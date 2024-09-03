@@ -1,36 +1,48 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>PHP7- I/O模型学习 · 少年当自强</title><meta name="description" content="四种响应模型
 
-extends partial/layout
+同步：调用后，死等，等到结果为止
+异步：调用立即返回，等到有结果通知
+阻塞：数据没有处理完成前不返回
+非阻塞：调用立即返回等到有结果通知我
 
-block site_title
-    != page.title + " · " + config.title
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
+五种I&amp;#x2F;O模型
+阻塞I&amp;#x2F;O (Blocking I&amp;#x2F;O)
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+
+当进程进行系统调用时，内核开始了IO的第一个阶段"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>PHP7- I/O模型学习</a></h3></div><div class="post-content"><blockquote>
+<p>四种响应模型</p>
+<ol>
+<li>同步：调用后，死等，等到结果为止</li>
+<li>异步：调用立即返回，等到有结果通知</li>
+<li>阻塞：数据没有处理完成前不返回</li>
+<li>非阻塞：调用立即返回等到有结果通知我</li>
+</ol>
+</blockquote>
+<h1 id="五种I-O模型"><a href="#五种I-O模型" class="headerlink" title="五种I&#x2F;O模型"></a>五种I&#x2F;O模型</h1><ol>
+<li>阻塞I&#x2F;O (Blocking I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/2018062101.png" alt="阻塞I/O"></p>
+<p>当进程进行系统调用时，内核开始了IO的第一个阶段准备数据，准备完成交给内核缓冲最后拷贝到用户进程的内存中，然后才解锁进程，这个等待过程称为阻塞。</p>
+<ol start="2">
+<li>非阻塞I&#x2F;O (Non-Blocking I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/2018062102.png" alt="非阻塞I/O"></p>
+<p>进程在第二阶段被阻塞，调用的时候没有阻塞，第二阶段开始不断轮训CPU询问数据是否准备完毕，所以比较消耗CPU资源的模型</p>
+<ol start="3">
+<li>I&#x2F;O复用（I&#x2F;O Multiplexing)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/2018062103.png" alt="I/O复用"></p>
+<p>IO执行的两个阶段进程都是阻塞的，在这次完整的过程中，进程发起了两次系统调用。和阻塞IO不同的是第一阶段可以等待多个调用结果</p>
+<ol start="4">
+<li>信号驱动的I&#x2F;O (Signal Driven I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/2018062104.png" alt="信号驱动的I/O"></p>
+<p>只有在IO执行的第二阶段阻塞了进程，该模型在IO执行的第一阶段，当数据完成之后，会主动通知进程数据已经准备好，对进程做一个回调，通知分为两种，一位水平触发，及时进程不响应会一直发送通知，二为边缘触发，即只通知一次</p>
+<ol start="5">
+<li>异步I&#x2F;O (Asynchrnous I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/2018062105.png" alt="异步I/O"></p>
+<p>当进程发起系统调用后，立刻就可以开始做其它事情，然后知道IO执行的两个阶段都完成之后，内核会给集成发送通知，告之进程已经完成处理了。</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-21</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><a class="tag" href="/tags/IO/" title="IO">IO </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2018/06/21/2018062101/,少年当自强,PHP7- I/O模型学习,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/06/24/2018062401/" title="yar学习">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/06/19/2018061901/" title="array常用函数整理">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

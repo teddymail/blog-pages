@@ -1,36 +1,31 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>面试经验1 · 少年当自强</title><meta name="description" content="经验分享
+  面临大学的毕业，我和大多数毕业生一样，对这个世界是那么的迷茫和无知，如今找工作也快一个月了，依然任何的进展，北京这个地方固然美好，但是人才济济，Android市场的异常冷门让我雪上加霜，貌似我现在连一个实习生的资格都过不了，我是该好好反思自己的水平，不能再停留在原来那个阶段，下面我总结"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>面试经验1</a></h3></div><div class="post-content"><h1 id="经验分享"><a href="#经验分享" class="headerlink" title="经验分享"></a>经验分享</h1><blockquote>
+<p>  面临大学的毕业，我和大多数毕业生一样，对这个世界是那么的迷茫和无知，如今找工作也快一个月了，依然任何的进展，北京这个地方固然美好，但是人才济济，Android市场的异常冷门让我雪上加霜，貌似我现在连一个实习生的资格都过不了，我是该好好反思自己的水平，不能再停留在原来那个阶段，下面我总结几个我考过的题型，也是为了分享一下记录自己的不足好去应对未来的挑战。</p>
+</blockquote>
+<ul>
+<li>实现一个单例模式代码</li>
+</ul>
+<blockquote>
+<p>这道题虽然简单，但是埋下了一个坑，你是否考虑过在多线程的情况下，你得单例会不会产生多个对象呢？ 还有效率问题呢？</p>
+</blockquote>
+<ol>
+<li>下面是一个简单的单例，咱们看看会产生什么问题<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="comment">//存放引用的变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">A</span> <span class="variable">ins</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//私有化构造方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">A</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> A <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ins == <span class="literal">null</span>)&#123;</span><br><span class="line">            ins = <span class="keyword">new</span> <span class="title class_">A</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ins;</span><br><span class="line">    &#125;</span><br><span class="line">｝</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>实验效果：<br>  <img src="http://img.yuekang.org.cn/20170330145606.png" alt="效果图"></p>
+<blockquote>
+<p>哇，居然在高并发的情况下创建了两个！所以这种单例不严谨，会在高并发的情况下产生问题，我们来改进一下加入同步的内容。</p>
+</blockquote>
+<p>2.修改上面的代码加入同步的内容</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="comment">//存放引用的变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">A</span> <span class="variable">ins</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//私有化构造方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">A</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> A <span class="title function_">getInstance</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ins == <span class="literal">null</span>)&#123;</span><br><span class="line">           ins = <span class="keyword">new</span> <span class="title class_">A</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ins;</span><br><span class="line">    &#125;</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
 
-extends partial/layout
-
-block site_title
-    != page.title + " · " + config.title
-
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
-
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+<p>实验效果图：<br><img src="http://img.yuekang.org.cn/20170330162133.png" alt="增加同步后的实验效果图"></p>
+<blockquote>
+<p>哇塞，达到了同步的效果，但是这里还需要注意一个问题就是，当我们在进行大量的并发的时候锁住了这个类以后是不是全部都需要进入锁判断了？ 这样效率不就大大降低了么？所以这里我们还需要改进一下， 做到不多做一点的无用功。</p>
+</blockquote>
+<p>3.修改上面的代码加入多层次判断快速创建对象，不多做一点无用功！</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="comment">//存放引用的变量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">A</span> <span class="variable">ins</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//私有化构造方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">A</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">      ```java</span><br><span class="line">      <span class="comment">//加入同步</span></span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">static</span> A <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (ins == <span class="literal">null</span>) &#123;</span><br><span class="line">              <span class="keyword">synchronized</span> (A.class)&#123;</span><br><span class="line">                  <span class="keyword">if</span> (ins == <span class="literal">null</span>)&#123;</span><br><span class="line">                      ins = <span class="keyword">new</span> <span class="title class_">A</span>();</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> ins;</span><br><span class="line">      &#125;</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里就不展示效果图了，改进的是运行的速度，这里在首次创建对象的时候会进入锁判断，当创建完成以后，其他的都会直接返回对象，不再进入锁等待着中，大大的提高了运行的效率</p>
+</blockquote>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-03-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/安卓面试经验/" title="安卓面试经验">安卓面试经验 </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2017/03/28/2017032801/,少年当自强,面试经验1,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2017/03/30/2017033001/" title="给定路径统计当前以及子目录文件个数">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2017/03/08/2017030801/" title="java中有几种类型的流？">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

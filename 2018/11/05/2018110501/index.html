@@ -1,36 +1,82 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>ZooKeeper集群化安装 · 少年当自强</title><meta name="description" content="zookeeper是一个强一致【不严格】的分布式数据库，由多个节点共同组成一个分布式集群，挂掉任意一个节点，数据库仍然可以正常工作，客户端无感知故障切换。客户端向任意一个节点写入数据，其它节点可以立即看到最新的数据。
 
-extends partial/layout
+布局规划图
+环境准备
+JRE (依赖的环境)【 点击进入 】
 
-block site_title
-    != page.title + " · " + config.title
+安装JRE
+ta"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>ZooKeeper集群化安装</a></h3></div><div class="post-content"><blockquote>
+<p>zookeeper是一个强一致【不严格】的分布式数据库，由多个节点共同组成一个分布式集群，挂掉任意一个节点，数据库仍然可以正常工作，客户端无感知故障切换。客户端向任意一个节点写入数据，其它节点可以立即看到最新的数据。</p>
+</blockquote>
+<h2 id="布局规划图"><a href="#布局规划图" class="headerlink" title="布局规划图"></a>布局规划图</h2><p><img src="http://img.yuekang.org.cn/2018110565853.png" alt="架构图"></p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ol>
+<li>JRE (依赖的环境)【 <a href="https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html">点击进入</a> 】</li>
+</ol>
+<p>安装JRE</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tar zxvf jre-8u191-linux-x64.tar.gz</span><br><span class="line">mv jre1.8.0_191/ /opt/</span><br><span class="line">//添加环境变量</span><br><span class="line">vi /etc/profile</span><br><span class="line">//末尾加入</span><br><span class="line">JAVA_HOME=/opt/jre1.8.0_191</span><br><span class="line">PATH=$JAVA_HOME/bin:$PATH</span><br><span class="line">CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">export JAVA_HOME</span><br><span class="line">export PATH</span><br><span class="line">export CLASSPATH</span><br><span class="line">//生效配置</span><br><span class="line">source /etc/profile </span><br></pre></td></tr></table></figure>
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
+<p>开启端口</p>
+<blockquote>
+<p>默认是2181 我自己设定为2999，2888和3888是机器之间同步端口</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=2999/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=2888/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=3888/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+<ol start="2">
+<li>ZooKeeper安装包</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget http://mirror.cogentco.com/pub/apache/zookeeper/zookeeper-3.4.13/zookeeper-3.4.13.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf zookeeper-3.4.13.tar.gz</span><br><span class="line"></span><br><span class="line">mv zookeeper-3.4.13 /opt/</span><br></pre></td></tr></table></figure>
+<h2 id="安装配置ZooKeeper"><a href="#安装配置ZooKeeper" class="headerlink" title="安装配置ZooKeeper"></a>安装配置ZooKeeper</h2><blockquote>
+<p>基础环境安装完成后，需要配置ZooKeeper</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//配置</span><br><span class="line">cp /opt/zookeeper-3.4.13/conf/zoo_sample.cfg /opt/zookeeper-3.4.13/conf/zoo.cfg</span><br><span class="line"></span><br><span class="line">vi /opt/zookeeper-3.4.13/conf/zoo.cfg</span><br></pre></td></tr></table></figure>
+
+<p>有以下配置选项</p>
+<ol>
+<li>tickTime&#x3D;2000</li>
+</ol>
+<p>最小时间单元长度，默认3000，例如回话的最小超时时间默认2*tickTIme</p>
+<ol start="2">
+<li>initLimit&#x3D;5</li>
+</ol>
+<p>默认：10，定义leader服务在启动过程中等待follower完成数据同步的时间，后续服务器增多需要增大这个值，以保证数据同步顺利完成。</p>
+<ol start="3">
+<li>dataDir&#x3D;&#x2F;var&#x2F;lib&#x2F;zookeeper&#x2F;</li>
+</ol>
+<p>无默认，必须配置，用于配置ZooKeeper存放快照文件的目录，如果不配置dataLogDir则也存放在这里面。</p>
+<ol start="4">
+<li>clientPort&#x3D;2999</li>
+</ol>
+<p>当前服务对外的端口，集群内服务器都可以配置任意可用端口，不需要保持端口一致！一般是2181， 无默认，必须配置！</p>
+<ol start="5">
+<li>server.1 &#x3D; server1:2888:3888</li>
+</ol>
+<p>用于定义整个集群是由那几台机器构成的，每一行代表一个机器配置格式如下：</p>
+<p>server.id &#x3D; host:localPort:targetPort</p>
+<p>创建myid文件标识当前主机的序号，在dataDir中新建</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /var/lib/zookeeper/myid</span><br><span class="line">写上当前主机的序号即可，一定要是整数！</span><br></pre></td></tr></table></figure>
+
+
+<p>启动ZooKeeper</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/opt/zookeeper-3.4.13/bin/zkServer.sh start</span><br><span class="line">ZooKeeper JMX enabled by default</span><br><span class="line">Using config: /opt/zookeeper-3.4.13/bin/../conf/zoo.cfg</span><br><span class="line">Starting zookeeper ... STARTED</span><br></pre></td></tr></table></figure>
+
+<p>看到上方标识意味启动成功</p>
+<h2 id="验证ZooKeeper服务"><a href="#验证ZooKeeper服务" class="headerlink" title="验证ZooKeeper服务"></a>验证ZooKeeper服务</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@zookeepermaster bin]# telnet localhost 2999</span><br><span class="line">Trying ::1...</span><br><span class="line">Connected to localhost.</span><br><span class="line">Escape character is &#x27;^]&#x27;.</span><br><span class="line">stat</span><br><span class="line">Zookeeper version: 3.4.13-2d71af4dbe22557fda74f9a9b4309b15a7487f03, built on 06/29/2018 04:05 GMT</span><br><span class="line">Clients:</span><br><span class="line"> /0:0:0:0:0:0:0:1:56564[0](queued=0,recved=1,sent=0)</span><br><span class="line"></span><br><span class="line">Latency min/avg/max: 0/0/0</span><br><span class="line">Received: 1</span><br><span class="line">Sent: 0</span><br><span class="line">Connections: 1</span><br><span class="line">Outstanding: 0</span><br><span class="line">Zxid: 0x200000000</span><br><span class="line">Mode: follower</span><br><span class="line">Node count: 4</span><br><span class="line">Connection closed by foreign host.</span><br></pre></td></tr></table></figure>
+
+<p>像上方这样的返回意味着已经成功运行ZooKeeper了，其中Mode: follower是当前的身份</p>
+<ol>
+<li>Mode: leader</li>
+</ol>
+<p>leader 是节点中选举的主节点整个服务器中就1个</p>
+<ol start="2">
+<li>Mode: follower</li>
+</ol>
+<p>follower 是从节点，负责服务客户端</p>
+<ol start="3">
+<li>Mode: standalone</li>
+</ol>
+<p>standalone 是单机模式下才会有的</p>
+<h2 id="采坑集结"><a href="#采坑集结" class="headerlink" title="采坑集结"></a>采坑集结</h2><p>如果telnet验证时返回下面这样的情况</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@zookeepermaster bin]# telnet 127.0.0.1 2999</span><br><span class="line">Trying 127.0.0.1...</span><br><span class="line">Connected to 127.0.0.1.</span><br><span class="line">Escape character is &#x27;^]&#x27;.</span><br><span class="line">stat</span><br><span class="line">This ZooKeeper instance is not currently serving requests</span><br><span class="line">Connection closed by foreign host.</span><br></pre></td></tr></table></figure>
+<p>碰到上面的情况首先应该检查各个服务节点的机器是否端口已经全部打开？,主要原因就是这个节点无法连接其他服务器造成服务无法选举造成了服务出错</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/ZooKeeper/" title="ZooKeeper">ZooKeeper </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2018/11/05/2018110501/,少年当自强,ZooKeeper集群化安装,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/11/06/2018110601/" title="php安装ZooKeeper">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/10/24/2018102401/" title="Centos7上搭建统一认证服务">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

@@ -1,36 +1,170 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>php文档注释规范总结和学习 · 少年当自强</title><meta name="description" content="php文档注释规范总结和学习,掌握标准化成就一流程序员。"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>php文档注释规范总结和学习</a></h3></div><div class="post-content"><h3 id="PHP标准注释列表"><a href="#PHP标准注释列表" class="headerlink" title="PHP标准注释列表"></a>PHP标准注释列表</h3><ul>
+<li><a href="#api" title="@api">@api</a></li>
+<li><a href="#author" title="@author">@author</a></li>
+<li><a href="#category" title="@category">@category</a></li>
+<li><a href="#copyright" title="@copyright">@copyright</a></li>
+<li><a href="#deprecated" title="@deprecated">@deprecated</a></li>
+<li><a href="#example" title="@example">@example</a></li>
+<li><a href="#filesource" title="@filesource">@filesource</a></li>
+<li><a href="#global" title="@global">@global</a></li>
+<li><a href="#ignore" title="@ignore">@ignore</a></li>
+<li><a href="#internal" title="@internal">@internal</a></li>
+<li><a href="#license" title="@license">@license</a></li>
+<li><a href="#link" title="@link">@link</a></li>
+<li><a href="#method" title="@method">@method</a></li>
+<li><a href="#package" title="@package">@package</a></li>
+<li><a href="#param" title="@param">@param</a></li>
+<li><a href="#property-read" title="@property-read">@property-read</a></li>
+<li><a href="#property-write" title="@property-write">@property-write</a></li>
+<li><a href="#return" title="@return">@return</a></li>
+<li><a href="#see" title="@see">@see</a></li>
+<li><a href="#since" title="@since">@since</a></li>
+<li><a href="#source" title="@source">@source</a></li>
+<li><a href="#subpackage" title="@subpackage">@subpackage</a></li>
+<li><a href="#throws" title="@throws">@throws</a></li>
+<li><a href="#todo" title="@todo">@todo</a></li>
+<li><a href="#uses" title="@uses">@uses</a></li>
+<li><a href="#var" title="@vars">@var</a></li>
+<li><a href="#version" title="@version">@version</a></li>
+</ul>
+<p><a id="api"><h3>@api </h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例如下：<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * This method will not change until a major release.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@api</span></span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">showVersion</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">     &lt;...&gt;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a id="api"><h3>@author</h3></a></p>
+<ul>
+<li><p>语法要求</p>
+<ul>
+<li>@author [name] [<email address>]</li>
+</ul>
+</li>
+<li><p>官方示例如下：</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@author</span> My Name</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@author</span> My Name &lt;my.name<span class="doctag">@example</span>.com&gt;</span></span><br><span class="line"><span class="comment">  */</span></span><br></pre></td></tr></table></figure>
 
-extends partial/layout
 
-block site_title
-    != page.title + " · " + config.title
+<p><a id="category"><h3>@category</h3></a></p>
+<ul>
+<li><p>语法要求</p>
+<ul>
+<li>@category [description]</li>
+</ul>
+</li>
+<li><p>官方示例</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Page-Level DocBlock</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@category</span> MyCategory</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@package</span>  MyPackage</span></span><br><span class="line"><span class="comment">  */</span></span><br></pre></td></tr></table></figure>
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+
+<p><a id="copyright"><h3>@copyright</h3></a></p>
+<ul>
+<li>语法要求<ul>
+<li>@copyright [description]</li>
+</ul>
+</li>
+<li>描述<ul>
+<li>此注释专用于对软件版权进行注释</li>
+</ul>
+</li>
+<li>官方示例<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@copyright</span> 1997-2005 The PHP Group</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a id="deprecated"><h3>@deprecated</h3></a></p>
+<ul>
+<li><p>语法要求</p>
+<ul>
+<li>@deprecated [version] [description]</li>
+</ul>
+</li>
+<li><p>官方示例</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span></span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span> 1.0.0</span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span> No longer used by internal code and not recommended.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span> 1.0.0 No longer used by internal code and not recommended.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  &lt;...&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a id="example"><h3>@example</h3></a></p>
+<ul>
+<li><p>语法要求</p>
+<ul>
+<li>@example [location] [start-line] [number-of-lines] ] [description]</li>
+</ul>
+</li>
+<li><p>官方示例</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@example</span> example1.php Counting in action.</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@example</span> http://example.com/example2.phps Counting in action by a 3rd party.</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@example</span> &quot;My Own Example.php&quot; My counting.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">     &lt;...&gt;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a id="filesource"><h3>@filesource</h3></a></p>
+<blockquote>
+<p>@filesource标签用于告诉phpDocumentor将当前文件的源包含在解析结果中。</p>
+</blockquote>
+<ul>
+<li><p>语法要求</p>
+<ul>
+<li>@filesource</li>
+</ul>
+</li>
+<li><p>说明<br>@filesource标签告诉phpDocumentor将当前文件包含在解析输出中。由于这仅适用于整个文件的源代码，所以必须在文件级PHPDoc中使用此标记。任何其他位置都将被忽略。</p>
+<p>当包含此标签时，phpDocumentor将压缩文件内容并使用Base64进行编码，以便可以由变压器处理。任何能够显示源代码的模板都可以在抽象语法树中读取相关文件元素中的源子元素。</p>
+</li>
+<li><p>官方示例</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">/ **</span><br><span class="line">  * @filesource</span><br><span class="line">  * /</span><br></pre></td></tr></table></figure>
+
+
+<p><a id="global"><h3>@global</h3></a></p>
+<blockquote>
+<p>@global标签用于通知phpDocumentor全局变量_or_其用法。(非必须)</p>
+</blockquote>
+<ul>
+<li>语法要求</li>
+</ul>
+<ul>
+<li>@global [ Type ] [name] @global [ Type ] [description]</li>
+</ul>
+<hr>
+<p><a id="ignore"><h3>@ignore</h3></a></p>
+<blockquote>
+<p>@ignore标签用于告诉phpDocumentor结构元素不被phpDocumentor处理。</p>
+</blockquote>
+<ul>
+<li>语法要求<ul>
+<li>@ignore [<description>]</li>
+</ul>
+</li>
+<li>官方示例</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>（$ ostest）&#123;</span><br><span class="line">     / **</span><br><span class="line">      *这个定义将是“Unix”或“Windows”</span><br><span class="line">      * /</span><br><span class="line">     define（“OS”，“Unix”）;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     / **</span><br><span class="line">      * @ignore</span><br><span class="line">      * /</span><br><span class="line">     define（“OS”，“Windows”）;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a id="api"><h3>@api</h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例</li>
+</ul>
+<hr>
+<p><a id="api"><h3>@api</h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例</li>
+</ul>
+<p><a id="api"><h3>@api</h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例</li>
+</ul>
+<p><a id="api"><h3>@api</h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例</li>
+</ul>
+<p><a id="api"><h3>@api</h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例</li>
+</ul>
+<p><a id="api"><h3>@api</h3></a></p>
+<ul>
+<li>语法要求</li>
+<li>官方示例</li>
+</ul>
+<p><a id="api"><h3>@api</h3></a><br><a id="api"><h3>@api</h3></a><br><a id="api"><h3>@api</h3></a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-05-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><a class="tag" href="/tags/web/" title="web">web </a><a class="tag" href="/tags/apidoc/" title="apidoc">apidoc </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2017/05/19/2017051901/,少年当自强,php文档注释规范总结和学习,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2017/07/26/2017072601/" title="好久没写博客了">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2017/05/17/2017051701/" title="Larvel学习 （Day 02）">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

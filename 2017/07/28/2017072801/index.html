@@ -1,36 +1,104 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>使用mysql-router工具实现数据库读写分离，数据库负载均衡 · 少年当自强</title><meta name="description" content="研究公司oFrame框架发现，我们框架内大量的sql扫表语句严重的影响了数据查询速度和产品使用的各种问题，为此我准备先从第一步入手去增数据的性能，让我们一起学一下吧.
 
-extends partial/layout
+一、 环境准备
+mysql-router 简单的负载均衡组件
+mysql5.6        mysql
+centos7
+Vmwa"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>使用mysql-router工具实现数据库读写分离，数据库负载均衡</a></h3></div><div class="post-content"><blockquote>
+<p>研究公司oFrame框架发现，我们框架内大量的sql扫表语句严重的影响了数据查询速度和产品使用的各种问题，为此我准备先从第一步入手去增数据的性能，让我们一起学一下吧.</p>
+</blockquote>
+<h3 id="一、-环境准备"><a href="#一、-环境准备" class="headerlink" title="一、 环境准备"></a>一、 环境准备</h3><ul>
+<li>mysql-router 简单的负载均衡组件</li>
+<li>mysql5.6        mysql</li>
+<li>centos7</li>
+<li>Vmware</li>
+</ul>
+<p>** mysql-router 简介 **</p>
+<p>MySQL的路由器是轻量级的中间件，提供您的应用程序和任何后端MySQL服务器之间的透明路由。它可用于各种各样的使用情况，如通过有效的路由数据库流量到合适的后端MySQL服务器提供高可用性和可扩展性。可插拔的体系结构还使开发者来扩展MySQL的路由器自定义的用例。</p>
+<ol>
+<li>故障转移</li>
+</ol>
+<p>典型地，高度可用的MySQL设置由一个单一的主站和多个从机，并且它是由应用程序来处理故障切换，在情况下，MySQL主变得不可用。使用MySQL路由器，应用程序连接将被透明基于负载平衡策略路由，不实现自定义应用程序代码。</p>
+<ol start="2">
+<li>负载均衡</li>
+</ol>
+<p>MySQL的路由器通过在服务器池分配数据库的连接提供了额外的可扩展性和性能。举例来说，如果你有一个复制的一套MySQL服务器的，MySQL的路由器可以在一个循环的方式分发应用程序连接到他们。</p>
+<ol start="3">
+<li>可插入式架构</li>
+</ol>
+<p>MySQL的路由器的可插入式架构使MySQL的开发人员能够轻松地与附加功能延伸产品，以及提供MySQL用户能够创建提供了无限的可能性自己的自定义插件的能力。MySQL的路由器目前包括一些核心插件，其中包括：</p>
+<p>连接路由插件，它确实基于连接的路由，这意味着它转发MySQL的数据包发送到后端服务器，而不检查或修改它们，从而提供最大的吞吐量。<br>的元数据高速缓存插件，它提供了透明的客户端负载平衡，路由和故障转移到组复制和InnoDB群集。</p>
+<p><img src="http://img.yuekang.org.cn/mysql_router.png" alt="mysql-router结构示意图"></p>
+<h3 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h3><blockquote>
+<p>这里centos搭建和Vmware不再阐述，mysql的安装也不在讲解，重点讲解配置步骤和实现mysql-router功能</p>
+</blockquote>
+<ol>
+<li>安装mysql-router</li>
+</ol>
+<p>进入官网下载页面：<a href="https://dev.mysql.com/downloads/router/">点我去往下载页面</a></p>
+<p><img src="http://img.yuekang.org.cn/MySQL%20%20%20%20Download%20MySQL%20Router.png" alt="mysql-router下载页面"></p>
+<p>这里我选择Red Hat Enterprise Linux 7 &#x2F; Oracle Linux 7也就是上图中的第一个rpm包进行下载</p>
+<p>为了在虚拟机中能够方便的复制，我这里下载过程中复制下载地址到虚拟机中使用**[ wget ]**命令进行下载</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# wget https://cdn.mysql.com//Downloads/MySQL-Router/mysql-router-2.1.4-1.el7.x86_64.rpm</span><br><span class="line"></span><br><span class="line">--2017-07-28 14:57:02--  https://cdn.mysql.com//Downloads/MySQL-Router/mysql-router-2.1.4-1.el7.x86_64</span><br><span class="line">.rpm</span><br><span class="line">Resolving cdn.mysql.com (cdn.mysql.com)... 2.17.63.195</span><br><span class="line">Connecting to cdn.mysql.com (cdn.mysql.com)|2.17.63.195|:443... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 1947576 (1.9M) [application/x-redhat-package-manager]</span><br><span class="line">Saving to: ‘mysql-router-2.1.4-1.el7.x86_64.rpm’</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">100%</span><span class="language-bash">[============================================================&gt;] 1,947,576    773KB/s   <span class="keyword">in</span> 2.5s</span>   </span><br><span class="line"></span><br><span class="line">2017-07-28 14:57:10 (773 KB/s) - ‘mysql-router-2.1.4-1.el7.x86_64.rpm’ saved [1947576/1947576]</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# rpm -i mysql-router-2.1.4-1.el7.x86_64.rpm</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-block site_title
-    != page.title + " · " + config.title
+<p>经过上面的步骤mysql-router已经安装完毕，这里mysql安装不在叙述</p>
+<h3 id="三、负载均衡架构规划"><a href="#三、负载均衡架构规划" class="headerlink" title="三、负载均衡架构规划"></a>三、负载均衡架构规划</h3><blockquote>
+<p>我由于使用的是虚拟机我这里设定以下几个服务器</p>
+</blockquote>
+<p>1.Mysql Middleware 安装着mysql-router专门用于mysql入口负责机器的主从分配等问题</p>
+<p>2.Mysql Master 数据库主库，用于数据的读写</p>
+<p>3.Mysql Salve 数据库从库</p>
+<p>我对结构做了如下划分和IP分配，详情见图:</p>
+<p><img src="http://img.yuekang.org.cn/%E7%BB%93%E6%9E%84%E5%9B%BE%E7%81%B0%E5%BA%95.png" alt="结构规划图"></p>
+<h3 id="四、配置服务"><a href="#四、配置服务" class="headerlink" title="四、配置服务"></a>四、配置服务</h3><p>1.Mysql Middleware (router主机)</p>
+<blockquote>
+<p>默认rpm安装位置在&#x2F;usr&#x2F;bin&#x2F;mysqlrouter 为了个人意愿我把日志logs和配置文件mysqlrouter.ini都存放在&#x2F;usr&#x2F;local&#x2F;mysql-router下</p>
+</blockquote>
+<p>下面开始新建配置文件，设置port:8000为读写端口 port:8001为只读端口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost mysql-router]# mkdir logs</span><br><span class="line">[root@localhost mysql-router]# vi mysqlrouter.ini</span><br><span class="line"></span><br><span class="line">[DEFAULT]              </span><br><span class="line">logging_folder=usr/local/mysql-router/logs                                                         </span><br><span class="line"></span><br><span class="line">[logger]                                                                  </span><br><span class="line">level=INFO                                                                                    </span><br><span class="line">[routing:basic_failover]                                                                              </span><br><span class="line">bind_address=192.168.1.186                                                                          </span><br><span class="line">bind_port=000                                                                                      </span><br><span class="line">destinations=192.168.1.189:3306                                                                     </span><br><span class="line">mode=read-write                                                                                     </span><br><span class="line">max_connections=1024                                                                                </span><br><span class="line">max_connect_errors=100                                                                              </span><br><span class="line">client_connect_timeout=9                                                                        </span><br><span class="line">[routing:balancing]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">绑定router的IP即可</span>                                               </span><br><span class="line">bind_address=192.168.1.186                                                #绑定端口                </span><br><span class="line">bind_port=8001                                                            #数据库地址，会轮训访问                      </span><br><span class="line">destinations = 192.168.1.193:3306</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">指定模式为只读</span></span><br><span class="line">mode=read-only                                                            #设置最大连接数        </span><br><span class="line">max_connections=65535</span><br><span class="line">max_connect_errors=100</span><br><span class="line">client_connect_timeout = 9            </span><br><span class="line">[keepalive]                                                               </span><br><span class="line">interval = 60</span><br></pre></td></tr></table></figure>
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
+<p>以上是配置文件内容，注释了一部分</p>
+<ul>
+<li>启动mysqlrouter(设置自己的配置文件即可，我已经在配置文件目录了就按照下方启动即可)</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost mysql-router]# mysqlrouter -c ./mysqlrouter.ini &amp;</span><br></pre></td></tr></table></figure>
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+<ul>
+<li>验证mysqlrouter是否启动（下图情况为启动成功）</li>
+</ul>
+ <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost mysql-router]# netstat -tunlp|grep mysqlrouter                               </span><br><span class="line">tcp        0      0 0.0.0.0:8000            0.0.0.0:*               LISTEN      71271/mysqlrouter     </span><br><span class="line">tcp        0      0 0.0.0.0:8001            0.0.0.0:*               LISTEN      71271/mysqlrouter</span><br></pre></td></tr></table></figure>
+
+<p> 经过以上步骤已经完成router配置了，如果主库从库都可以的话即可使用客户端通过8000端口访问测试，如果不能访问通过下面这组命令查看错误日志</p>
+ <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost mysql-router]# tail logs/mysqlrouter.log</span><br></pre></td></tr></table></figure>
+
+<p>2.Mysql Master 数据库主库</p>
+<ul>
+<li>配置从库复制账号</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">MySQL [(none)]&gt; grant replication scale on *.* to &#x27;账号名&#x27;@&#x27;主机域&#x27; identifed by &#x27;账号密码&#x27;；</span><br><span class="line">MySQL [(none)]&gt; flush privileges;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置主库的主从复制文件my.ini主要增加或修改一下选项</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">#服务器ID唯一标识，错了，无法复制</span><br><span class="line">server-id = 1</span><br><span class="line">#指定复制库</span><br><span class="line">binlog-do-db=text</span><br><span class="line">#以下数据库不复制</span><br><span class="line">binlog-ignore-db=mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> 经过修改以后从其mysql主库的任务就完成了，接下来配置从库</p>
+<ol start="3">
+<li>Mysql Salve 数据库从库(设定主库信息进行读写配置)</li>
+</ol>
+<p>登入数据库后查看服务器ID不可以和主库相同，切记！</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MySQL [(none)]&gt; show variables like &#x27;server_id&#x27;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| server_id     | 2     |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.02 sec)</span><br></pre></td></tr></table></figure>
+
+<p>查询主库配置信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MySQL [(none)]&gt; show master status \G</span><br><span class="line"></span><br><span class="line">             File: mysql-bin.000006</span><br><span class="line">         Position: 2647</span><br><span class="line">     Binlog_Do_DB: text</span><br><span class="line"> Binlog_Ignore_DB: mysql</span><br><span class="line">Executed_Gtid_Set:</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>获取File和Position即可</p>
+<p>写入主库信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MySQL [(none)]&gt; change master to</span><br><span class="line">    -&gt;master_host=&#x27;192.168.1.189&#x27;,//主库地址</span><br><span class="line">    -&gt;master_port=3306,          //主库端口      </span><br><span class="line">    -&gt;master_user=&#x27;master&#x27;,      //主库同步账户名             </span><br><span class="line">    -&gt;master_password=&#x27;master&#x27;,  //同步账号密码</span><br><span class="line">    -&gt;master_log_file=&#x27;mysql-bin.000005&#x27;,//对应主库File</span><br><span class="line">    -&gt;master_log_pos=3195;//对应主库Position                                                 </span><br><span class="line">Query OK, 0 rows affected, 2 warnings (0.02 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; start slave;   //启动同步</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>为了保证数据同步，请一定要空表操作，避免报错</p>
+<p>如果同步请使用MySQL [(none)]&gt; show slave status \G 查看具体错误</p>
+<p>其它从库全部遵循这个配置原则即可完成，多少个从库都可以</p>
+<h3 id="五、-总结"><a href="#五、-总结" class="headerlink" title="五、 总结"></a>五、 总结</h3><p>通过本次学习我对数据库负载均衡有了很大的了解，我以后也会继续学习更深入的集群化知识，为以后架构师的梦想做知识筹备，也希望我出的这个经验分享能给大家一个很好的参考，也是目前能提高公司产品服务器这块速度慢，在并发情况下发生数据库罢工的解决方案，目前这个演示仅仅是一个主库和从库，大家回去练习可以多建立从库进行大并发访问测试，今天的分享就到这里，祝大家工作顺利。</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-07-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><a class="tag" href="/tags/mysql-router/" title="mysql-router">mysql-router </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2017/07/28/2017072801/,少年当自强,使用mysql-router工具实现数据库读写分离，数据库负载均衡,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2017/09/11/2017091101/" title="23种设计模式英文中文对照">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2017/07/26/2017072601/" title="好久没写博客了">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

@@ -1,36 +1,23 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>proxy 反向代理设置 · 少年当自强</title><meta name="description" content="在公司的vpc网络中需要一个统一的对外提供服务的服务器叫proxy 其作用是统一入口，外界无法直接和业务服务器直接通信，而是通过proxy服务器进行服务转发。
 
-extends partial/layout
+目标是达到如下目的：客户端&amp;#x3D;&amp;gt;（服务器反向代理&amp;#x3D;&amp;gt;）Web服务器
 
-block site_title
-    != page.title + " · " + config.title
+线上proxy配置
+server &amp;#"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>proxy 反向代理设置</a></h3></div><div class="post-content"><blockquote>
+<p>在公司的vpc网络中需要一个统一的对外提供服务的服务器叫proxy 其作用是统一入口，外界无法直接和业务服务器直接通信，而是通过proxy服务器进行服务转发。</p>
+</blockquote>
+<p>目标是达到如下目的：<br>客户端&#x3D;&gt;（服务器反向代理&#x3D;&gt;）Web服务器</p>
+<p><img src="http://img.yuekang.org.cn/2018071201.png" alt="规划图"></p>
+<p>线上proxy配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">     listen       443 ssl;</span><br><span class="line">     server_name  abc.ethercap.com;</span><br><span class="line">     ssl on;</span><br><span class="line">     ssl_certificate /etc/pki/CA/certs/ethercap.com.chained.crt;</span><br><span class="line">     ssl_certificate_key /etc/pki/CA/certs/ethercap.com.key;</span><br><span class="line">     keepalive_timeout    60;</span><br><span class="line"></span><br><span class="line">     location / &#123;</span><br><span class="line">         proxy_pass          http://base_server;</span><br><span class="line"></span><br><span class="line">         proxy_http_version 1.1;</span><br><span class="line">         proxy_set_header Host $host;</span><br><span class="line">         proxy_set_header Connection &quot;&quot;;</span><br><span class="line">         proxy_set_header X-Forwarded-For $remote_addr;</span><br><span class="line">         proxy_set_header X-Forwarded-Proto https;</span><br><span class="line"></span><br><span class="line">         proxy_redirect      off;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
-
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+<p>关键点是 proxy_pass</p>
+<p>proxy_pass 可以做的几件事是这样的:</p>
+<p>本地不处理，交给后面处理<br>这样后面就可以用php, fastcgi, tomcat等处理<br>可以切换协议，比如从http切换至https<br>实际上在linux上还可以将底层切换至unix domain socket</p>
+<p>&#x2F;&#x2F; 这些设置主要是给业务服务器做认证的<br>proxy_http_version 1.1;</p>
+<p>&#x2F;&#x2F;这个proxy_set_header Host $host;  $host就是nginx代理服务器，也就是客户端请求的host<br>proxy_set_header Host $host;</p>
+<p>&#x2F;&#x2F;任何逐段传输头都需要在 Connection 头中列出，这样才能让第一个代理知道必须处理它们且不转发这些头<br>proxy_set_header Connection “”;</p>
+<p>&#x2F;&#x2F;X-Forwarded-For 表示 Nginx 接收到的头，原样的转发过来（假如不转发，Web 服务器就不能获取这个头）<br>proxy_set_header X-Forwarded-For $remote_addr;</p>
+<p>&#x2F;&#x2F;转发的协议<br>proxy_set_header X-Forwarded-Proto https;</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-07-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/nginx/" title="nginx">nginx </a><a class="tag" href="/tags/反向代理/" title="反向代理">反向代理 </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2018/07/15/2018071501/,少年当自强,proxy 反向代理设置,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/07/15/2018071502/" title="负载均衡算法">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/07/08/2018070801/" title="CentOS7 安装OpenLdap">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

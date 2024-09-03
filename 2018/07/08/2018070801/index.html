@@ -1,36 +1,55 @@
-include mixins
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>CentOS7 安装OpenLdap · 少年当自强</title><meta name="description" content="正常在企业的环境中，会遇到账户统一管理的事情，当手下就不几台服务器时在每个机器上都创建一遍好像也没多大事事情，但当人经常更换，或者服务器达到上百台的时候这个账号的管理将会是噩梦，今天就来一起安装OpenLdap来达到网络统一账号管理和验证的目的。
 
-extends partial/layout
+什么是LDAP?LDAP 全称轻量级目录访问协议（"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>CentOS7 安装OpenLdap</a></h3></div><div class="post-content"><blockquote>
+<p>正常在企业的环境中，会遇到账户统一管理的事情，当手下就不几台服务器时在每个机器上都创建一遍好像也没多大事事情，但当人经常更换，或者服务器达到上百台的时候这个账号的管理将会是噩梦，今天就来一起安装OpenLdap来达到网络统一账号管理和验证的目的。</p>
+</blockquote>
+<h1 id="什么是LDAP"><a href="#什么是LDAP" class="headerlink" title="什么是LDAP?"></a>什么是LDAP?</h1><p>LDAP 全称轻量级目录访问协议（英文：Lightweight Directory Access Protocol），是一个运行在 TCP&#x2F;IP 上的目录访问协议。目录是一个特殊的数据库，它的数据经常被查询，但是不经常更新。其专门针对读取、浏览和搜索操作进行了特定的优化。目录一般用来包含描述性的，基于属性的信息并支持精细复杂的过滤能力。比如 DNS 协议便是一种最被广泛使用的目录服务。</p>
+<p>LDAP 中的信息按照目录信息树结构组织，树中的一个节点称之为条目（Entry），条目包含了该节点的属性及属性值。条目都可以通过识别名 dn 来全局的唯一确定1，可以类比于关系型数据库中的主键。比如 dn 为 uid&#x3D;teddy,ou&#x3D;People,dc&#x3D;ethercap,dc&#x3D;com 的条目表示在组织中一个名字叫做 teddy 的员工，其中 uid&#x3D;teddy 也被称作相对区别名 rdn。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">是否必填</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">cn</td>
+<td align="left">是</td>
+<td align="left">该条目被人所熟知的通用名（Common Name）</td>
+</tr>
+<tr>
+<td align="left">sn</td>
+<td align="left">是</td>
+<td align="left">该条目的姓氏</td>
+</tr>
+<tr>
+<td align="left">o</td>
+<td align="left">否</td>
+<td align="left">该条目所属的组织名（Organization Name）</td>
+</tr>
+<tr>
+<td align="left">mobile</td>
+<td align="left">否</td>
+<td align="left">该条目的手机号码</td>
+</tr>
+<tr>
+<td align="left">description</td>
+<td align="left">否</td>
+<td align="left">该条目的描述信息</td>
+</tr>
+</tbody></table>
+<p>下面是一个典型的 LDAP 目录树结构，其中每个节点表示一个条目。接下来将按照这个结构来配置一个 LDAP 服务。</p>
+<p><img src="http://img.yuekang.org.cn/2018070902.png"></p>
+<p>LDAP server搭建</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//安装软件</span></span><br><span class="line">yum -y install openldap openldap-servers openldap-clients</span><br><span class="line"></span><br><span class="line"><span class="comment">//配置/etc/openldap/slapd.conf</span></span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/core.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/cosine.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/duaconf.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/dyngroup.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/inetorgperson.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/java.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/misc.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/nis.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/openldap.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/ppolicy.schema</span><br><span class="line"><span class="keyword">include</span> /etc/openldap/schema/collective.schema</span><br><span class="line">pidfile /<span class="keyword">var</span>/run/openldap/slapd.pid</span><br><span class="line">argsfile /<span class="keyword">var</span>/run/openldap/slapd.args</span><br><span class="line">database bdb</span><br><span class="line">suffix <span class="string">&quot;dc=hostname,dc=com&quot;</span></span><br><span class="line">rootdn <span class="string">&quot;cn=ffff,dc=hostname,dc=com&quot;</span></span><br><span class="line">rootpw esdfdsf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//数据会存放到/var/openldap-data/ 中</span></span><br><span class="line"><span class="comment">//id2entry.bdb 一开始会没有，使用JXplorer即可自动生成这个文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 记得/var/openldap-data/DB_CONFIG</span></span><br><span class="line">cp /usr/share/openldap-servers/DB_CONFIG.example /<span class="keyword">var</span>/openldap-data/DB_CONFIG</span><br><span class="line"></span><br><span class="line"><span class="comment">//加入到service管理体系中</span></span><br><span class="line">systemctl enable slapd</span><br><span class="line">systemctl start slapd</span><br><span class="line"></span><br><span class="line"><span class="comment">//导入用户组</span></span><br><span class="line">dn: dc=ethercap,dc=com</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: dcObject</span><br><span class="line">objectclass: organization</span><br><span class="line">o: Server World</span><br><span class="line">dc: ethercap</span><br><span class="line"></span><br><span class="line">dn: ou=people,dc=ethercap,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: people</span><br><span class="line"></span><br><span class="line">dn: ou=groups,dc=ethercap,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: groups</span><br><span class="line"></span><br><span class="line">ldapadd -Y EXTERNAL -H ldapi:<span class="comment">/// -f front.ldif</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//添加用户</span></span><br><span class="line">cat /etc/passwd | grep yk &gt; /tmp/passwd.in</span><br><span class="line">/usr/share/migrationtools/migrate_passwd.pl /tmp/passwd.in &gt; /tmp/passwd.ldif</span><br><span class="line"></span><br><span class="line"><span class="comment">//发现dc不对，可以通过 修改</span></span><br><span class="line">vi /usr/share/migrationtools/migrate_common.ph</span><br><span class="line"><span class="variable">$DEFAULT_BASE</span> = <span class="string">&quot;dc=ethercap,dc=com&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//查看生成文件，没什么毛病</span></span><br><span class="line">dn: uid=yk,ou=People,dc=ethercap,dc=com</span><br><span class="line">uid: yk</span><br><span class="line">cn: yk</span><br><span class="line">objectClass: account</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">userPassword: &#123;crypt&#125;$<span class="number">1</span>$eZc1Mzdw<span class="variable">$HBvCDOC1KEWIO699dLCNl1</span></span><br><span class="line">shadowLastChange: <span class="number">17722</span></span><br><span class="line">shadowMin: <span class="number">0</span></span><br><span class="line">shadowMax: <span class="number">99999</span></span><br><span class="line">shadowWarning: <span class="number">7</span></span><br><span class="line">loginShell: /bin/bash</span><br><span class="line">uidNumber: <span class="number">1001</span></span><br><span class="line">gidNumber: <span class="number">1001</span></span><br><span class="line">homeDirectory: /home/yk</span><br><span class="line"></span><br><span class="line"><span class="comment">//导入用户到ldap</span></span><br><span class="line">ldapadd -x -D <span class="string">&quot;cn=admin,dc=ethercap,dc=com&quot;</span> -W -f /tmp/passwd.ldif</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>导入后的效果<br><img src="http://img.yuekang.org.cn/2018071001.png"></p>
+<h1 id="LdapClient-客户端配置"><a href="#LdapClient-客户端配置" class="headerlink" title="LdapClient 客户端配置"></a>LdapClient 客户端配置</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">//安装客户端必备软件</span><br><span class="line">yum install -y oddjob-mkhomedir oddjob openssh-ldap</span><br><span class="line"></span><br><span class="line">//开启相关配置选项 /etc/sysconfig/authconfig</span><br><span class="line">USELDAP=yes  </span><br><span class="line">USELDAPAUTH=yes  </span><br><span class="line">USEMD5=no  </span><br><span class="line">USESHADOW=yes  </span><br><span class="line">USELOCAUTHORIZE=yes</span><br><span class="line"></span><br><span class="line">//配置ldap /etc/openldap/ldap.conf</span><br><span class="line">URI ldap://URL/</span><br><span class="line">BASE dc=ethercap,dc=com</span><br><span class="line">BINDDN cn=admins</span><br><span class="line"></span><br><span class="line">//配置centos验证方式/etc/nsswitch.conf文件,修改为ldap验证</span><br><span class="line">passwd:     files ldap</span><br><span class="line">shadow:     files ldap</span><br><span class="line">group:      files ldap</span><br><span class="line"></span><br><span class="line">//加入到service管理</span><br><span class="line">chkconfig oddjobd on</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">service messagebus start</span><br><span class="line">service oddjobd start</span><br><span class="line"></span><br><span class="line">//启用自动创建目录</span><br><span class="line">authconfig --enablemkhomedir --update</span><br><span class="line"></span><br><span class="line">//修改ssdh加入命令 两条都得有缺一不可！</span><br><span class="line">AuthorizedKeysCommand /usr/libexec/openssh/ssh-ldap-wrapper</span><br><span class="line">AuthorizedKeysCommandUser root</span><br><span class="line"></span><br><span class="line">//手动添加/etc/pam.d/password-auth和system-auth</span><br><span class="line">session     optional      pam_oddjob_mkhomedir.so umask=0077</span><br><span class="line"></span><br><span class="line">//重启服务 生效配置</span><br><span class="line">service nslcd restart</span><br><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
 
-block site_title
-    != page.title + " · " + config.title
+<p>采坑总结，自动家目录创建依靠pam_oddjob_mkhomedir.so来实现，前期,使用之前确保oddjobd 是运行状态,否则报错！</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yk@dev:~$ service oddjobd status</span><br><span class="line">Redirecting to /bin/systemctl status  oddjobd.service</span><br><span class="line">● oddjobd.service - privileged operations for unprivileged applications</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/oddjobd.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since 三 2018-07-11 17:37:39 CST; 4h 59min ago</span><br><span class="line"> Main PID: 15108 (oddjobd)</span><br><span class="line">   CGroup: /system.slice/oddjobd.service</span><br><span class="line">           └─15108 /usr/sbin/oddjobd -n -p /var/run/oddjobd.pid -t 300</span><br></pre></td></tr></table></figure>
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .cyReward.post.cent
-      #cyReward(role="cylabs",data-use="reward",sourceid=page.permalink)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src='https://www.evernote.com/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href='https://www.evernote.com/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+<p>修改sshd_config重启后报错，单纯查看状态无法知道错误信息，可以通过下面的命令查看</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`which sshd` -D -d</span><br></pre></td></tr></table></figure></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-07-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/LDAP/" title="LDAP">LDAP </a><a class="tag" href="/tags/CentOS/" title="CentOS">CentOS </a><a class="tag" href="/tags/Linux/" title="Linux">Linux </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2018/07/08/2018070801/,少年当自强,CentOS7 安装OpenLdap,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/07/15/2018071501/" title="proxy 反向代理设置">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/07/05/20180705/" title="CGI与FastCGI 学习">Próximo post</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
