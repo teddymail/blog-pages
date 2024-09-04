@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>从零编译nginx+lua+cjson模块的nginx服务实现日志全程监控 · 少年当自强</title><meta name="description" content="我们中有这样的需求就是，当前端和后端通过接口通信以后，我们在日常排查中缺少跟踪接口返回信息和所有头部信息的跟踪，针对于这个需求我们采用nginx+lua+cjson的形式通过lua脚本
+
+准备的模块
+LuaJIT
+
+http://luajit.org/download/LuaJIT-2.0.5.ta"><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>从零编译nginx+lua+cjson模块的nginx服务实现日志全程监控</a></h3></div><div class="post-content"><blockquote>
+<p>我们中有这样的需求就是，当前端和后端通过接口通信以后，我们在日常排查中缺少跟踪接口返回信息和所有头部信息的跟踪，针对于这个需求我们采用nginx+lua+cjson的形式通过lua脚本</p>
+</blockquote>
+<h2 id="准备的模块"><a href="#准备的模块" class="headerlink" title="准备的模块"></a>准备的模块</h2><ol>
+<li>LuaJIT</li>
+</ol>
+<p><a href="http://luajit.org/download/LuaJIT-2.0.5.tar.gz">http://luajit.org/download/LuaJIT-2.0.5.tar.gz</a></p>
+<ol start="2">
+<li>lua-nginx-module</li>
+</ol>
+<p><a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.9rc7.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.9rc7.tar.gz</a></p>
+<ol start="3">
+<li>ngx_devel_kit</li>
+</ol>
+<p><a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<ol start="4">
+<li>lua-cjson</li>
+</ol>
+<p><a href="https://www.kyne.com.au/~mark/software/download/lua-cjson-2.1.0.tar.gz">https://www.kyne.com.au/~mark/software/download/lua-cjson-2.1.0.tar.gz</a></p>
+<ol start="5">
+<li>nginx</li>
+</ol>
+<p><a href="http://nginx.org/download/nginx-1.14.1.tar.gz">http://nginx.org/download/nginx-1.14.1.tar.gz</a></p>
+<h2 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h2><ol>
+<li>LuaJit安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget http://luajit.org/download/LuaJIT-2.0.5.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf LuaJIT-2.0.5.tar.gz</span><br><span class="line"></span><br><span class="line">cd LuaJIT-2.0.5</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install PREFIX=/usr/local/luajit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">环境变量必须配置！</span></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加入下面两个环境变量</span></span><br><span class="line">export LUAJIT_LIB=/usr/local/luajit/lib</span><br><span class="line">export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>ngx_devel_kit和lua-nginx-module</li>
+</ol>
+<p>自己选择安装位置，最好公共目录,我放在&#x2F;usr&#x2F;local下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</span><br><span class="line"></span><br><span class="line">wget https://github.com/openresty/lua-nginx-module/archive/v0.10.9rc7.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf v0.3.0.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf v0.10.9rc7.tar.gz</span><br><span class="line"></span><br><span class="line">cp -R lua-nginx-module/ /usr/local/</span><br><span class="line">cp -R ngx_devel_kit/ /usr/local/</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装nginx编译nginx</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">wget http://nginx.org/download/nginx-1.14.1.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf nginx-1.14.1.tar.gz</span><br><span class="line"></span><br><span class="line">cd nginx-1.14.1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注：报错gcc需要安装，可以执行</span></span><br><span class="line"></span><br><span class="line">yum install -y gcc g++ gcc-c++</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">依赖报错，可以执行</span></span><br><span class="line"></span><br><span class="line">yum -y install zlib zlib-devel openssl openssl--devel pcre pcre-devel</span><br><span class="line"></span><br><span class="line">./configure --with-ld-opt=&quot;-Wl,-rpath,$LUAJIT_LIB&quot; --conf-path=/etc/nginx/nginx.conf  --add-module=/usr/local/ngx_devel_kit --add-module=/usr/local/lua-nginx-module</span><br><span class="line"></span><br><span class="line">make -j 4 &amp;&amp; make install</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载lua库</span></span><br><span class="line">echo &quot;/usr/local/luajit/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+
+
+<ol start="4">
+<li>lua-cjson安装</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">wget https://www.kyne.com.au/~mark/software/download/lua-cjson-2.1.0.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf lua-cjson-2.1.0.tar.gz</span><br><span class="line"></span><br><span class="line">cd lua-cjson-2.1.0</span><br><span class="line"></span><br><span class="line">vi Makefile</span><br><span class="line"></span><br><span class="line"># 修改前缀(路径后不要留空格！！)</span><br><span class="line">PREFIX =            /usr/local/luajit</span><br><span class="line">LUA_INCLUDE_DIR =   $(PREFIX)/include/luajit-2.0</span><br><span class="line"></span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># lua中引用cjson库时必须指定位置</span><br><span class="line">package.path = &quot;/usr/local/luajit/mylua/?.lua;&quot;</span><br><span class="line">package.cpath = &quot;/usr/local/luajit/lib/lua/5.1/?.so;&quot;</span><br><span class="line">local cjson = require(&quot;cjson&quot;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="网站配置"><a href="#网站配置" class="headerlink" title="网站配置"></a>网站配置</h2><p>日志手机依旧依靠nginx log的形式我们针对于需要的内容进行收集和填充到日志中去，依赖原有的阿里云日志服务进行收集</p>
+<p><img src="http://img.yuekang.org.cn/2018112101.png" alt="日志服务"></p>
+<ol>
+<li>定义日志格式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">log_format json_combined escape=json</span><br><span class="line">                &#x27;&#123;&#x27;</span><br><span class="line">                    &#x27;&quot;time_local&quot;:&quot;$time_local&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;remote_addr&quot;:&quot;$remote_addr&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;remote_user&quot;:&quot;$remote_user&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;request&quot;:&quot;$request&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;req_headers&quot;:&quot;$req_headers&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;status&quot;: &quot;$status&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;http_host&quot;: &quot;$http_host&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;body_bytes_sent&quot;:&quot;$body_bytes_sent&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;request_time&quot;:&quot;$request_time&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;http_referrer&quot;:&quot;$http_referer&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;content_type&quot;:&quot;$content_type&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;req_body&quot;:&quot;$req_body&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;resp_body&quot;:&quot;$resp_body&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ua&quot;:&quot;$http_user_agent&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;cookie_u&quot;:&quot;$cookie_u&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;referer&quot;:&quot;$http_referer&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;xff&quot;:&quot;$http_x_forwarded_for&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ups_status&quot;:&quot;$upstream_status&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ups_addr&quot;:&quot;$upstream_addr&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;resp_content_type&quot;:&quot;$resp_content_type&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ups_time&quot;:&quot;$upstream_response_time&quot;&#x27;</span><br><span class="line">                &#x27;&#125;&#x27;;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>定义req_header和resp_body收集</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 开启lua记录请求体</span><br><span class="line">lua_need_request_body on;</span><br><span class="line">set $resp_body &quot;&quot;;</span><br><span class="line">set $resp_content_type &quot;&quot;;</span><br><span class="line">set $req_body &quot;&quot;;</span><br><span class="line">set $req_headers &quot;&quot;;</span><br><span class="line">header_filter_by_lua &#x27;</span><br><span class="line">             package.path = &quot;/usr/local/luajit/mylua/?.lua;&quot;</span><br><span class="line">             package.cpath = &quot;/usr/local/luajit/lib/lua/5.1/?.so;&quot;</span><br><span class="line">             local cjson = require(&quot;cjson&quot;);</span><br><span class="line">             local headers, err = ngx.req.get_headers()</span><br><span class="line">             local json = &#123;&#125;;</span><br><span class="line">             for k, v in pairs(headers) do</span><br><span class="line">                 json[k] = v;</span><br><span class="line">             end</span><br><span class="line">             ngx.var.req_headers = cjson.encode(json);</span><br><span class="line">&#x27;;</span><br><span class="line">body_filter_by_lua &#x27;</span><br><span class="line">             ngx.var.resp_content_type = ngx.resp.get_headers()[&quot;Content-Type&quot;]</span><br><span class="line">             local resp_body = ngx.arg[1]</span><br><span class="line">             ngx.ctx.buffered = (ngx.ctx.buffered or &quot;&quot;) .. resp_body</span><br><span class="line">             if ngx.arg[2] and string.find(ngx.var.resp_content_type, &quot;application/json&quot;) then</span><br><span class="line">                     ngx.var.resp_body = ngx.ctx.buffered</span><br><span class="line">                     ngx.var.req_body = ngx.var.request_body</span><br><span class="line">             end</span><br><span class="line">&#x27;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>odps收集表结构</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `access_json` (</span><br><span class="line">	`ip` string,</span><br><span class="line">	`remote_user` string,</span><br><span class="line">	`req_headers` string,</span><br><span class="line">	`status` bigint,</span><br><span class="line">	`http_host` string,</span><br><span class="line">	`body_bytes_sent` bigint,</span><br><span class="line">	`request_time` string,</span><br><span class="line">	`http_referer` string,</span><br><span class="line">	`content_type` string,</span><br><span class="line">	`req_body` string,</span><br><span class="line">	`resp_body` string,</span><br><span class="line">	`http_user_agent` string,</span><br><span class="line">	`cookie_u` string,</span><br><span class="line">	`http_x_forwarded_for` string,</span><br><span class="line">	`upstream_status` string,</span><br><span class="line">	`upstream_addr` string,</span><br><span class="line">	`resp_content_type` string,</span><br><span class="line">	`upstream_response_time` string,</span><br><span class="line">	`request` string</span><br><span class="line">) </span><br><span class="line"> PARTITIONED BY (dt string);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="AB压力测试"><a href="#AB压力测试" class="headerlink" title="AB压力测试"></a>AB压力测试</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"> yum -y install httpd-tools</span><br><span class="line">[root@zookeeperslave2 ~]# ab -c 1000 -n 10000 -r  http://192.168.1.169/aaa</span><br><span class="line">This is ApacheBench, Version 2.3 &lt;$Revision: 1430300 $&gt;</span><br><span class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</span><br><span class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.1.169 (be patient)</span><br><span class="line">Completed 1000 requests</span><br><span class="line">Completed 2000 requests</span><br><span class="line">Completed 3000 requests</span><br><span class="line">Completed 4000 requests</span><br><span class="line">Completed 5000 requests</span><br><span class="line">Completed 6000 requests</span><br><span class="line">Completed 7000 requests</span><br><span class="line">Completed 8000 requests</span><br><span class="line">Completed 9000 requests</span><br><span class="line">Completed 10000 requests</span><br><span class="line">Finished 10000 requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        nginx/1.14.1</span><br><span class="line">Server Hostname:        192.168.1.169</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          /aaa</span><br><span class="line">Document Length:        17 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      1000</span><br><span class="line">Time taken for tests:   1.508 seconds</span><br><span class="line">Complete requests:      10000</span><br><span class="line">Failed requests:        0</span><br><span class="line">Write errors:           0</span><br><span class="line">Total transferred:      1660000 bytes</span><br><span class="line">HTML transferred:       170000 bytes</span><br><span class="line">Requests per second:    6632.41 [#/sec] (mean)</span><br><span class="line">Time per request:       150.775 [ms] (mean)</span><br><span class="line">Time per request:       0.151 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          1075.18 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0   52 169.9     18    1040</span><br><span class="line">Processing:    11   50  29.4     41     273</span><br><span class="line">Waiting:        0   48  29.3     39     270</span><br><span class="line">Total:         30  102 171.4     65    1292</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     65</span><br><span class="line">  66%     73</span><br><span class="line">  75%     82</span><br><span class="line">  80%     90</span><br><span class="line">  90%    150</span><br><span class="line">  95%    156</span><br><span class="line">  98%   1059</span><br><span class="line">  99%   1065</span><br><span class="line"> 100%   1292 (longest request)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="问题集结"><a href="#问题集结" class="headerlink" title="问题集结"></a>问题集结</h2><ol>
+<li>AIO找不到的问题</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: no supported file AIO was found</span><br><span class="line">Currently file AIO is supported on FreeBSD 4.3+ and Linux 2.6.22+ only</span><br></pre></td></tr></table></figure>
+
+<p>安装开发者工具</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum groupinstall &#x27;Development Tools&#x27;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>缺少libxml2&#x2F;libxslt模块</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the HTTP XSLT module requires the libxml2/libxslt</span><br><span class="line">libraries. You can either do not enable the module or install the libraries.</span><br></pre></td></tr></table></figure>
+
+<p>安装缺失库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install libxml2 libxml2-dev</span><br><span class="line">yum -y install libxslt-devel</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>缺少GD库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the HTTP image filter module requires the GD library.</span><br><span class="line">You can either do not enable the module or install the libraries.</span><br></pre></td></tr></table></figure>
+
+<p>安装GD库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install gd-devel</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>缺少ExtUtils</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: perl module ExtUtils::Embed is required</span><br></pre></td></tr></table></figure>
+
+<p>安装ExtUtils</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install perl-devel perl-ExtUtils-Embed</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>缺少GeoIP库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the GeoIP module requires the GeoIP library.</span><br><span class="line">You can either do not enable the module or install the library.</span><br></pre></td></tr></table></figure>
+
+<p>安装缺失库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install GeoIP GeoIP-devel GeoIP-data</span><br></pre></td></tr></table></figure>
+
+<p>6、 缺少Google Perftools （编译环境我是不装这个的，从编译选线去除这个依赖就行）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the Google perftools module requires the Google perftools</span><br><span class="line">library. You can either do not enable the module or install the library.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 安装libunwind</span><br><span class="line">wget http://download.savannah.gnu.org/releases/libunwind/libunwind-0.99-beta.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf libunwind-0.99-beta.tar.gz</span><br><span class="line">cd libunwind-0.99-beta</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># 安装google-perftools</span><br><span class="line">wget https://github.com/gperftools/gperftools/releases/download/gperftools-2.5/gperftools-2.5.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf gperftools-2.5.tar.gz</span><br><span class="line">cd gperftools-2.5</span><br><span class="line">./configure --prefix=/usr/local/gperftools</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">vi /etc/ld.so.conf.d/usr_local_lib.conf</span><br><span class="line">#加入</span><br><span class="line">/usr/local/lib</span><br><span class="line">ldconfig</span><br><span class="line"></span><br><span class="line"># 添加环境</span><br><span class="line">vi /etc/profile</span><br><span class="line">export LD_PRELOAD=/usr/local/gperftools/lib/libtcmalloc.so</span><br><span class="line">export HEAPPROFILE=/usr/bin/gzip</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>8.模块版本不对 </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[emerg] module &quot;/usr/lib64/nginx/modules/ngx_http_geoip_module.so&quot; version 1012002 instead of 1...ip.conf:1</span><br></pre></td></tr></table></figure>
+
+<p>这个错误是因为之前nginx是yum安装的他的版本是1.12.*的  我这次安装的nginx是最新版本1.14.*的所以我需要对这个模块进行升级</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/yum.repos.d/nginx.repo</span><br><span class="line"></span><br><span class="line">[nginx]</span><br><span class="line">name=nginx repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/7/$basearch/</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line"></span><br><span class="line">yum remove nginx-mod*</span><br><span class="line">yum install nginx-module-*</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/nginx/" title="nginx">nginx </a><a class="tag" href="/tags/监控/" title="监控">监控 </a><a class="tag" href="/tags/lua/" title="lua">lua </a></div></div></div></div><a id="comments"></a><div id="cyReward" role="cylabs" data-use="reward"></div><script src="https://cy-cdn.kuaizhan.com/js/??lib/jquery.js,changyan.labs.https.js?appid=cyt08N8Y6"></script><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2018/11/14/2018-11-14-从零编译nginx-lua-cjson模块的nginx服务实现日志全程监控/,少年当自强,从零编译nginx+lua+cjson模块的nginx服务实现日志全程监控,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/11/28/2018-11-28-LDAP-%E5%88%86%E4%BA%AB/" title="LDAP 分享">Post Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/11/12/2018-11-12-nginx%E4%B8%8A%E9%83%A8%E7%BD%B2nginx-json-log%E6%9D%A5%E7%9B%91%E6%8E%A7%E7%BD%91%E7%AB%99%E4%B8%8A%E6%8E%A5%E5%8F%A3%E7%9A%84%E8%AF%A6%E7%BB%86%E6%95%B0%E6%8D%AE/" title="nginx上部署nginx-json-log来监控网站上接口的详细数据">Próximo post</a></li></ul></div><a id="valine"></a><a id="comments"></a><div id="vcomments" style="margin:0 30px;"></div><script src="//unpkg.com/valine@1.5.2/dist/Valine.min.js?v=undefined"></script><script>var valine = new Valine({
+  el:'#vcomments',
+  notify:false || false, 
+  verify:true || false,
+  app_id:'yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz',
+  app_key:'Fb1nRCpsNrMB0U2Fv3jJSCsu',
+  placeholder:'ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像',
+  path: window.location.pathname,
+  avatar:'',
+  avatar_cdn: 'https://cravatar.cn/avatar/', // 自定义avatar cdn
+  // 设置Bilibili表情包地址
+  emojiCDN: '//i0.hdslb.com/bfs/emote/',
+  // 表情title和图片映射
+  emojiMaps: {
+         "tv_doge": "6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png",
+         "tv_亲亲": "a8111ad55953ef5e3be3327ef94eb4a39d535d06.png",
+         "tv_偷笑": "bb690d4107620f1c15cff29509db529a73aee261.png",
+         "tv_再见": "180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png",
+         "tv_冷漠": "b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png",
+         "tv_可爱": "9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png",
+         "tv_吐血": "09dd16a7aa59b77baa1155d47484409624470c77.png",
+         "tv_呆": "fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png",
+         "tv_呕吐": "9f996894a39e282ccf5e66856af49483f81870f3.png",
+         "tv_困": "241ee304e44c0af029adceb294399391e4737ef2.png",
+         "tv_坏笑": "1f0b87f731a671079842116e0991c91c2c88645a.png",
+         "tv_大佬": "093c1e2c490161aca397afc45573c877cdead616.png",
+         "tv_委屈": "d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png",
+         "tv_害羞": "a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png",
+         "tv_尴尬": "7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png",
+         "tv_微笑": "70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png",
+         "tv_思考": "90cf159733e558137ed20aa04d09964436f618a1.png",
+         "tv_惊吓": "0d15c7e2ee58e935adc6a7193ee042388adc22af.png",
+         "tv_打脸": "56ab10b624063e966bfcb76ea5dc4794d87dfd47.png",
+         "tv_抓狂": "fe31c08edad661d63762b04e17b8d5ae3c71a757.png",
+         "tv_抠鼻": "c666f55e88d471e51bbd9fab9bb308110824a6eb.png",
+         "tv_斜眼笑": "911f987aa8bc1bee12d52aafe62bc41ef4474e6c.png",
+         "tv_无奈": "ea8ed89ee9878f2fece2dda0ea8a5dbfe21b5751.png",
+         "tv_晕": "5443c22b4d07fb1907ccc610c8e6db254f2461b7.png",
+         "tv_流汗": "cead1c351ab8d79e9f369605beb90148db0fbed3.png",
+         "tv_流泪": "7e71cde7858f0cd50d74b0264aa26db612a8a167.png",
+         "tv_流鼻血": "c32d39db2737f89b904ca32700d140a9241b0767.png",
+         "tv_点赞": "f85c354995bd99e28fc76c869bfe42ba6438eff4.png",
+         "tv_生气": "26702dcafdab5e8225b43ffd23c94ac1ff932654.png",
+         "tv_生病": "8b0ec90e6b86771092a498c54f09fc94621c1900.png",
+         "tv_疑问": "0793d949b18d7be716078349c202c15ff166f314.png",
+         "tv_白眼": "c1d59f439e379ee50eef488bcb5e5378e5044ea4.png",
+         "tv_皱眉": "72ccad6679fea0d14cce648b4d818e09b8ffea2d.png",
+         "tv_目瞪口呆": "0b8cb81a68de5d5365212c99375e7ace3e7891b7.png",
+         "tv_睡着": "8b196675b53af58264f383c50ad0945048290b33.png",
+         "tv_笑哭": "1abc628f6d4f4caf9d0e7800878f4697abbc8273.png",
+         "tv_腼腆": "89712c0d4af73e67f89e35cbc518420380a7f6f4.png",
+         "tv_色": "61822c7e9aae5da76475e7892534545336b23a6f.png",
+         "tv_调侃": "4bc022533ef31544ca0d72c12c808cf4a1cce3e3.png",
+         "tv_调皮": "b9c41de8e82dd7a8515ae5e3cb63e898bf245186.png",
+         "tv_鄙视": "6e72339f346a692a495b123174b49e4e8e781303.png",
+         "tv_闭嘴": "c9e990da7f6e93975e25fd8b70e2e290aa4086ef.png",
+         "tv_难过": "87f46748d3f142ebc6586ff58860d0e2fc8263ba.png",
+         "tv_馋": "fc7e829b845c43c623c8b490ee3602b7f0e76a31.png",
+         "tv_鬼脸": "0ffbbddf8a94d124ca2f54b360bbc04feb6bbfea.png",
+         "tv_黑人问号": "45821a01f51bc867da9edbaa2e070410819a95b2.png",
+         "tv_鼓掌": "1d21793f96ef4e6f48b23e53e3b9e42da833a0f6.png"
+  }
+})</script></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
