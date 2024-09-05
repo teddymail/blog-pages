@@ -1,71 +1,285 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a class="current" href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display:none;"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/03/05/2017-03-05-%E7%BB%8F%E5%85%B8%E5%AE%89%E5%8D%93%E9%9D%A2%E8%AF%95%E9%A2%98/">经典安卓面试题</a></h3></div><div class="post-content"><p>1. Activity生命周期
-这个是安卓中的基础，重要性想必不用我说了吧，如果还有对此不太了解的要回去好好复习了哦现在主要考的还是对于他们生命周期的灵活运用
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/tags">Tags</a></li><li><a href="/about">About</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display: none"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2017/03/05/2017-03-05-%E7%BB%8F%E5%85%B8%E5%AE%89%E5%8D%93%E9%9D%A2%E8%AF%95%E9%A2%98/">经典安卓面试题</a></h3></div><div class="post-content"><div class="card"><p><h6 id="1-Activity生命周期"><a href="#1-Activity生命周期" class="headerlink" title="1. Activity生命周期"></a>1. Activity生命周期</h6><blockquote>
+<p>这个是安卓中的基础，重要性想必不用我说了吧，如果还有对此不太了解的要回去好好复习了哦<br>现在主要考的还是对于他们生命周期的灵活运用</p>
+</blockquote>
+<hr>
+<h6 id="2-Service生命周期"><a href="#2-Service生命周期" class="headerlink" title="2. Service生命周期"></a>2. Service生命周期</h6><blockquote>
+<p>注意：Service两种启动方式,startService()和bindService()，还有混合启动的概念</p>
+</blockquote>
+<p>  答：<br>      给一个图足以说明生命周期的概念:</p>
+<p>  <img src="http://img.yuekang.org.cn/QQ%E6%88%AA%E5%9B%BE20170305163817.png" alt="Services声明周期"></p>
+<hr>
+<h6 id="3-理解Activity，View-Window三者关系"><a href="#3-理解Activity，View-Window三者关系" class="headerlink" title="3. 理解Activity，View,Window三者关系"></a>3. 理解Activity，View,Window三者关系</h6><blockquote>
+<p>这个问题真的很不好回答。所以这里先来个算是比较恰当的比喻来形容下它们的关系吧。</p>
+</blockquote>
+<blockquote>
+<p>Activity像一个工匠（控制单元）</p>
+</blockquote>
+<blockquote>
+<p>Window像窗户（承载模型）</p>
+</blockquote>
+<blockquote>
+<p>View像窗花（显示视图）LayoutInflater像剪刀，Xml配置像窗花图纸。</p>
+</blockquote>
+<pre><code>答：
 
+1. Activity构造的时候会初始化一个Window，准确的说是PhoneWindow。
+2. 这个PhoneWindow有一个“ViewRoot”，这个“ViewRoot”是一个View或者说ViewGroup，是最初始的根视图。
+3. “ViewRoot”通过addView方法来一个个的添加View。比如TextView，Button等
+4. 这些View的事件监听，是由WindowManagerService来接受消息，并且回调Activity函数。比如onClickListener，onKeyDown等。
+</code></pre>
+<hr>
+<h6 id="4-四种LaunchMode及其使用场景"><a href="#4-四种LaunchMode及其使用场景" class="headerlink" title="4. 四种LaunchMode及其使用场景"></a>4. 四种LaunchMode及其使用场景</h6><p>答：</p>
+<ol>
+<li>standard 模式<br>这是默认模式，每次激活Activity时都会创建Activity实例，并放入任务栈中。使用场景：大多数Activity。</li>
+<li>singleTop 模式<br>如果在任务的栈顶正好存在该Activity的实例，就重用该实例( 会调用实例的 onNewIntent() )，否则就会创建新的实例并放入栈顶，即使栈中已经存在该Activity的实例，只要不在栈顶，都会创建新的实例。使用场景如新闻类或者阅读类App的内容页面。</li>
+<li>singleTask 模式<br>如果在栈中已经有该Activity的实例，就重用该实例(会调用实例的 onNewIntent() )。重用时，会让该实例回到栈顶，因此在它上面的实例将会被移出栈。如果栈中不存在该实例，将会创建新的实例放入栈中。使用场景如浏览器的主界面。不管从多少个应用启动浏览器，只会启动主界面一次，其余情况都会走onNewIntent，并且会清空主界面上面的其他页面。</li>
+<li>singleInstance 模式<br>在一个新栈中创建该Activity的实例，并让多个应用共享该栈中的该Activity实例。一旦该模式的Activity实例已经存在于某个栈中，任何应用再激活该Activity时都会重用该栈中的实例( 会调用实例的 onNewIntent() )。其效果相当于多个应用共享一个应用，不管谁激活该 Activity 都会进入同一个应用中。使用场景如闹铃提醒，将闹铃提醒与闹铃设置分离。singleInstance不要用于中间页面，如果用于中间页面，跳转会有问题，比如：A -&gt; B (singleInstance) -&gt; C，完全退出后，在此启动，首先打开的是B。</li>
+</ol>
+<hr>
+<h6 id="5-View的绘制流程"><a href="#5-View的绘制流程" class="headerlink" title="5. View的绘制流程"></a>5. View的绘制流程</h6><blockquote>
+<p>这个就比较复杂了，我老师说过这个东西每个两年玩不明白，可见这个东西的复杂性<br>三大过程：measure过程，layout过程，draw过程</p>
+</blockquote>
+<p>答：</p>
+<h5 id="6-Touch事件传递机制"><a href="#6-Touch事件传递机制" class="headerlink" title="6. Touch事件传递机制"></a>6. Touch事件传递机制</h5><p>答：<br>    <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">dispatchTouchEvent</span><span class="params">(MotionEventev)</span>;  </span><br><span class="line"><span class="comment">//用来分派event</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">onInterceptTouchEvent</span><span class="params">(MotionEventev)</span>;</span><br><span class="line"><span class="comment">//用来拦截event</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">onTouchEvent</span><span class="params">(MotionEventev)</span>;</span><br><span class="line"><span class="comment">//用来处理event</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>其中Activity和View控件（TextView）拥有分派和处理事件方法，View容器（LinearLayout）具有分派，拦截，处理事件方法。这里也有个比喻：领导都会把任务向下分派，一旦下面的人把事情做不好，就不会再把后续的任务交给下面的人来做了，只能自己亲自做，如果自己也做不了，就只能告诉上级不能完成任务，上级又会重复他的过程。另外，领导都有权利拦截任务，对下级隐瞒该任务，而直接自己去做，如果做不成，也只能向上级报告不能完成任务。</p>
+</blockquote>
+<h5 id="7-Android中的几种动画"><a href="#7-Android中的几种动画" class="headerlink" title="7. Android中的几种动画"></a>7. Android中的几种动画</h5><p>答:<br>曾被问到Android中有几种动画，这个问题也好难回答。Android3.0之前有2种，3.0后有3种。</p>
+<ol>
+<li>FrameAnimation（逐帧动画）：将多张图片组合起来进行播放，类似于早期电影的工作原理，很多App的loading是采用这种方式。</li>
+<li>TweenAnimation（补间动画）：是对某个View进行一系列的动画的操作，包括淡入淡出（Alpha），缩放（Scale），平移（Translate），旋转（Rotate）四种模式。</li>
+<li>PropertyAnimation（属性动画）：属性动画不再仅仅是一种视觉效果了，而是一种不断地对值进行操作的机制，并将值赋到指定对象的指定属性上，可以是任意对象的任意属性。</li>
+</ol>
+<hr>
+<h5 id="8-Android中跨进程通讯的几种方式"><a href="#8-Android中跨进程通讯的几种方式" class="headerlink" title="8. Android中跨进程通讯的几种方式"></a>8. Android中跨进程通讯的几种方式</h5></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-03-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><span>About 1328 words, 4 min 25 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/03/01/2017-03-01-%E5%AE%89%E5%8D%93%E5%BC%80%E6%BA%90%E5%BA%93%E6%8E%A8%E8%8D%90/">安卓开源库推荐</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>博主在这里记录一些特别的好的开源框架以供以后去使用,会不断的更新</p>
+</blockquote>
+<h1 id="1-Android-skin-support"><a href="#1-Android-skin-support" class="headerlink" title="1. Android-skin-support"></a>1. Android-skin-support</h1><h4 id="Android-skin-support-一款用心去做的Android-换肤框架-极低的学习成本-极好的用户体验-只需要两行代码-就可以实现换肤-你值得拥有"><a href="#Android-skin-support-一款用心去做的Android-换肤框架-极低的学习成本-极好的用户体验-只需要两行代码-就可以实现换肤-你值得拥有" class="headerlink" title="Android-skin-support: 一款用心去做的Android 换肤框架, 极低的学习成本, 极好的用户体验. 只需要两行代码, 就可以实现换肤, 你值得拥有!!!"></a>Android-skin-support: 一款用心去做的Android 换肤框架, 极低的学习成本, 极好的用户体验. 只需要两行代码, 就可以实现换肤, 你值得拥有!!!</h4><p>开源库地址：<a href="https://github.com/ximsfei/Android-skin-support">点我查看</a></p>
+<p>效果图：<img src="http://img.yuekang.org.cn/2017-01-17%2018_07_04.gif"></p>
+<h1 id="2-StatefulLayout"><a href="#2-StatefulLayout" class="headerlink" title="2. StatefulLayout"></a>2. StatefulLayout</h1><h4 id="Android布局，以显示最常见的状态模板，如加载，空，错误等。要做到这一点，所有你需要的是包装目标区域（视图）与StatefulLayout。"><a href="#Android布局，以显示最常见的状态模板，如加载，空，错误等。要做到这一点，所有你需要的是包装目标区域（视图）与StatefulLayout。" class="headerlink" title="Android布局，以显示最常见的状态模板，如加载，空，错误等。要做到这一点，所有你需要的是包装目标区域（视图）与StatefulLayout。"></a>Android布局，以显示最常见的状态模板，如加载，空，错误等。要做到这一点，所有你需要的是包装目标区域（视图）与StatefulLayout。</h4><p>开源库地址：【<a href="https://github.com/gturedi/StatefulLayout">点击此处进入</a>】</p>
+<p>效果图：<img src="http://img.yuekang.org.cn/2017030101.gif" alt="效果图"></p>
+<h1 id="3-CircleMenu"><a href="#3-CircleMenu" class="headerlink" title="3. CircleMenu"></a>3. CircleMenu</h1><h4 id="这是一个效果非常棒的弹出式菜单开源库。"><a href="#这是一个效果非常棒的弹出式菜单开源库。" class="headerlink" title="这是一个效果非常棒的弹出式菜单开源库。"></a>这是一个效果非常棒的弹出式菜单开源库。</h4><p>开源库地址：【<a href="https://github.com/ImangazalievM/CircleMenu">开此进入</a>】</p>
+<p>效果图：<img src="http://img.yuekang.org.cn/2017030102.gif" alt="效果图"></p>
+<h1 id="4-Aceso"><a href="#4-Aceso" class="headerlink" title="4.Aceso"></a>4.Aceso</h1><h5 id="Aceso是基于Instant-Run-Hot-Swap的Android热修复方案，使用它你能在不用重新发布版本的情况下对线上app的bug进行修复。"><a href="#Aceso是基于Instant-Run-Hot-Swap的Android热修复方案，使用它你能在不用重新发布版本的情况下对线上app的bug进行修复。" class="headerlink" title="Aceso是基于Instant Run Hot Swap的Android热修复方案，使用它你能在不用重新发布版本的情况下对线上app的bug进行修复。"></a>Aceso是基于Instant Run Hot Swap的Android热修复方案，使用它你能在不用重新发布版本的情况下对线上app的bug进行修复。</h5><p>开源库地址:【<a href="https://github.com/meili/Aceso">点此进入</a>】</p>
+<h1 id="5-ExpectAnim"><a href="#5-ExpectAnim" class="headerlink" title="5. ExpectAnim"></a>5. ExpectAnim</h1><h5 id="一个让你的页面动起来的开源库"><a href="#一个让你的页面动起来的开源库" class="headerlink" title="一个让你的页面动起来的开源库"></a>一个让你的页面动起来的开源库</h5><p>开源库地址:【<a href="https://github.com/florent37/ExpectAnim">点此进入</a>】</p>
+<p>效果图：<img src="http://img.yuekang.org.cn/2017030103.gif" alt="效果图"></p>
+<h1 id="6-Snacky"><a href="#6-Snacky" class="headerlink" title="6 .Snacky"></a>6 .Snacky</h1><h4 id="此款开源库能够帮你快速的建立Snackbar"><a href="#此款开源库能够帮你快速的建立Snackbar" class="headerlink" title="此款开源库能够帮你快速的建立Snackbar"></a>此款开源库能够帮你快速的建立Snackbar</h4><p>开源库地址:【<a href="https://github.com/matecode/Snacky">点此进入</a>】</p>
+<p>效果图:<img src="http://img.yuekang.org.cn/2017030104.png" alt="效果图"></p>
+<h1 id="7-Zoomy"><a href="#7-Zoomy" class="headerlink" title="7. Zoomy"></a>7. Zoomy</h1><blockquote>
+<p>Zoomy是一个简易的从缩放到撮合的安卓库</p>
+</blockquote>
+<p>开源库地址:【<a href="https://github.com/imablanco/Zoomy">点此进入</a>】</p>
+<p>效果图:<img src="http://img.yuekang.org.cn/2017030105.gif"></p>
+<h1 id="8-vlayout"><a href="#8-vlayout" class="headerlink" title="8. vlayout"></a>8. vlayout</h1><blockquote>
+<p>VirtualLayout是一个针对RecyclerView的LayoutManager扩展, 主要提供一整套布局方案和布局间的组件复用的问题。</p>
+</blockquote>
+<p>开源库地址：【<a href="https://github.com/alibaba/vlayout">点此进入</a>】</p>
+<p>效果图:<img src="http://img.yuekang.org.cn/2017030106.gif" alt="效果图"></p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-03-01</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><i class="fa fa-tag"></i><a class="tag" href="/tags/开源库/" title="开源库">开源库 </a><span>About 401 words, 1 min 20 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/02/13/2017-02-13-Java%E4%B8%AD%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%88%E5%8C%BA%E5%88%AB%EF%BC%89/">Java中的知识点（区别）</a></h3></div><div class="post-content"><div class="card"><p><p>1.public ,private, protected 不写时候的区别:</p>
+<table>
+<thead>
+<tr>
+<th align="left">作用于</th>
+<th align="center">当前类</th>
+<th align="center">同包</th>
+<th align="center">子孙类</th>
+<th align="center">其他package</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">public</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="left">protected</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">friendly</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+<tr>
+<td align="left">private</td>
+<td align="center">√</td>
+<td align="center">×</td>
+<td align="center">×</td>
+<td align="center">×</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>不写时默认为friendly</p>
+</blockquote>
+<p>2.Collection和Collections的区别</p>
+<blockquote>
+<p>答：<br>1.java.util.Collection是一个<code>集合接口</code>。它提供了集合对象进行基本操作的通用接口方法。<br>Collection接口在java类库中有很多具体的实现。Collection接口意义是为各种具体的集合提供了最大化的统一操作方式。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Collection   </span><br><span class="line">├List   </span><br><span class="line">│├LinkedList   </span><br><span class="line">│├ArrayList   </span><br><span class="line">│└Vector   </span><br><span class="line">│　└Stack   </span><br><span class="line">└Set</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>java.util.Collections是一个包装类。它包含有各种有关集合操作的<code>静态多态方法</code>。此类<code>不能实例化</code>,就像一各工具类，服务于java的Collection框架</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestCollections</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> &#123;</span><br><span class="line">		<span class="comment">//注意List是实现Collection接口的</span></span><br><span class="line">    <span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">    <span class="type">double</span> array[] = &#123; <span class="number">112</span>, <span class="number">111</span>, <span class="number">23</span>, <span class="number">456</span>, <span class="number">231</span> &#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">      list.add(<span class="keyword">new</span> <span class="title class_">Double</span>(array[i]));</span><br><span class="line">    &#125;</span><br><span class="line">    Collections.sort(list);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">      System.out.println(list.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 结果：23.0 111.0 112.0 231.0 456.0</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-2. Service生命周期
-注意：Service两种启动方式,startService()和bindService()，还有混合启动的概念
+<p>3.Vector类和ArrayList类的区别</p>
+<blockquote>
+<p>答：<br><code>Vector</code>和<code>ArrayList</code>同属于<code>List</code>接口下,Vector从java1开始一直沿用至今，他俩的最大区别之处是加入了同步锁的策略，Vector是一种老的动态数组，是线程同步的，效率很低，一般不赞成使用。</p>
+</blockquote>
+<p>4.String和StringBuffer的区别</p>
+<blockquote>
+<p>答:<br>String 类代表字符串。Java 程序中的所有字符串字面值（如 “abc” ）都作为此类的实例实现。<br>我们查看内部源码</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">String</span></span><br><span class="line">  <span class="keyword">implements</span> <span class="title class_">java</span>.io.Serializable, Comparable&lt;String&gt;, CharSequence &#123;...&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查看源码的关键字’final’内部则是维护一个不可改变的数组，所以不可以动态的扩种添加，只能创建一个更大的对象来装载新添加的数据</p>
+</blockquote>
+<blockquote>
+<p>下面我们来看一下’StringBuffer’的官方源代码</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">StringBuffer</span></span><br><span class="line">  <span class="keyword">extends</span> <span class="title class_">AbstractStringBuilder</span></span><br><span class="line">  <span class="keyword">implements</span> <span class="title class_">java</span>.io.Serializable, Appendable, CharSequence</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">StringBuffer</span><span class="params">(String str)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(str.length() + <span class="number">16</span>);</span><br><span class="line">        append(str);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-  答...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-03-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><a class="tag" href="/tags/Android/" title="Android">Android </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/03/01/2017-03-01-%E5%AE%89%E5%8D%93%E5%BC%80%E6%BA%90%E5%BA%93%E6%8E%A8%E8%8D%90/">安卓开源库推荐</a></h3></div><div class="post-content"><p>
-博主在这里记录一些特别的好的开源框架以供以后去使用,会不断的更新
+<blockquote>
+<p>从这里看出我们实际上增加字符串的过程实际上就是调用了自身的<code>append</code>方法而已，追查具体的实现</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> AbstractStringBuilder <span class="title function_">append</span><span class="params">(String str)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="literal">null</span>) str = <span class="string">&quot;null&quot;</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> str.length();</span><br><span class="line">    ensureCapacityInternal(count + len);</span><br><span class="line">    str.getCharsNoCheck(<span class="number">0</span>, len, value, count);</span><br><span class="line">    count += len;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 
-1. Android-skin-supportAndroid-skin-support: 一款用心去做的Android 换肤框架, 极低的学习成本, 极好的用户体验. 只需要两行代码, 就可以实现换肤, 你值得拥有!!!开源库地址：点我查看
-效...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-03-01</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Android/" title="Android">Android </a><a class="tag" href="/tags/开源库/" title="开源库">开源库 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/02/13/2017-02-13-Java%E4%B8%AD%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%88%E5%8C%BA%E5%88%AB%EF%BC%89/">Java中的知识点（区别）</a></h3></div><div class="post-content"><p>1.public ,private, protected 不写时候的区别:
-
-
-
-作用于
-当前类
-同包
-子孙类
-其他package
-
-
-
-public
-√
-√
-√
-√
-
-
-protected
-√
-√
-√
-×
-
-
-friendly
-√
-√
-×
-×
-
-
-private
-√
-×
-×
-×
-
-
-
-不写时默认为friendl...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-02-13</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><a class="tag" href="/tags/面试题/" title="面试题">面试题 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/02/12/2017-02-12-Java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%B2%BE%E9%80%89%EF%BC%88%E7%AC%AC%E4%BA%8C%E5%8D%B7%EF%BC%89/">Java面试题精选（第二卷）</a></h3></div><div class="post-content"><p>
-进程和线程的区别是什么？
-
-
-答：进程是执行着的应用程序，而线程是进程内部的一个执行序列。一个进程可以有多个线程。线程又叫做轻量级进程。
-
-
-
-创建线程有几种不同的方式？你喜欢哪一种？为什么？
-
-
-答：
-
-有三种方式可以用来创建线程：1.继承Thread类2.实现Runnable接口3.应用程序可以使用Exec...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-02-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/02/12/2017-02-12-Java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%B2%BE%E9%80%89-%E7%AC%AC%E4%B8%80%E5%8D%B7/">Java面试题精选(第一卷)</a></h3></div><div class="post-content"><p>1.什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？
-
-答：
-
-Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。Java虚拟机让...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-02-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/5/">Anterior</a></li></ul></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
+<blockquote>
+<p>实际上是计算当前字符串的长度，并且通过计数器把最新存储的位置保存下来，之前还需要判空,<code>ensureCapacityInternal(count + len);</code>就是他们的动态扩展数组大小的具体实现，其原理就是判断当前存储的的位数是否足够，不够就动态的空中。</p>
+</blockquote>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-02-13</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><i class="fa fa-tag"></i><a class="tag" href="/tags/面试题/" title="面试题">面试题 </a><span>About 683 words, 2 min 16 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/02/12/2017-02-12-Java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%B2%BE%E9%80%89%EF%BC%88%E7%AC%AC%E4%BA%8C%E5%8D%B7%EF%BC%89/">Java面试题精选（第二卷）</a></h3></div><div class="post-content"><div class="card"><p><ol>
+<li>进程和线程的区别是什么？</li>
+</ol>
+<blockquote>
+<h6 id="答："><a href="#答：" class="headerlink" title="答："></a>答：</h6><p>进程是执行着的应用程序，而线程是进程内部的一个执行序列。一个进程可以有多个线程。线程又叫做轻量级进程。</p>
+</blockquote>
+<hr>
+<ol start="2">
+<li>创建线程有几种不同的方式？你喜欢哪一种？为什么？</li>
+</ol>
+<blockquote>
+<h6 id="答：-1"><a href="#答：-1" class="headerlink" title="答："></a>答：</h6></blockquote>
+<blockquote>
+<p>有三种方式可以用来创建线程：<br>1.继承Thread类<br>2.实现Runnable接口<br>3.应用程序可以使用Executor框架来创建线程池<br>实现Runnable接口这种方式更受欢迎，因为这不需要继承Thread类。在应用设计中已经继承了别的对象的情况下，这需要多继承（而Java不支持多继承），只能实现接口。同时，线程池也是非常高效的，很容易实现和使用。</p>
+</blockquote>
+<hr>
+<p>3.概括的解释下线程的几种可用状态。</p>
+<blockquote>
+<h6 id="答：-2"><a href="#答：-2" class="headerlink" title="答："></a>答：</h6><ol>
+<li>新建( new )：新创建了一个线程对象。</li>
+<li>可运行( runnable )：线程对象创建后，其他线程(比如 main 线程）调用了该对象 的 start ()方法。该状态的线程位于可运行线程池中，等待被线程调度选中，获 取 cpu 的使用权 。</li>
+<li>运行( running )：可运行状态( runnable )的线程获得了 cpu 时间片（ timeslice ） ，执行程序代码。</li>
+<li>阻塞( block )：阻塞状态是指线程因为某种原因放弃了 cpu 使用权，也即让出了 cpu timeslice ，暂时停止运行。直到线程进入可运行( runnable )状态，才有 机会再次获得 cpu timeslice 转到运行( running )状态。阻塞的情况分三种：<blockquote>
+<p>(一). 等待阻塞：运行( running )的线程执行 o . wait ()方法， JVM 会把该线程放 入等待队列( &gt;&gt;waitting queue )中。<br>(二). 同步阻塞：运行( running )的线程在获取对象的同步锁时，若该同步锁 被别的线程占用，则 JVM 会把该线程放入锁池( lock pool )中。<br>(三). 其他阻塞: 运行( running )的线程执行 Thread . sleep ( long ms )或 t . join ()方法，或者发出了 I &#x2F; O 请求时， JVM 会把该线程置为阻塞状态。            当 sleep ()状态超时、 join ()等待线程终止或者超时、或者 I &#x2F; O 处理完毕时，线程重新转入可运行( runnable )状态。</p>
+</blockquote>
+</li>
+<li>死亡( dead )：线程 run ()、 main () 方法执行结束，或者因异常退出了 run ()方法，则该线程结束生命周期。死亡的线程不可再次复生<br><img src="http://img.yuekang.org.cn/2017021202_thread.png" alt="线程图例"></li>
+</ol>
+</blockquote>
+<hr>
+<p>4.同步方法和同步代码块的区别是什么？</p>
+<blockquote>
+<h6 id="答：-3"><a href="#答：-3" class="headerlink" title="答："></a>答：</h6><p>区别：<br>同步方法默认用this或者当前类class对象作为锁；<br>同步代码块可以选择以什么来加锁，比同步方法要更细颗粒度，我们可以选择只同步会发生同步问题的部分代码而不是整个方法.</p>
+</blockquote>
+<hr>
+<p>5.在监视器(Monitor)内部，是如何做线程同步的？程序应该做哪种级别的同步？</p>
+<blockquote>
+<h6 id="答：-4"><a href="#答：-4" class="headerlink" title="答："></a>答：</h6></blockquote>
+<blockquote>
+<p>监视器和锁在Java虚拟机中是一块使用的。<br>监视器监视一块同步代码块，确保一次只有一个线程执行同步代码块。<br>每一个监视器都和一个对象引用相关联。<br>线程在获取锁之前不允许执行同步代码。</p>
+</blockquote>
+<hr>
+<p>6.什么是死锁(deadlock)？</p>
+<blockquote>
+<h6 id="答：-5"><a href="#答：-5" class="headerlink" title="答："></a>答：</h6><p>两个线程或两个以上线程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是这些线程都陷入了无限的等待中。</p>
+</blockquote>
+<hr>
+<p>7.如何确保N个线程可以访问N个资源同时又不导致死锁？</p>
+<blockquote>
+<h6 id="答：-6"><a href="#答：-6" class="headerlink" title="答："></a>答：</h6><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p>
+</blockquote>
+<hr>
+<p>8.Java集合类框架的基本接口有哪些？</p>
+<blockquote>
+<h6 id="答"><a href="#答" class="headerlink" title="答:"></a>答:</h6><p>集合类接口指定了一组叫做元素的对象。集合类接口的每一种具体的实现类都可以选择以它自己的方式对元素进行保存和排序。有的集合类允许重复的键，有些不允许。<br>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。<br>Java集合类里面最基本的接口有：</p>
+<blockquote>
+<p>1.Collection：代表一组对象，每一个对象都是它的子元素。<br>2.Set：不包含重复元素的Collection。<br>3.List：有顺序的collection，并且可以包含重复元素。<br>4.Map：可以把键(key)映射到值(value)的对象，键不能重复。</p>
+</blockquote>
+</blockquote>
+<hr>
+<p>9.为什么集合类没有实现Cloneable和Serializable接口？</p>
+<blockquote>
+<h6 id="答-1"><a href="#答-1" class="headerlink" title="答:"></a>答:</h6><p>克隆(cloning)或者是序列化(serialization)的语义和含义是跟具体的实现相关的。因此，应该由集合类的具体实现来决定如何被克隆或者是序列化。</p>
+</blockquote>
+<hr>
+<p>10.什么是迭代器(Iterator)？</p>
+<blockquote>
+<h6 id="答-2"><a href="#答-2" class="headerlink" title="答:"></a>答:</h6><p>Iterator接口提供了很多对集合元素进行迭代的方法。<br>每一个集合类都包含了可以返回迭代器实例的迭代方法。<br>迭代器可以在迭代的过程中删除底层集合的元素,但是不可以直接调用集合的remove(Object Obj)删除，可以通过迭代器的remove()方法删除。</p>
+</blockquote>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-02-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><span>About 1453 words, 4 min 50 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/02/12/2017-02-12-Java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%B2%BE%E9%80%89-%E7%AC%AC%E4%B8%80%E5%8D%B7/">Java面试题精选(第一卷)</a></h3></div><div class="post-content"><div class="card"><p><p>1.什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？</p>
+<blockquote>
+<h6 id="答："><a href="#答：" class="headerlink" title="答："></a>答：</h6></blockquote>
+<blockquote>
+<p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。<br>Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。Java虚拟机让这个变为可能，因为它知道底层硬件平台的指令长度和其他特性</p>
+</blockquote>
+<hr>
+<p>2.JDK和JRE的区别是什么？</p>
+<blockquote>
+<h6 id="答：-1"><a href="#答：-1" class="headerlink" title="答："></a>答：</h6></blockquote>
+<blockquote>
+<p>Java运行时环境(JRE)是将要执行Java程序的Java虚拟机。它同时也包含了执行applet需要的浏览器插件。Java开发工具包(JDK)是完整的Java软件开发包，包含了JRE，编译器和其他的工具(比如：JavaDoc，Java调试器)，可以让开发者开发、编译、执行Java应用程序。</p>
+</blockquote>
+<p>3.”static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</p>
+<blockquote>
+<h6 id="答：-2"><a href="#答：-2" class="headerlink" title="答："></a>答：</h6></blockquote>
+<blockquote>
+<p>“static”关键字表明一个成员变量或者是成员方法可以在没有所属的类的实例变量的情况下被访问。<br>Java中static方法不能被覆盖，因为方法覆盖是基于运行时动态绑定的，而static方法是编译时静态绑定的。static方法跟类的任何实例都不相关，所以概念上不适用。</p>
+</blockquote>
+<hr>
+<p>4.是否可以在static环境中访问非static变量？</p>
+<blockquote>
+<h6 id="答：-3"><a href="#答：-3" class="headerlink" title="答："></a>答：</h6><p>静态的不可以访问非静态的，但是非静态的可以访问静态变量<br>static变量在Java中是属于类的，它在所有的实例中的值是一样的。当类被Java虚拟机载入的时候，会对static变量进行初始化。如果你的代码尝试不用实例来访问非static的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例关联上。</p>
+</blockquote>
+<hr>
+<p>5.Java支持的数据类型有哪些？什么是自动拆装箱？</p>
+<blockquote>
+<h6 id="答：-4"><a href="#答：-4" class="headerlink" title="答："></a>答：</h6><p>Java语言支持的8种基本数据类型是：<br>byte<br>short<br>int<br>long<br>float<br>double<br>boolean<br>char<br>自动装箱是Java编译器在基本数据类型和对应的对象包装类型之间做的一个转化。比如：把int转化成Integer，double转化成Double，等等。反之就是自动拆箱。</p>
+</blockquote>
+<hr>
+<p>6.Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？</p>
+<blockquote>
+<h6 id="答：-5"><a href="#答：-5" class="headerlink" title="答："></a>答：</h6><p>Java中的方法重载发生在同一个类里面两个或者是多个方法的方法名相同但是参数不同的情况。与此相对，方法覆盖是说子类重新定义了父类的方法。</p>
+</blockquote>
+<blockquote>
+<p>方法覆盖必须有相同的方法名，参数列表和返回类型。覆盖者可能不会限制它所覆盖的方法的访问。</p>
+</blockquote>
+<p>7.Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？</p>
+<blockquote>
+<h6 id="答：-6"><a href="#答：-6" class="headerlink" title="答："></a>答：</h6><p>当新对象被创建的时候，构造函数会被调用。每一个类都有构造函数。在程序员没有给类提供构造函数的情况下，Java编译器会为这个类创建一个默认的构造函数。<br>Java中构造函数重载和方法重载很相似。可以为一个类创建多个构造函数。每一个构造函数必须有它自己唯一的参数列表。<br>Java不支持像C++中那样的复制构造函数，这个不同点是因为如果你不自己写构造函数的情况下，Java不会创建默认的复制构造函数。</p>
+</blockquote>
+<p>8.Java支持多继承么？</p>
+<blockquote>
+<h6 id="答：-7"><a href="#答：-7" class="headerlink" title="答："></a>答：</h6><p>ava中类不支持多继承，只支持单继承（即一个类只有一个父类）。<br>但是java中的接口支持多继承，即一个子接口可以有多个父接口。（接口的作用是用来扩展对象的功能，一个子接口继承多个父接口，说明子接口扩展了多个功能，当类实现接口时，类就扩展了相应的功能）。</p>
+</blockquote>
+<p>9.接口和抽象类的区别是什么？</p>
+<blockquote>
+<h6 id="答：-8"><a href="#答：-8" class="headerlink" title="答："></a>答：</h6><p>Java提供和支持创建抽象类和接口。它们的实现有共同点，不同点在于：<br>接口中所有的方法隐含的都是抽象的。而抽象类则可以同时包含抽象和非抽象的方法。<br>类可以实现很多个接口，但是只能继承一个抽象类<br>类可以不实现抽象类和接口声明的所有方法，当然，在这种情况下，类也必须得声明成是抽象的。<br>抽象类可以在不提供接口方法实现的情况下实现接口。<br>Java接口中声明的变量默认都是final的。抽象类可以包含非final的变量。<br>Java接口中的成员函数默认是public的。抽象类的成员函数可以是private，protected或者是public。<br>接口是绝对抽象的，不可以被实例化。抽象类也不可以被实例化，但是，如果它包含main方法的话是可以被调用的。</p>
+</blockquote>
+<p>10.什么是值传递和引用传递？</p>
+<blockquote>
+<h6 id="答：-9"><a href="#答：-9" class="headerlink" title="答："></a>答：</h6><p>值传递是对基本型变量而言的,传递的是该变量的一个副本,改变副本不影响原变量.<br>引用传递一般是对于对象型变量而言的,传递的是该对象地址的一个副本, 并不是原对象本身 。<br> 所以对引用对象进行操作会同时改变原对象.<br>一般认为,java内的传递都是值传递.</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>感谢牛客网提供的面试题</p>
+</blockquote>
+<blockquote>
+<p>详情请访问:  【<a href="https://www.nowcoder.com/ta/review-java">牛客网Java面试题</a>】</p>
+</blockquote>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-02-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Java/" title="Java">Java </a><span>About 1573 words, 5 min 14 sec  read</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/5/">Previous</a></li></ul></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"Posts",pages:"Pages",categories:"Categories",tags:"Tags",untitled:"(Untitled)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>

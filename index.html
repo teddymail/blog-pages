@@ -1,36 +1,535 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Yue Kang,ykcode@163.com"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords" content="HTML,JAVA,CSS,安卓,Android,Linux"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div></div><ul class="social-links"><li><a href="http://weibo.com/teddymail"><i class="fa fa-weibo"></i></a></li><li><a href="http://github.com/teddymail"><i class="fa fa-github"></i></a></li></ul><div class="footer"><a target="_blank" href="/"><span>Copyright &copy; Teddy All rights reserved.</span></a><div class="by_farbox"></div><div class="by_farbox"><script src="/js/jquery.js"></script><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cspan id='cnzz_stat_icon_1261418356'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1261418356%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a class="current" href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Arquivo</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display:none;"> </a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2024/09/04/2024-09-04-%E4%B8%BAHexo-%E7%9A%84-md-%E6%96%87%E4%BB%B6%E7%BB%9F%E4%B8%80%E9%87%8D%E5%91%BD%E5%90%8D/">为Hexo 的 md 文件统一重命名</a></h3></div><div class="post-content"><p>换用 Hexo 之后发现 _post 目录里面乱乱的，比如从 WordPress 中导入的中文标题文章的文件名会变成乱乱的字符串，看着很难受。所以搞了个改名的脚本来重命名文件。
-重命名之后的格式为 PO文日期.文章标题.md，如果文件内有注明 urlname 的话就是 PO文日期.文章标题.urlname.md。...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/shell/" title="shell">shell </a><a class="tag" href="/tags/hexo/" title="hexo">hexo </a><a class="tag" href="/tags/rename/" title="rename">rename </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2020/01/04/2020-01-04-%E6%90%AD%E5%BB%BAES%E6%9C%8D%E5%8A%A1/">搭建ES服务</a></h3></div><div class="post-content"><p>前言Es
-ES 搭建//添加官方源vi /etc/yum.repos.d/elasticsearch.repo//安装ES服务yum install --enablerepo=elasticsearch elasticsearch//服务启停 service方式sudo chkconfig --add elast...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-01-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/ES/" title="ES">ES </a><a class="tag" href="/tags/服务/" title="服务">服务 </a><a class="tag" href="/tags/搜索服务/" title="搜索服务">搜索服务 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2019/04/08/2019-04-08-k8s%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E6%95%B4%E7%90%86/">k8s部署方式整理</a></h3></div><div class="post-content"><p>
-是不会方式多种多样
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a class="current" href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/tags">Tags</a></li><li><a href="/about">About</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display: none"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2024/09/04/2024-09-04-%E4%B8%BAHexo-%E7%9A%84-md-%E6%96%87%E4%BB%B6%E7%BB%9F%E4%B8%80%E9%87%8D%E5%91%BD%E5%90%8D/">为Hexo 的 md 文件统一重命名</a></h3></div><div class="post-content"><div class="card"><p><p>换用 Hexo 之后发现 _post 目录里面乱乱的，比如从 WordPress 中导入的中文标题文章的文件名会变成乱乱的字符串，看着很难受。所以搞了个改名的脚本来重命名文件。</p>
+<p>重命名之后的格式为 PO文日期.文章标题.md，如果文件内有注明 urlname 的话就是 PO文日期.文章标题.urlname.md。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">保存系统默认的 IFS</span></span><br><span class="line">SAVEIFS=$IFS</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">更改 IFS 为换行（用于处理文件名含有空格的文件</span></span><br><span class="line">IFS=$&#x27;\n&#x27;</span><br><span class="line"></span><br><span class="line">for filename in *.md; do</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">标题（不想替换空格的话就删除“s/ /_/g”。</span></span><br><span class="line">  title=$(grep &quot;title: &quot; $filename | head -1 | sed -e &#x27;s/title: //g; s#/##g;s/ /_/g&#x27;)</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">发文日期</span></span><br><span class="line">  date=$(grep &quot;date: &quot; $filename | awk &#x27;NR==1&#123;printf $2&#125;&#x27; )</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">urlname</span></span><br><span class="line">  link=$(grep &quot;urlname: &quot; $filename | head -1 | sed &#x27;s/urlname: //g&#x27; )</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">新文件名</span></span><br><span class="line">  if [ -z &quot;$link&quot; ]; then</span><br><span class="line">    newname=&quot;$date.$title.md&quot;</span><br><span class="line">    else</span><br><span class="line">    newname=&quot;$date.$title.$link.md&quot;</span><br><span class="line">  fi</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">过滤掉名字正确的</span></span><br><span class="line">  if [ &quot;$filename&quot; != &quot;$newname&quot; ]; then</span><br><span class="line">     #开始改名</span><br><span class="line">     echo &quot;Rename $filename to $newname&quot;</span><br><span class="line">     mv $filename $newname</span><br><span class="line">  fi</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">echo done!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>展示效果:</p>
+<p><img src="https://img.yuekang.org.cn/2024-09-04%2014-01-13.png" alt="展示效果"></p>
+<p>这样就舒服好多了。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/shell/" title="shell">shell </a><i class="fa fa-tag"></i><a class="tag" href="/tags/hexo/" title="hexo">hexo </a><i class="fa fa-tag"></i><a class="tag" href="/tags/rename/" title="rename">rename </a><span>About 287 words, 57 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2020/01/04/2020-01-04-%E6%90%AD%E5%BB%BAES%E6%9C%8D%E5%8A%A1/">搭建ES服务</a></h3></div><div class="post-content"><div class="card"><p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Es</p>
+<h1 id="ES-搭建"><a href="#ES-搭建" class="headerlink" title="ES 搭建"></a>ES 搭建</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">//添加官方源</span><br><span class="line">vi /etc/yum.repos.d/elasticsearch.repo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//安装ES服务</span><br><span class="line">yum install --enablerepo=elasticsearch elasticsearch</span><br><span class="line"></span><br><span class="line">//服务启停 service方式</span><br><span class="line">sudo chkconfig --add elasticsearch</span><br><span class="line">sudo -i service elasticsearch start</span><br><span class="line">sudo -i service elasticsearch stop</span><br><span class="line"></span><br><span class="line">//systemctl方式</span><br><span class="line">sudo /bin/systemctl daemon-reload</span><br><span class="line">sudo /bin/systemctl enable elasticsearch.service</span><br><span class="line">sudo systemctl start elasticsearch.service</span><br><span class="line">sudo systemctl stop elasticsearch.service</span><br></pre></td></tr></table></figure>
 
-MicroK8s部署
-MicroK8s适合单机测试环境，友好的操作体验可以很轻松的上手k8s集群控制和开发。
+<h1 id="Kibana-搭建"><a href="#Kibana-搭建" class="headerlink" title="Kibana 搭建"></a>Kibana 搭建</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vi /etc/yum.repos.d/kibana.repo</span><br><span class="line">[kibana-7.x]</span><br><span class="line">name=Kibana repository for 7.x packages</span><br><span class="line">baseurl=https://artifacts.elastic.co/packages/7.x/yum</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch</span><br><span class="line">enabled=1</span><br><span class="line">autorefresh=1</span><br><span class="line">type=rpm-md</span><br><span class="line"></span><br><span class="line">//添加服务</span><br><span class="line">sudo chkconfig --add kibana</span><br><span class="line">sudo -i service kibana start</span><br><span class="line">sudo -i service kibana stop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//systemd管理</span><br><span class="line">sudo /bin/systemctl daemon-reload</span><br><span class="line">sudo /bin/systemctl enable kibana.service</span><br><span class="line">sudo systemctl start kibana.service</span><br><span class="line">sudo systemctl stop kibana.service</span><br></pre></td></tr></table></figure></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-01-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/ES/" title="ES">ES </a><i class="fa fa-tag"></i><a class="tag" href="/tags/服务/" title="服务">服务 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/搜索服务/" title="搜索服务">搜索服务 </a><span>About 142 words, 28 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/04/08/2019-04-08-k8s%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E6%95%B4%E7%90%86/">k8s部署方式整理</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>是不会方式多种多样</p>
+</blockquote>
+<h2 id="MicroK8s部署"><a href="#MicroK8s部署" class="headerlink" title="MicroK8s部署"></a>MicroK8s部署</h2><blockquote>
+<p>MicroK8s适合单机测试环境，友好的操作体验可以很轻松的上手k8s集群控制和开发。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// MicroK8s 依赖 snapd工具需要第一个安装</span><br><span class="line">sudo yum install epel-release</span><br><span class="line">sudo yum install snapd</span><br><span class="line">sudo systemctl enable --now snapd.socket</span><br><span class="line">sudo ln -s /var/lib/snapd/snap /snap</span><br><span class="line"></span><br><span class="line">//通过snap工具安装microk8s</span><br><span class="line">sudo snap install microk8s --classic</span><br><span class="line">snap info microk8s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 启动集群</span><br><span class="line">sudo microk8s.start</span><br><span class="line">//停止集群</span><br><span class="line">sudo microk8s.stop</span><br><span class="line"></span><br><span class="line">//查看所有容器启动情况</span><br><span class="line">microk8s.kubectl get all --all-namespaces                                               </span><br><span class="line">NAMESPACE     NAME                                                  READY   STATUS              RESTARTS   AGE</span><br><span class="line">default       pod/nginx-7db9fccd9b-7klhs                            0/1     ContainerCreating   0          76m</span><br><span class="line">default       pod/nginx-7db9fccd9b-8zjwg                            0/1     ContainerCreating   0          7</span><br><span class="line"></span><br><span class="line">//查看当前集群的编号和版本</span><br><span class="line">[root@k8smaster ~]# microk8s.kubectl get no</span><br><span class="line">NAME        STATUS   ROLES    AGE    VERSION</span><br><span class="line">k8smaster   Ready    &lt;none&gt;   109m   v1.14.0</span><br><span class="line"></span><br><span class="line">//监控当前所有容器工作状态</span><br><span class="line">watch microk8s.kubectl get all --all-namespaces</span><br></pre></td></tr></table></figure>
 
-// MicroK8s 依赖 snapd工具需要第一个安装sudo yum install epel-releasesudo yum install snapdsudo syst...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><a class="tag" href="/tags/k8s/" title="k8s">k8s </a><a class="tag" href="/tags/部署/" title="部署">部署 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2019/04/08/2019-04-08-k8s%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E5%92%8C%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93/">k8s关键术语和概念总结</a></h3></div><div class="post-content"><p>
-Kubernetes是一个全新的基于容器技术的分布式架构领先方案。这个方案虽然很新，但谷歌已经稳定运行了十几年以来大规模应用容器化技术的积累和升华的重要成功。运用K8s我们不仅能节省不少于30%的开发成本，同时可以将更多地经历放到业务本身，我们不必再费心于服务监控和故障处理模块的开发和开发复杂的服务治理框架，一...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><a class="tag" href="/tags/k8s/" title="k8s">k8s </a><a class="tag" href="/tags/kubernetes/" title="kubernetes">kubernetes </a><a class="tag" href="/tags/容器化/" title="容器化">容器化 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2019/04/07/2019-04-07-kubernetes%E6%90%AD%E5%BB%BA/">kubernetes搭建</a></h3></div><div class="post-content"><p>
-搭建环境最快的方法就是参照官方稳定进行搭建：https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
-
-一、 环境要求
-一个或者多个兼容 deb 或者 rpm 软件包的操作系统，比如 Ubuntu 或者 CentOS
-每台机器 2 ...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-07</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><a class="tag" href="/tags/容器/" title="容器">容器 </a><a class="tag" href="/tags/k8s/" title="k8s">k8s </a><a class="tag" href="/tags/kubernetes/" title="kubernetes">kubernetes </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2019/01/16/2019-01-16-docker%E4%B8%89%E5%A4%A7%E4%BB%B6%E4%B9%8B%E9%95%9C%E5%83%8F%E5%AD%A6%E4%B9%A0/">docker三大件之镜像学习</a></h3></div><div class="post-content"><p>
-操作系统分为内核和用户空间，，对于linux而言，内核启动后，会挂载root 文件系统为其提供用户空间支持。而Docker镜像（Image），就相当于是一个root文件系统。比如官方镜像ubuntu:18.04 就包含了完整的一套最小的root 文件系统。
-
-
-Docker镜像是一个特殊的文件系统，除了提供容器...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-01-16</span><i class="fa fa-tag"></i><a class="tag" href="/tags/docker/" title="docker">docker </a><a class="tag" href="/tags/镜像/" title="镜像">镜像 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2019/01/15/2019-01-15-RabbitMQ-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%92%8C%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B/">RabbitMQ 系统架构和通信过程</a></h3></div><div class="post-content"><p>
-MQ全称为Message Queue, 是一种分布式应用程序的的通信方法，它是消费-生产者模型的一个典型的代表，producer往消息队列中不断写入消息，而另一端consumer则可以读取或者订阅队列中的消息。RabbitMQ是MQ产品的典型代表，是一款基于AMQP协议可复用的企业消息系统。业务上，可以实现服务...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-01-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Rabbitmq/" title="Rabbitmq">Rabbitmq </a><a class="tag" href="/tags/Queue/" title="Queue">Queue </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2018/12/14/2018-12-14-Centos-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E7%AE%A1%E7%90%86/">Centos 端口转发管理</a></h3></div><div class="post-content"><p>
-在工作中经常会遇到vpc网络，内网所有机器通过唯一一台对外的proxy机器进行共享上网，这里记录一下如何做好端口转发和管理。
+<p><img src="http://img.yuekang.org.cn/2019040805.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//删除容器</span><br><span class="line">microk8s.kubectl delete deployment/nginx</span><br><span class="line">deployment.extensions &quot;nginx&quot; deleted</span><br></pre></td></tr></table></figure>
 
 
-展示所有nat表规则 以编号标注
+<h2 id="以安装包的方式直接搭建"><a href="#以安装包的方式直接搭建" class="headerlink" title="以安装包的方式直接搭建"></a>以安装包的方式直接搭建</h2><h3 id="etcd服务"><a href="#etcd服务" class="headerlink" title="etcd服务"></a>etcd服务</h3><blockquote>
+<p>etcd 服务是作为k8s集群的主数据库，用来存放所有的容器状态的主数据库。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 安装etcd</span><br><span class="line">yum install etcd</span><br><span class="line"></span><br><span class="line">// etcd配置文件, 默认监听在2379号端口</span><br><span class="line">vi /etc/etcd/etcd.conf</span><br><span class="line">//指定数据存放位置</span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;</span><br><span class="line">//指定该节点名称</span><br><span class="line">ETCD_NAME=&quot;master&quot;</span><br><span class="line">//指定客户端监听url，对外提供服务的地址</span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://localhost:2379&quot;</span><br><span class="line">//对外公告该客户端监听地址</span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://localhost:2379&quot;</span><br><span class="line"></span><br><span class="line">// 启动服务</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line">// 启动服务</span><br><span class="line">systemctl enable etcd.service</span><br><span class="line"></span><br><span class="line">systemctl start etcd.service</span><br><span class="line"></span><br><span class="line">//验证etcd健康状态</span><br><span class="line">etcdctl -C http://localhost:2379 cluster-health</span><br><span class="line">member 8e9e05c52164694d is healthy: got healthy result from http://localhost:2379</span><br><span class="line">cluster is healthy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-root@jumper:~# iptables -L -t nat --line-numberChain PREROUTING (policy ...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-12-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/iptables/" title="iptables">iptables </a><a class="tag" href="/tags/NAT/" title="NAT">NAT </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2018/11/28/2018-11-28-LDAP-%E5%88%86%E4%BA%AB/">LDAP 分享</a></h3></div><div class="post-content"><p>
-轻型目录访问协议（英文：Lightweight Directory Access Protocol，缩写：LDAP）是一个开放的，中立的，工业标准的应用协议，通过IP协议提供访问控制和维护分布式信息的目录信息。OpenLDAP是轻型目录访问协议（Lightweight Directory Access Prot...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/LDAP/" title="LDAP">LDAP </a><a class="tag" href="/tags/OpenLdap/" title="OpenLdap">OpenLdap </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2018/11/14/2018-11-14-%E4%BB%8E%E9%9B%B6%E7%BC%96%E8%AF%91nginx-lua-cjson%E6%A8%A1%E5%9D%97%E7%9A%84nginx%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E5%85%A8%E7%A8%8B%E7%9B%91%E6%8E%A7/">从零编译nginx+lua+cjson模块的nginx服务实现日志全程监控</a></h3></div><div class="post-content"><p>
-我们中有这样的需求就是，当前端和后端通过接口通信以后，我们在日常排查中缺少跟踪接口返回信息和所有头部信息的跟踪，针对于这个需求我们采用nginx+lua+cjson的形式通过lua脚本
+<h3 id="k8s-Mster-相关服务安装"><a href="#k8s-Mster-相关服务安装" class="headerlink" title="k8s Mster 相关服务安装"></a>k8s Mster 相关服务安装</h3><blockquote>
+<p>接下来将是我们非常重要的服务，k8s它有三个主要的服务：</p>
+<ol>
+<li>kube-apiserver服务</li>
+<li>kube-kube-controller-manager服务,依赖apiserver</li>
+<li>kube-scheduler服务,依赖apiserver</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//三个服务都已经集成到kubernetes中了</span><br><span class="line">yum install kubernetes -y</span><br><span class="line"></span><br><span class="line">//配置kube-apiserver</span><br><span class="line">vi /etc/kubernetes/apiserver</span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot; </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://127.0.0.1:2379&quot; </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;</span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;</span><br><span class="line">KUBE_API_ARGS=&quot;</span><br><span class="line">--insecure-port=8000</span><br><span class="line">--service-cluster-ip-range=169.169.0.0/16</span><br><span class="line">--service-node-port-range=1-65535</span><br><span class="line">-logtostderr=false</span><br><span class="line">--log-dir=/var/log/kubernetes</span><br><span class="line">-v=2</span><br><span class="line">&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//配置kube-controller-manager</span><br><span class="line">vi /etc/kubernetes/controller-manager</span><br><span class="line">KUBE_CONTROLLER_MANAGER_ARGS=&quot;</span><br><span class="line">--master=http://127.0.0.1:8000</span><br><span class="line">--logtostderr=false</span><br><span class="line">--v=2</span><br><span class="line">&quot;         </span><br><span class="line"></span><br><span class="line">//配置kube-scheduler</span><br><span class="line">vi /etc/kubernetes/scheduler</span><br><span class="line">KUBE_SCHEDULER_ARGS=&quot;</span><br><span class="line">-master=http://127.0.0.1:8000</span><br><span class="line">--logtostderr=false</span><br><span class="line">--log-dir=/var/log/kubernetes</span><br><span class="line">--v=2</span><br><span class="line">&quot; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//k8s配置config</span><br><span class="line">vi /etc/kubernetes/config</span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot; </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;</span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;</span><br><span class="line">KUBE_MASTER=&quot;--master=http://127.0.0.1:8000&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//启动k8s各个组件</span><br><span class="line">systemctl start kube-apiserver.service</span><br><span class="line">systemctl start kube-controller-manager.service</span><br><span class="line">systemctl start kube-scheduler.service</span><br><span class="line"></span><br><span class="line">//加入到系统服务中</span><br><span class="line">systemctl enable kube-apiserver.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/kube-apiserver.service to /usr/lib/systemd/system/kube-apiserver.service.</span><br><span class="line"></span><br><span class="line">systemctl enable kube-controller-manager.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/kube-controller-manager.service to /usr/lib/systemd/system/kube-controller-manager.service.</span><br><span class="line"></span><br><span class="line">systemctl enable kube-scheduler.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/kube-scheduler.service to /usr/lib/systemd/system/kube-scheduler.service.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-准备的模块
-LuaJIT
+<h3 id="k8s-Worker服务搭建"><a href="#k8s-Worker服务搭建" class="headerlink" title="k8s Worker服务搭建"></a>k8s Worker服务搭建</h3><blockquote>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//安装服务</span><br><span class="line">yum install kubernetes -y</span><br><span class="line"></span><br><span class="line">//k8s配置</span><br><span class="line">vi /etc/kubernetes/config</span><br><span class="line">//指定master地址位置</span><br><span class="line">KUBE_MASTER=&quot;--master=http://127.0.0.1:8000&quot;</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">systemctl enable kubelet.service</span><br><span class="line">systemctl enable kube-proxy.service</span><br><span class="line"></span><br><span class="line">//配置master节点地址</span><br><span class="line">export KUBERNETES_MASTER=http://centos-master:8080</span><br></pre></td></tr></table></figure></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/k8s/" title="k8s">k8s </a><i class="fa fa-tag"></i><a class="tag" href="/tags/部署/" title="部署">部署 </a><span>About 794 words, 2 min 38 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/04/08/2019-04-08-k8s%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E5%92%8C%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93/">k8s关键术语和概念总结</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>Kubernetes是一个全新的基于容器技术的分布式架构领先方案。这个方案虽然很新，但谷歌已经稳定运行了十几年以来大规模应用容器化技术的积累和升华的重要成功。运用K8s我们不仅能节省不少于30%的开发成本，同时可以将更多地经历放到业务本身，我们不必再费心于服务监控和故障处理模块的开发和开发复杂的服务治理框架，一切的一切它都为我们做好了。</p>
+</blockquote>
+<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>为了更好地了解k8s我先从整体架构开始，了解一件事情先要总览，然后逐步了解每个细节的内容，逐步应用容器编排技术。</p>
+<p><img src="http://img.yuekang.org.cn/2019040801.png" alt="k8s架构图"></p>
+<p>上面是k8s设计架构图，从图中可以看到<br>Kubernetes主要由以下几个核心组件组成：</p>
+<ul>
+<li>etcd保存了整个集群的状态</li>
+<li>apiserver提供了资源操作的唯一入口，并提供认证、授权、访问控制、API注册和发现等机制</li>
+<li>controller manager负责维护集群的状态，比如故障检测、自动扩展、滚动更新等</li>
+<li>scheduler负责资源的调度，按照预定的调度策略将Pod调度到相应的机器上</li>
+<li>kubelet负责维护容器的生命周期，同时也负责Volume（CVI）和网络（CNI）的管理</li>
+<li>Container runtime负责镜像管理以及Pod和容器的真正运行（CRI）</li>
+<li>kube-proxy负责为Service提供cluster内部的服务发现和负载均衡</li>
+</ul>
+<p>官方还推荐一些其他组件：</p>
+<ul>
+<li>kube-dns负责为整个集群提供DNS服务</li>
+<li>Ingress Controller为服务提供外网入口</li>
+<li>Heapster提供资源监控</li>
+<li>Dashboard提供GUI</li>
+<li>Federation提供跨可用区的集群</li>
+<li>Fluentd-elasticsearch提供集群日志采集、存储与查询</li>
+</ul>
+<h2 id="K8s分层架构"><a href="#K8s分层架构" class="headerlink" title="K8s分层架构"></a>K8s分层架构</h2><p><img src="http://img.yuekang.org.cn/2019040804.jpg" alt="k8s总体结构"></p>
+<ul>
+<li>核心层：Kubernetes最核心的功能，对外提供API构建高层的应用，对内提供插件式应用执行环境</li>
+<li>应用层：部署（无状态应用、有状态应用、批处理任务、集群应用等）和路由（服务发现、DNS解析等）</li>
+<li>管理层：系统度量（如基础设施、容器和网络的度量），自动化（如自动扩展、动态Provision等）以及策略管理（RBAC、Quota、PSP、NetworkPolicy等）</li>
+<li>接口层：kubectl命令行工具、客户端SDK以及集群联邦</li>
+<li>生态系统：在接口层之上的庞大容器集群管理调度的生态系统，可以划分为两个范畴</li>
+<li>Kubernetes外部：日志、监控、配置管理、CI、CD、Workflow、FaaS、OTS应用、ChatOps等</li>
+<li>Kubernetes内部：CRI、CNI、CVI、镜像仓库、Cloud Provider、集群自身的配置和管理等</li>
+</ul>
+<h2 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h2><p><img src="http://img.yuekang.org.cn/2019040802.png" alt="Master结构2019图"></p>
+<p>Master是集群控制节点，每个K8s集群需要有一个Master节点来负责整个集群的管理和控制，基本上k8s所有的控制命令都是发给它的，它来负责具体的执行过程，Master节点通常会占据一个独立的x86服务器（或者一个虚拟机），正因为如此重要所有它挂掉了整个集群的所有控制命令都将失效，所以他就是军队的司令部大脑，正因为如此重要他就是集群的单点了，测试环境我们可以设置一个Master主机，生产环境我们一般会设置多个Master来达到高可用的目的，阿里云容器服务k8s已经为我们做到了高可用，它默认创建集群服务会为你创建三台主机来运行Mster，它的运行模式也是采用选举算法，这也就是为什么Master数量是偶数的，所以达到高可用至少3台主机以上的奇数个主机数量才能达到高可用的目的。</p>
+<p>Mster运行着一下一组关键进程：</p>
+<ul>
+<li>kube-apiserver: 提供Rest接口的关键服务进程，是真个k8s里所有资源的增删改查操作的唯一入口，也是集群控制的入口进程。</li>
+<li>kube-controller-manager： k8s所有资源对象的自动化控制中心，可以理解为资源对象的“内务大总管”。</li>
+<li>kube-scheduler: 负责资源调度（Pod）的进程，相当于地铁的“调度中心”。</li>
+<li>etcd: 主节点一般都会启动这个服务，主要提供所有资源对象数据都存在在里面，如果其中一台机pod节点发生故障或者未达到预期目标，k8s会读取etcd里面的数据进行重新资源的部署。</li>
+</ul>
+<h2 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h2><p><img src="http://img.yuekang.org.cn/2019040803.png" alt="Node结构图"></p>
+<p>除了Master, k8s集群里面其他机器一律称作为Node节点，Node节点和主节点一样可以使一台物理主机也可以是一台虚拟机。Node节点是k8s集群中的工作负载节点，每一台Node都会被Master分到一部分工作负载（docker容器），当其中某个Node节点宕机时，其上的工作负载还会被Master自动转移到其他节点上去。</p>
+<p>每个Node节点上都运行着以下一组关键进程。</p>
+<ul>
+<li>kubelet: 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
+<li>kube-proxy:实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
+<li>Docker Engine（docker）： Docker引擎负责本机的容器创建和管理工作</li>
+</ul>
+<p>Node节点可以在运行期间动态添加到K8s急群众，前提是这个节点上已经正确钱庄、配置和启动了上述关键进程。一旦Node被纳入集群管理范围，kubelet会定时想Master节点汇报自身情况，这样Master可以获知每个Node的资源使用情况，并实现高效的负载均衡的资源调度策略。 而某个Node超过指定时间不上报信息时，会被Master判定为<code>失联</code>，Node的状态会被标记为不可用（Not Ready）,随后Master会出发<code>工作负载大转移</code> 的自动化迁移流程。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的内容就能够对k8s大致形态和规则有了相应的了解，也知道了k8s是由哪些关键进程组成的，他们的写作模式是什么？ k8s是如何达到高可用的目的，后续我会更多整理相关知识，继续深入研究k8s相关内容。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/k8s/" title="k8s">k8s </a><i class="fa fa-tag"></i><a class="tag" href="/tags/kubernetes/" title="kubernetes">kubernetes </a><i class="fa fa-tag"></i><a class="tag" href="/tags/容器化/" title="容器化">容器化 </a><span>About 1781 words, 5 min 56 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/04/07/2019-04-07-kubernetes%E6%90%AD%E5%BB%BA/">kubernetes搭建</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>搭建环境最快的方法就是参照官方稳定进行搭建：<a href="https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/">https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/</a></p>
+</blockquote>
+<h2 id="一、-环境要求"><a href="#一、-环境要求" class="headerlink" title="一、 环境要求"></a>一、 环境要求</h2><ol>
+<li>一个或者多个兼容 deb 或者 rpm 软件包的操作系统，比如 Ubuntu 或者 CentOS</li>
+<li>每台机器 2 GB 以上的内存，内存不足时应用会受限制,主节点上 2 CPU 以上核心</li>
+<li>集群里所有的机器有完全的网络连接，公有网络或者私有网络都可以</li>
+<li>docker 1.9版本以上</li>
+<li>etcd 2.0版本以上</li>
+</ol>
+<p>本次搭建测试环境</p>
+<ul>
+<li>虚拟机三台分别是：<br>Master 一个，Node 二个</li>
+</ul>
+<h2 id="二、-安装k8s"><a href="#二、-安装k8s" class="headerlink" title="二、 安装k8s"></a>二、 安装k8s</h2><ul>
+<li>关闭swap和firewall</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//临时关闭</span><br><span class="line">swapoff -a</span><br><span class="line"></span><br><span class="line">//永久关闭</span><br><span class="line">vi /etc/fstab</span><br><span class="line">//注释以下行</span><br><span class="line"># /dev/mapper/centos-swap swap</span><br><span class="line"></span><br><span class="line">//快捷执行方法</span><br><span class="line">sed -i &#x27;/ swap / s/^/#/&#x27; /etc/fstab</span><br><span class="line"></span><br><span class="line">//关闭防火墙</span><br><span class="line">service firewalld stop</span><br></pre></td></tr></table></figure>
 
-http://luajit.org/download/LuaJIT-2.0.5.tar.gz
+<ul>
+<li>安装docker</li>
+</ul>
+<p>添加安装源</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+<p>找不到执行(<code>yum-config-manager</code>)：<code>yum -y install yum-utils</code></p>
+<p>安装docker</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install docker-ce -y</span><br><span class="line"></span><br><span class="line">//查看版本验证安装</span><br><span class="line">docker --version</span><br><span class="line">Docker version 18.09.4, build d14af54266</span><br><span class="line"></span><br><span class="line">//开机启动</span><br><span class="line">systemctl start docker &amp; systemctl enable docker</span><br><span class="line"></span><br><span class="line">//验证容器是否正常</span><br><span class="line">docker run hello-world</span><br><span class="line">docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.</span><br><span class="line">See &#x27;docker run --help&#x27;.</span><br><span class="line"></span><br><span class="line">//说明docker没有启动，启动docker引擎</span><br><span class="line">service docker start</span><br><span class="line"></span><br><span class="line">//重新验证安装 下方为安装成功的情况</span><br><span class="line">docker run hello-world</span><br><span class="line">Unable to find image &#x27;hello-world:latest&#x27; locally</span><br><span class="line">latest: Pulling from library/hello-world</span><br><span class="line">1b930d010525: Pull complete</span><br><span class="line"></span><br><span class="line">Digest: sha256:2557e3c07ed1e38f26e389462d03ed943586f744621577a99efb77324b0fe535</span><br><span class="line">Status: Downloaded newer image for hello-world:latest</span><br><span class="line"></span><br><span class="line">Hello from Docker!</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br><span class="line"></span><br><span class="line">To generate this message, Docker took the following steps:</span><br><span class="line"> 1. The Docker client contacted the Docker daemon.</span><br><span class="line"> 2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.</span><br><span class="line">    (amd64)</span><br><span class="line"> 3. The Docker daemon created a new container from that image which runs the</span><br><span class="line">    executable that produces the output you are currently reading.</span><br><span class="line"> 4. The Docker daemon streamed that output to the Docker client, which sent it</span><br><span class="line">    to your terminal.</span><br><span class="line"></span><br><span class="line">To try something more ambitious, you can run an Ubuntu container with:</span><br><span class="line"> $ docker run -it ubuntu bash</span><br><span class="line"></span><br><span class="line">Share images, automate workflows, and more with a free Docker ID:</span><br><span class="line"> https://hub.docker.com/</span><br><span class="line"></span><br><span class="line">For more examples and ideas, visit:</span><br><span class="line"> https://docs.docker.com/get-started/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/nginx/" title="nginx">nginx </a><a class="tag" href="/tags/监控/" title="监控">监控 </a><a class="tag" href="/tags/lua/" title="lua">lua </a></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/2/">Próximo</a></li></ul></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
+
+<ul>
+<li>安装 kubelet kubeadm kubectl</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line"></span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 将 SELinux 设置为 permissive 模式(将其禁用)</span><br><span class="line">setenforce 0</span><br><span class="line">sed -i &#x27;s/^SELINUX=enforcing$/SELINUX=permissive/&#x27; /etc/selinux/config</span><br><span class="line"></span><br><span class="line">yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes</span><br><span class="line"></span><br><span class="line">systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>启动kuberlet</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载官网编译好的二进制k8s包</p>
+</li>
+</ul>
+<p>进入github下载地址：<code>https://github.com/kubernetes/kubernetes/releases</code></p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-07</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/容器/" title="容器">容器 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/k8s/" title="k8s">k8s </a><i class="fa fa-tag"></i><a class="tag" href="/tags/kubernetes/" title="kubernetes">kubernetes </a><span>About 656 words, 2 min 11 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/01/16/2019-01-16-docker%E4%B8%89%E5%A4%A7%E4%BB%B6%E4%B9%8B%E9%95%9C%E5%83%8F%E5%AD%A6%E4%B9%A0/">docker三大件之镜像学习</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>操作系统分为内核和用户空间，，对于linux而言，内核启动后，会挂载<code>root</code> 文件系统为其提供用户空间支持。而Docker镜像（Image），就相当于是一个<code>root</code>文件系统。比如官方镜像<code>ubuntu:18.04</code> 就包含了完整的一套最小的<code>root</code> 文件系统。</p>
+</blockquote>
+<blockquote>
+<p>Docker镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。镜像不包含任何动态数据，其内容在构建后也不会被改变。</p>
+</blockquote>
+<h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h2><p>Docker镜像仓库获取镜像的命令是<code>docker pull</code>。其格式为<code>docker pull [选项] [Docker Registry 地址[:端口号/]仓库名[:标签]]</code></p>
+<p>拉取</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-01-16</span><i class="fa fa-tag"></i><a class="tag" href="/tags/docker/" title="docker">docker </a><i class="fa fa-tag"></i><a class="tag" href="/tags/镜像/" title="镜像">镜像 </a><span>About 238 words, 47 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/01/15/2019-01-15-RabbitMQ-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%92%8C%E9%80%9A%E4%BF%A1%E8%BF%87%E7%A8%8B/">RabbitMQ 系统架构和通信过程</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>MQ全称为Message Queue, 是一种分布式应用程序的的通信方法，它是消费-生产者模型的一个典型的代表，producer往消息队列中不断写入消息，而另一端consumer则可以读取或者订阅队列中的消息。RabbitMQ是MQ产品的典型代表，是一款基于AMQP协议可复用的企业消息系统。业务上，可以实现服务提供者和消费者之间的数据解耦，提供高可用性的消息传输机制，在实际生产中应用相当广泛。</p>
+</blockquote>
+<h2 id="RabbitMQ简介"><a href="#RabbitMQ简介" class="headerlink" title="RabbitMQ简介"></a>RabbitMQ简介</h2><p>RabbitMQ是一个由Erlang开发的AMQP（AdvancedMessage Queue ）的开源实现，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。</p>
+<p>Rabbitmq系统最核心的组件是Exchange和Queue，下图是系统简单的示意图。Exchange和Queue是在rabbitmq Server</p>
+<p><img src="http://img.yuekang.org.cn/2019011501.jpg" alt="RabbitMQ系统示意图"></p>
+<h2 id="AMQP-简介"><a href="#AMQP-简介" class="headerlink" title="AMQP 简介"></a>AMQP 简介</h2><p>AMQP，即Advanced Message Queuing Protocol,一个提供统一消息服务的应用层标准高级消息队列协议,是应用层协议的一个开放标准,为面向消息的中间件设计。基于此协议的客户端与消息中间件可传递消息，并不受客户端&#x2F;中间件不同产品，不同的开发语言等条件的限制。Erlang中的实现有 RabbitMQ等。</p>
+<h2 id="Message-Broker与AMQP简介"><a href="#Message-Broker与AMQP简介" class="headerlink" title="Message Broker与AMQP简介"></a>Message Broker与AMQP简介</h2><p>Message Broker是一种消息验证、传输、路由的架构模式，其设计目标主要应用于下面这些场景：</p>
+<ol>
+<li><p>消息路由到一个或多个目的地</p>
+</li>
+<li><p>消息转化为其他的表现方式</p>
+</li>
+<li><p>执行消息的聚集、消息的分解，并将结果发送到他们的目的地，然后重新组合相应返回给消息用户</p>
+</li>
+<li><p>调用Web服务来检索数据</p>
+</li>
+<li><p>响应事件或错误</p>
+</li>
+<li><p>使用发布-订阅模式来提供内容或基于主题的消息路由</p>
+</li>
+</ol>
+<p>AMQP是Advanced Message QueuingProtocol的简称，它是一个面向消息中间件的开放式标准应用层协议。AMQP定义了这些特性：</p>
+<ol>
+<li><p>消息方向</p>
+</li>
+<li><p>消息队列</p>
+</li>
+<li><p>消息路由（包括：点到点和发布-订阅模式）</p>
+</li>
+<li><p>可靠性</p>
+</li>
+<li><p>安全性</p>
+</li>
+</ol>
+<p>RabbitMQ就是以AMQP协议实现的一种中间件产品，它可以支持多种操作系统，多种编程语言，几乎可以覆盖所有主流的企业级技术平台。</p>
+<h2 id="Rabbitmq系统架构"><a href="#Rabbitmq系统架构" class="headerlink" title="Rabbitmq系统架构"></a>Rabbitmq系统架构</h2><p>Rabbitmq系统最核心的组件是Exchange和Queue，下图是系统简单的示意图。Exchange和Queue是在rabbitmq server（又叫做broker）端，producer和consumer在应用端。</p>
+<p><img src="http://img.yuekang.org.cn/2019011701.png" alt="结构图"></p>
+<p>1. Producer 生产者<br>2. Consumer 消费者<br>3. Queue<br>消息队列，提供了FIFO的处理机制，具有缓存消息的能力。rabbitmq中，队列消息可以设置为持久化，临时或者自动删除。</p>
+<p>设置为持久化的队列，queue中的消息会在server本地硬盘存储一份，防止系统crash，数据丢失<br>设置为临时队列，queue中的数据在系统重启之后就会丢失<br>设置为自动删除的队列，当不存在用户连接到server，队列中的数据会被自动删除</p>
+<ol start="4">
+<li>Exchange<br>Exchange类似于数据通信网络中的交换机，提供消息路由策略。rabbitmq中，producer不是通过信道直接将消息发送给queue，而是先发送给Exchange。一个Exchange可以和多个Queue进行绑定，producer在传递消息的时候，会传递一个ROUTING_KEY，Exchange会根据这个ROUTING_KEY按照特定的路由算法，将消息路由给指定的queue。和Queue一样，Exchange也可设置为持久化，临时或者自动删除。</li>
+</ol>
+<p>Exchange有4种类型：direct(默认)，fanout, topic, 和headers，不同类型的Exchange转发消息的策略有所区别</p>
+<p>4.1. Direct<br>直接交换器，工作方式类似于单播，Exchange会将消息发送完全匹配ROUTING_KEY的Queue</p>
+<p><img src="http://img.yuekang.org.cn/2019011704.png"></p>
+<p>4.2. fanout<br>广播是式交换器，不管消息的ROUTING_KEY设置为什么，Exchange都会将消息转发给所有绑定的Queue。</p>
+<p><img src="http://img.yuekang.org.cn/2019011703.png"></p>
+<p>4.3 topic<br>主题交换器，工作方式类似于组播，Exchange会将消息转发和ROUTING_KEY匹配模式相同的所有队列，比如，ROUTING_KEY为user.stock的Message会转发给绑定匹配模式为 * .stock,user.stock， * . * 和#.user.stock.#的队列。（ * 表是匹配一个任意词组，#表示匹配0个或多个词组）</p>
+<p><img src="http://img.yuekang.org.cn/2019011705.png"></p>
+<p>4.4. headers<br>消息体的header匹配（ignore）</p>
+<ol start="5">
+<li>Binding</li>
+</ol>
+<p>所谓绑定就是将一个特定的 Exchange 和一个特定的 Queue 绑定起来。Exchange 和Queue的绑定可以是多对多的关系。</p>
+<ol start="6">
+<li>Virtual host</li>
+</ol>
+<p>在rabbitmq server上可以创建多个虚拟的message broker，又叫做virtual hosts (vhosts)。每一个vhost本质上是一个mini-rabbitmq server，分别管理各自的exchange，和bindings。vhost相当于物理的server，可以为不同app提供边界隔离，使得应用安全的运行在不同的vhost实例上，相互之间不会干扰。producer和consumer连接rabbit server需要指定一个vhost。</p>
+<h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><p>假设P1和C1注册了相同的Broker，Exchange和Queue。P1发送的消息最终会被C1消费。基本的通信流程大概如下所示：</p>
+<p><img src="http://img.yuekang.org.cn/2019011702.png" alt="示意图"></p>
+<p>P1生产消息，发送给服务器端的Exchange<br>Exchange收到消息，根据ROUTINKEY，将消息转发给匹配的Queue1<br>Queue1收到消息，将消息发送给订阅者C1<br>C1收到消息，发送ACK给队列确认收到消息<br>Queue1收到ACK，删除队列中缓存的此条消息</p>
+<p>Consumer收到消息时需要显式的向rabbit broker发送basic.ack消息或者consumer订阅消息时设置auto_ack参数为true。在通信过程中，队列对ACK的处理有以下几种情况：</p>
+<p>如果consumer接收了消息，发送ack,rabbitmq会删除队列中这个消息，发送另一条消息给consumer。<br>如果cosumer接受了消息, 但在发送ack之前断开连接，rabbitmq会认为这条消息没有被deliver,在consumer在次连接的时候，这条消息会被redeliver。<br>如果consumer接受了消息，但是程序中有bug,忘记了ack,rabbitmq不会重复发送消息。<br>rabbitmq2.0.0和之后的版本支持consumer reject某条（类）消息，可以通过设置requeue参数中的reject为true达到目地，那么rabbitmq将会把消息发送给下一个注册的consumer。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-01-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Rabbitmq/" title="Rabbitmq">Rabbitmq </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Queue/" title="Queue">Queue </a><span>About 1761 words, 5 min 52 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/12/14/2018-12-14-Centos-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E7%AE%A1%E7%90%86/">Centos 端口转发管理</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>在工作中经常会遇到vpc网络，内网所有机器通过唯一一台对外的proxy机器进行共享上网，这里记录一下如何做好端口转发和管理。</p>
+</blockquote>
+<ol>
+<li>展示所有nat表规则 以编号标注</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">root@jumper:~# iptables -L -t nat --line-number</span><br><span class="line">Chain PREROUTING (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br><span class="line">1    DNAT       tcp  --  anywhere             anywhere             tcp dpt:EtherNet/IP-1 to:192.168.1.3:2538</span><br><span class="line">2    DNAT       tcp  --  anywhere             anywhere             tcp dpt:ssh to:192.168.1.2:2538</span><br><span class="line">3    DNAT       tcp  --  anywhere             anywhere             tcp dpt:7687 to:192.168.1.3:7687</span><br><span class="line">4    DNAT       tcp  --  anywhere             anywhere             tcp dpt:dxspider to:192.168.1.3:8873</span><br><span class="line"></span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br><span class="line"></span><br><span class="line">Chain OUTPUT (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br><span class="line"></span><br><span class="line">Chain POSTROUTING (policy ACCEPT)</span><br><span class="line">num  target     prot opt source               destination</span><br><span class="line">1    SNAT       tcp  --  anywhere             newdev.my-domain.com  tcp dpt:EtherNet/IP-1 to:192.168.1.1</span><br><span class="line">2    SNAT       tcp  --  anywhere             dev.my-domain.com     tcp dpt:vnwk-prapi to:192.168.1.1</span><br><span class="line">3    SNAT       tcp  --  anywhere             dev.my-domain.com     tcp dpt:ssh to:192.168.1.1</span><br><span class="line">4    SNAT       tcp  --  anywhere             newdev.my-domain.com  tcp spt:7687 to:192.168.1.1</span><br><span class="line">5    SNAT       tcp  --  anywhere             newdev.my-domain.com  tcp spt:dxspider to:192.168.1.1</span><br><span class="line">6    SNAT       all  --  192.168.1.0/24       anywhere             to:192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>删除其中一个规则</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 删除nat表PREROUTING中的第一个规则</span><br><span class="line">iptables -t nat -D PREROUTING 1</span><br><span class="line"></span><br><span class="line">// 删除nat表中POSTROUTING中的第一个规则</span><br><span class="line">iptables -t nat -D POSTROUTING 1</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>添加转发规则</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iptables -t nat -A PREROUTING -p tcp -m tcp --dport 2233 -j DNAT --to-destination 192.168.1.2:2538</span><br><span class="line">iptables -t nat -A POSTROUTING -d 192.168.1.2/32 -p tcp -m tcp --dport 2233 -j SNAT --to-source 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-12-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/iptables/" title="iptables">iptables </a><i class="fa fa-tag"></i><a class="tag" href="/tags/NAT/" title="NAT">NAT </a><span>About 284 words, 56 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/11/28/2018-11-28-LDAP-%E5%88%86%E4%BA%AB/">LDAP 分享</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>轻型目录访问协议（英文：Lightweight Directory Access Protocol，缩写：LDAP）是一个开放的，中立的，工业标准的应用协议，通过IP协议提供访问控制和维护分布式信息的目录信息。<br>OpenLDAP是轻型目录访问协议（Lightweight Directory Access Protocol，LDAP）的自由和开源的实现，在其OpenLDAP许可证下发行，并已经被包含在众多流行的Linux发行版中。</p>
+</blockquote>
+<h2 id="目录服务"><a href="#目录服务" class="headerlink" title="目录服务"></a>目录服务</h2><p>目录是一个为查询、浏览和搜索而优化的专业分布式数据库，它呈树状结构组织数据，就好象Linux&#x2F;Unix系统中的文件目录一样。目录数据库和关系数据库不同，它有优异的读性能，但写性能差，并且没有事务处理、回滚等复杂功能，不适于存储修改频繁的数据。所以目录天生是用来查询的，就好象它的名字一样。</p>
+<h2 id="LDAP特点"><a href="#LDAP特点" class="headerlink" title="LDAP特点"></a>LDAP特点</h2><ul>
+<li><p>LDAP的结构用树来表示，而不是用表格。正因为这样，就不能用SQL语句了</p>
+</li>
+<li><p>LDAP可以很快地得到查询结果，不过在写方面，就慢得多</p>
+</li>
+<li><p>LDAP提供了静态数据的快速查询方式</p>
+</li>
+<li><p>Client&#x2F;server模型，Server 用于存储数据，Client提供操作目录信息树的工具</p>
+</li>
+<li><p>这些工具可以将数据库的内容以文本格式（LDAP 数据交换格式，LDIF）呈现在您的面前</p>
+</li>
+<li><p>LDAP是一种开放Internet标准，LDAP协议是跨平台的Interent协议</p>
+</li>
+</ul>
+<h2 id="LDAP组成形式"><a href="#LDAP组成形式" class="headerlink" title="LDAP组成形式"></a>LDAP组成形式</h2><p><img src="http://img.yuekang.org.cn/2018112801.png" alt="组成图"></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
+<li>Entry<br>条目，也叫记录项，是LDAP中最基本的颗粒，就像字典中的词条，或者是数据库中的记录。通常对LDAP的添加、删除、更改、检索都是以条目为基本对象的。</li>
+</ol>
+<p><strong>DN</strong> 标识名（distinguished Name ，DN） 例如：<strong>cn&#x3D;baby,ou&#x3D;marketing,ou&#x3D;people,dc&#x3D;mydomain,dc&#x3D;org</strong> 通过DN的层次型语法结构，可以方便地表示出条目在LDAP树中的位置，通常用于检索。</p>
+<p><strong>RDN</strong> 一般指dn逗号最左边的部分，如cn&#x3D;baby。它与RootDN不同，RootDN通常与RootPW同时出现，特指管理LDAP中信息的最高权限用户。</p>
+<p><strong>Base DN</strong> LDAP目录树的最顶部就是根，也就是所谓的“Base DN”，如”dc&#x3D;mydomain,dc&#x3D;org”。</p>
+<ol start="2">
+<li>Attribute</li>
+</ol>
+<p>每个条目都可以有很多属性（Attribute），比如常见的人都有姓名、地址、电话等属性。每个属性都有名称及对应的值，属性值可以有单个、多个，比如你有多个邮箱。<br>属性不是随便定义的，需要符合一定的规则，而这个规则可以通过schema制定,在openLDAP中通过导入基础的schema才能导入用户的账户信息</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="right">别名</th>
+<th align="center">语法</th>
+<th align="right">描述</th>
+<th align="right">值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">commonName</td>
+<td align="right">cn</td>
+<td align="center">Directory String</td>
+<td align="right">姓名</td>
+<td align="right">sean</td>
+</tr>
+<tr>
+<td align="left">surname</td>
+<td align="right">sn</td>
+<td align="center">Directory String</td>
+<td align="right">姓</td>
+<td align="right">Chow</td>
+</tr>
+<tr>
+<td align="left">organizationalUnitName</td>
+<td align="right">ou</td>
+<td align="center">Directory String</td>
+<td align="right">单位名</td>
+<td align="right">Chow</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>ObjectClass</li>
+</ol>
+<p>属性不是随便定义的，需要符合一定的规则，而这个规则可以通过schema制定。ObjectClass是属性的集合，LDAP预想了很多人员组织机构中常见的对象，并将其封装成对象类。比如人员（person）含有姓（sn）、名（cn）、电话(telephoneNumber)、密码(userPassword)等属性，单位职工(organizationalPerson)是人员(person)的继承类，除了上述属性之外还含有职务（title）、邮政编码（postalCode）、通信地址(postalAddress)等属性。通过对象类可以方便的定义条目类型。每个条目可以直接继承多个对象类，这样就继承了各种属性。eNumber属性，因为employeeNumber是在inetOrgPerson中定义的。</p>
+<ol start="4">
+<li>Schema</li>
+</ol>
+<p>对象类（ObjectClass）、属性类型（AttributeType）、语法（Syntax）分别约定了条目、属性、值。这些构成了模式(Schema)——对象类的集合。条目数据在导入时通常需要接受模式检查，它确保了目录中所有的条目数据结构都是一致的。</p>
+<ol start="5">
+<li>LDIF</li>
+</ol>
+<p>LDIF（LDAP Data Interchange Format，数据交换格式）是LDAP数据库信息的一种文本格式，用于数据的导入导出，每行都是“属性: 值”<br>行界定<br>冒号分隔<br>属性-值对</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dn: uid=root,ou=People,dc=ethercap,dc=com</span><br><span class="line">uid: root</span><br><span class="line">cn: root</span><br><span class="line">objectClass: account</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">userPassword: &#123;crypt&#125;$6$gNN9MrahZoiKSplA$2dGv8AIDmGNvwuCxI5LIC6Ub/pMwV0nvKnMoZL/ruagZautrmUQ96I2tjehR9hLt.emzhn/GG9C1dd5qoLHrB.</span><br><span class="line">shadowMin: 0</span><br><span class="line">shadowMax: 99999</span><br><span class="line">shadowWarning: 7</span><br><span class="line">loginShell: /bin/bash</span><br><span class="line">uidNumber: 0</span><br><span class="line">gidNumber: 0</span><br><span class="line">homeDirectory: /root</span><br><span class="line">gecos: root</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="半小时快速搭建实战"><a href="#半小时快速搭建实战" class="headerlink" title="半小时快速搭建实战"></a>半小时快速搭建实战</h2><pre><code class="shell">//安装三大应用，服务端，客户端，导出导入工具
+yum install -y openldap-servers openldap-clients migrationtools
+
+//配置文件
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+chown ldap. /var/lib/ldap/DB_CONFIG
+
+//启动服务
+systemctl start slapd
+systemctl enable slapd
+
+//生成root密码
+╭─root@ykdev ~
+╰─# slappasswd
+New password:
+Re-enter new password:
+&#123;SSHA&#125;/UFZ8EehpMMtKiiAy+vxdxH6fObhaF3l
+
+//修改rootdn密码
+cat chrootpw.ldif
+dn: olcDatabase=&#123;0&#125;config,cn=config
+changetype: modify
+add: olcRootPW
+olcRootPW: &#123;SSHA&#125;/UFZ8EehpMMtKiiAy+vxdxH6fObhaF3l
+
+ldapadd -Y EXTERNAL -H ldapi:/// -f chrootpw.ldif
+
+
+
+//导出基础的Schema，这些 Schema 文件位于 /etc/openldap/schema/ 目录中，定义了我们以后创建的条目可以使用哪些属性
+[root@localhost ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry &quot;cn=cosine,cn=schema,cn=config&quot;
+
+[root@localhost ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry &quot;cn=nis,cn=schema,cn=config&quot;
+
+[root@localhost ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry &quot;cn=inetorgperson,cn=schema,cn=config&quot;
+
+//配置 LDAP 的顶级域
+[root@proxy ldap]# cat chdomain.ldif
+dn: olcDatabase=&#123;1&#125;monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: &#123;0&#125;to * by dn.base=&quot;gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth&quot;
+  read by dn.base=&quot;cn=Manager,dc=my-domain,dc=com&quot; read by * none
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=my-domain,dc=com
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=Manager,dc=my-domain,dc=com
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: &#123;SSHA&#125;/UFZ8EehpMMtKiiAy+vxdxH6fObhaF3l
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+add: olcAccess
+olcAccess: &#123;0&#125;to attrs=userPassword,shadowLastChange by
+  dn=&quot;cn=Manager,dc=my-domain,dc=com&quot; write by anonymous auth by self write by * none
+olcAccess: &#123;1&#125;to dn.base=&quot;&quot; by * read
+olcAccess: &#123;2&#125;to * by dn=&quot;cn=Manager,dc=my-domain,dc=com&quot; write by * read
+
+[root@localhost ~]# ldapmodify -Y EXTERNAL -H ldapi:/// -f chdomain.ldif 
+
+//导入基础组信息什么的
+[root@proxy ldap]# cat base.ldif
+dn: dc=my-domain,dc=com
+dc: my-domain
+objectClass: top
+objectClass: domain
+
+dn: ou=People,dc=my-domain,dc=com
+ou: People
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Group,dc=my-domain,dc=com
+ou: Group
+objectClass: top
+objectClass: organizationalUnit
+
+ldapadd -x -D &quot;cn=Manager,dc=my-domain,dc=com&quot; -W -f base.ldif
+
+//导入用户信息
+//修改域名基础信息
+vi /usr/share/migrationtools/migrate_common.ph
+$DEFAULT_BASE = &quot;dc=my-domain,dc=com&quot;;
+[root@proxy ldap]# /usr/share/migrationtools/migrate_passwd.pl /etc/passwd passwd.ldif
+[root@proxy ldap]# /usr/share/migrationtools/migrate_group.pl /etc/group group.ldif
+[root@proxy ldap]# ldapadd -x -D cn=Manager,dc=my-domain,dc=com -W -f passwd.ldif
+[root@proxy ldap]# ldapadd -x -D cn=Manager,dc=my-domain,dc=com -W -f group.ldif
+
+//查看所有记录
+[root@proxy ldap]# ldapsearch -x -b &quot;dc=my-domain,dc=com&quot; -H ldap://192.168.1.1
+
+
+
+</code></pre>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/LDAP/" title="LDAP">LDAP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/OpenLdap/" title="OpenLdap">OpenLdap </a><span>About 1861 words, 6 min 12 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/11/14/2018-11-14-%E4%BB%8E%E9%9B%B6%E7%BC%96%E8%AF%91nginx-lua-cjson%E6%A8%A1%E5%9D%97%E7%9A%84nginx%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E5%85%A8%E7%A8%8B%E7%9B%91%E6%8E%A7/">从零编译nginx+lua+cjson模块的nginx服务实现日志全程监控</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>我们中有这样的需求就是，当前端和后端通过接口通信以后，我们在日常排查中缺少跟踪接口返回信息和所有头部信息的跟踪，针对于这个需求我们采用nginx+lua+cjson的形式通过lua脚本</p>
+</blockquote>
+<h2 id="准备的模块"><a href="#准备的模块" class="headerlink" title="准备的模块"></a>准备的模块</h2><ol>
+<li>LuaJIT</li>
+</ol>
+<p><a href="http://luajit.org/download/LuaJIT-2.0.5.tar.gz">http://luajit.org/download/LuaJIT-2.0.5.tar.gz</a></p>
+<ol start="2">
+<li>lua-nginx-module</li>
+</ol>
+<p><a href="https://github.com/openresty/lua-nginx-module/archive/v0.10.9rc7.tar.gz">https://github.com/openresty/lua-nginx-module/archive/v0.10.9rc7.tar.gz</a></p>
+<ol start="3">
+<li>ngx_devel_kit</li>
+</ol>
+<p><a href="https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz">https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</a></p>
+<ol start="4">
+<li>lua-cjson</li>
+</ol>
+<p><a href="https://www.kyne.com.au/~mark/software/download/lua-cjson-2.1.0.tar.gz">https://www.kyne.com.au/~mark/software/download/lua-cjson-2.1.0.tar.gz</a></p>
+<ol start="5">
+<li>nginx</li>
+</ol>
+<p><a href="http://nginx.org/download/nginx-1.14.1.tar.gz">http://nginx.org/download/nginx-1.14.1.tar.gz</a></p>
+<h2 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h2><ol>
+<li>LuaJit安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget http://luajit.org/download/LuaJIT-2.0.5.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf LuaJIT-2.0.5.tar.gz</span><br><span class="line"></span><br><span class="line">cd LuaJIT-2.0.5</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install PREFIX=/usr/local/luajit</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">环境变量必须配置！</span></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加入下面两个环境变量</span></span><br><span class="line">export LUAJIT_LIB=/usr/local/luajit/lib</span><br><span class="line">export LUAJIT_INC=/usr/local/luajit/include/luajit-2.0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>ngx_devel_kit和lua-nginx-module</li>
+</ol>
+<p>自己选择安装位置，最好公共目录,我放在&#x2F;usr&#x2F;local下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz</span><br><span class="line"></span><br><span class="line">wget https://github.com/openresty/lua-nginx-module/archive/v0.10.9rc7.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf v0.3.0.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf v0.10.9rc7.tar.gz</span><br><span class="line"></span><br><span class="line">cp -R lua-nginx-module/ /usr/local/</span><br><span class="line">cp -R ngx_devel_kit/ /usr/local/</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装nginx编译nginx</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">wget http://nginx.org/download/nginx-1.14.1.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf nginx-1.14.1.tar.gz</span><br><span class="line"></span><br><span class="line">cd nginx-1.14.1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注：报错gcc需要安装，可以执行</span></span><br><span class="line"></span><br><span class="line">yum install -y gcc g++ gcc-c++</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">依赖报错，可以执行</span></span><br><span class="line"></span><br><span class="line">yum -y install zlib zlib-devel openssl openssl--devel pcre pcre-devel</span><br><span class="line"></span><br><span class="line">./configure --with-ld-opt=&quot;-Wl,-rpath,$LUAJIT_LIB&quot; --conf-path=/etc/nginx/nginx.conf  --add-module=/usr/local/ngx_devel_kit --add-module=/usr/local/lua-nginx-module</span><br><span class="line"></span><br><span class="line">make -j 4 &amp;&amp; make install</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载lua库</span></span><br><span class="line">echo &quot;/usr/local/luajit/lib&quot; &gt;&gt; /etc/ld.so.conf</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+
+
+<ol start="4">
+<li>lua-cjson安装</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">wget https://www.kyne.com.au/~mark/software/download/lua-cjson-2.1.0.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf lua-cjson-2.1.0.tar.gz</span><br><span class="line"></span><br><span class="line">cd lua-cjson-2.1.0</span><br><span class="line"></span><br><span class="line">vi Makefile</span><br><span class="line"></span><br><span class="line"># 修改前缀(路径后不要留空格！！)</span><br><span class="line">PREFIX =            /usr/local/luajit</span><br><span class="line">LUA_INCLUDE_DIR =   $(PREFIX)/include/luajit-2.0</span><br><span class="line"></span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># lua中引用cjson库时必须指定位置</span><br><span class="line">package.path = &quot;/usr/local/luajit/mylua/?.lua;&quot;</span><br><span class="line">package.cpath = &quot;/usr/local/luajit/lib/lua/5.1/?.so;&quot;</span><br><span class="line">local cjson = require(&quot;cjson&quot;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="网站配置"><a href="#网站配置" class="headerlink" title="网站配置"></a>网站配置</h2><p>日志手机依旧依靠nginx log的形式我们针对于需要的内容进行收集和填充到日志中去，依赖原有的阿里云日志服务进行收集</p>
+<p><img src="http://img.yuekang.org.cn/2018112101.png" alt="日志服务"></p>
+<ol>
+<li>定义日志格式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">log_format json_combined escape=json</span><br><span class="line">                &#x27;&#123;&#x27;</span><br><span class="line">                    &#x27;&quot;time_local&quot;:&quot;$time_local&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;remote_addr&quot;:&quot;$remote_addr&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;remote_user&quot;:&quot;$remote_user&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;request&quot;:&quot;$request&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;req_headers&quot;:&quot;$req_headers&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;status&quot;: &quot;$status&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;http_host&quot;: &quot;$http_host&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;body_bytes_sent&quot;:&quot;$body_bytes_sent&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;request_time&quot;:&quot;$request_time&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;http_referrer&quot;:&quot;$http_referer&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;content_type&quot;:&quot;$content_type&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;req_body&quot;:&quot;$req_body&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;resp_body&quot;:&quot;$resp_body&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ua&quot;:&quot;$http_user_agent&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;cookie_u&quot;:&quot;$cookie_u&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;referer&quot;:&quot;$http_referer&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;xff&quot;:&quot;$http_x_forwarded_for&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ups_status&quot;:&quot;$upstream_status&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ups_addr&quot;:&quot;$upstream_addr&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;resp_content_type&quot;:&quot;$resp_content_type&quot;,&#x27;</span><br><span class="line">                    &#x27;&quot;ups_time&quot;:&quot;$upstream_response_time&quot;&#x27;</span><br><span class="line">                &#x27;&#125;&#x27;;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>定义req_header和resp_body收集</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 开启lua记录请求体</span><br><span class="line">lua_need_request_body on;</span><br><span class="line">set $resp_body &quot;&quot;;</span><br><span class="line">set $resp_content_type &quot;&quot;;</span><br><span class="line">set $req_body &quot;&quot;;</span><br><span class="line">set $req_headers &quot;&quot;;</span><br><span class="line">header_filter_by_lua &#x27;</span><br><span class="line">             package.path = &quot;/usr/local/luajit/mylua/?.lua;&quot;</span><br><span class="line">             package.cpath = &quot;/usr/local/luajit/lib/lua/5.1/?.so;&quot;</span><br><span class="line">             local cjson = require(&quot;cjson&quot;);</span><br><span class="line">             local headers, err = ngx.req.get_headers()</span><br><span class="line">             local json = &#123;&#125;;</span><br><span class="line">             for k, v in pairs(headers) do</span><br><span class="line">                 json[k] = v;</span><br><span class="line">             end</span><br><span class="line">             ngx.var.req_headers = cjson.encode(json);</span><br><span class="line">&#x27;;</span><br><span class="line">body_filter_by_lua &#x27;</span><br><span class="line">             ngx.var.resp_content_type = ngx.resp.get_headers()[&quot;Content-Type&quot;]</span><br><span class="line">             local resp_body = ngx.arg[1]</span><br><span class="line">             ngx.ctx.buffered = (ngx.ctx.buffered or &quot;&quot;) .. resp_body</span><br><span class="line">             if ngx.arg[2] and string.find(ngx.var.resp_content_type, &quot;application/json&quot;) then</span><br><span class="line">                     ngx.var.resp_body = ngx.ctx.buffered</span><br><span class="line">                     ngx.var.req_body = ngx.var.request_body</span><br><span class="line">             end</span><br><span class="line">&#x27;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>odps收集表结构</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CREATE TABLE `access_json` (</span><br><span class="line">	`ip` string,</span><br><span class="line">	`remote_user` string,</span><br><span class="line">	`req_headers` string,</span><br><span class="line">	`status` bigint,</span><br><span class="line">	`http_host` string,</span><br><span class="line">	`body_bytes_sent` bigint,</span><br><span class="line">	`request_time` string,</span><br><span class="line">	`http_referer` string,</span><br><span class="line">	`content_type` string,</span><br><span class="line">	`req_body` string,</span><br><span class="line">	`resp_body` string,</span><br><span class="line">	`http_user_agent` string,</span><br><span class="line">	`cookie_u` string,</span><br><span class="line">	`http_x_forwarded_for` string,</span><br><span class="line">	`upstream_status` string,</span><br><span class="line">	`upstream_addr` string,</span><br><span class="line">	`resp_content_type` string,</span><br><span class="line">	`upstream_response_time` string,</span><br><span class="line">	`request` string</span><br><span class="line">) </span><br><span class="line"> PARTITIONED BY (dt string);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="AB压力测试"><a href="#AB压力测试" class="headerlink" title="AB压力测试"></a>AB压力测试</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"> yum -y install httpd-tools</span><br><span class="line">[root@zookeeperslave2 ~]# ab -c 1000 -n 10000 -r  http://192.168.1.169/aaa</span><br><span class="line">This is ApacheBench, Version 2.3 &lt;$Revision: 1430300 $&gt;</span><br><span class="line">Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/</span><br><span class="line">Licensed to The Apache Software Foundation, http://www.apache.org/</span><br><span class="line"></span><br><span class="line">Benchmarking 192.168.1.169 (be patient)</span><br><span class="line">Completed 1000 requests</span><br><span class="line">Completed 2000 requests</span><br><span class="line">Completed 3000 requests</span><br><span class="line">Completed 4000 requests</span><br><span class="line">Completed 5000 requests</span><br><span class="line">Completed 6000 requests</span><br><span class="line">Completed 7000 requests</span><br><span class="line">Completed 8000 requests</span><br><span class="line">Completed 9000 requests</span><br><span class="line">Completed 10000 requests</span><br><span class="line">Finished 10000 requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Server Software:        nginx/1.14.1</span><br><span class="line">Server Hostname:        192.168.1.169</span><br><span class="line">Server Port:            80</span><br><span class="line"></span><br><span class="line">Document Path:          /aaa</span><br><span class="line">Document Length:        17 bytes</span><br><span class="line"></span><br><span class="line">Concurrency Level:      1000</span><br><span class="line">Time taken for tests:   1.508 seconds</span><br><span class="line">Complete requests:      10000</span><br><span class="line">Failed requests:        0</span><br><span class="line">Write errors:           0</span><br><span class="line">Total transferred:      1660000 bytes</span><br><span class="line">HTML transferred:       170000 bytes</span><br><span class="line">Requests per second:    6632.41 [#/sec] (mean)</span><br><span class="line">Time per request:       150.775 [ms] (mean)</span><br><span class="line">Time per request:       0.151 [ms] (mean, across all concurrent requests)</span><br><span class="line">Transfer rate:          1075.18 [Kbytes/sec] received</span><br><span class="line"></span><br><span class="line">Connection Times (ms)</span><br><span class="line">              min  mean[+/-sd] median   max</span><br><span class="line">Connect:        0   52 169.9     18    1040</span><br><span class="line">Processing:    11   50  29.4     41     273</span><br><span class="line">Waiting:        0   48  29.3     39     270</span><br><span class="line">Total:         30  102 171.4     65    1292</span><br><span class="line"></span><br><span class="line">Percentage of the requests served within a certain time (ms)</span><br><span class="line">  50%     65</span><br><span class="line">  66%     73</span><br><span class="line">  75%     82</span><br><span class="line">  80%     90</span><br><span class="line">  90%    150</span><br><span class="line">  95%    156</span><br><span class="line">  98%   1059</span><br><span class="line">  99%   1065</span><br><span class="line"> 100%   1292 (longest request)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="问题集结"><a href="#问题集结" class="headerlink" title="问题集结"></a>问题集结</h2><ol>
+<li>AIO找不到的问题</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: no supported file AIO was found</span><br><span class="line">Currently file AIO is supported on FreeBSD 4.3+ and Linux 2.6.22+ only</span><br></pre></td></tr></table></figure>
+
+<p>安装开发者工具</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum groupinstall &#x27;Development Tools&#x27;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>缺少libxml2&#x2F;libxslt模块</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the HTTP XSLT module requires the libxml2/libxslt</span><br><span class="line">libraries. You can either do not enable the module or install the libraries.</span><br></pre></td></tr></table></figure>
+
+<p>安装缺失库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install libxml2 libxml2-dev</span><br><span class="line">yum -y install libxslt-devel</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>缺少GD库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the HTTP image filter module requires the GD library.</span><br><span class="line">You can either do not enable the module or install the libraries.</span><br></pre></td></tr></table></figure>
+
+<p>安装GD库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install gd-devel</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>缺少ExtUtils</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: perl module ExtUtils::Embed is required</span><br></pre></td></tr></table></figure>
+
+<p>安装ExtUtils</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install perl-devel perl-ExtUtils-Embed</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>缺少GeoIP库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the GeoIP module requires the GeoIP library.</span><br><span class="line">You can either do not enable the module or install the library.</span><br></pre></td></tr></table></figure>
+
+<p>安装缺失库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install GeoIP GeoIP-devel GeoIP-data</span><br></pre></td></tr></table></figure>
+
+<p>6、 缺少Google Perftools （编译环境我是不装这个的，从编译选线去除这个依赖就行）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./configure: error: the Google perftools module requires the Google perftools</span><br><span class="line">library. You can either do not enable the module or install the library.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 安装libunwind</span><br><span class="line">wget http://download.savannah.gnu.org/releases/libunwind/libunwind-0.99-beta.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf libunwind-0.99-beta.tar.gz</span><br><span class="line">cd libunwind-0.99-beta</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line"># 安装google-perftools</span><br><span class="line">wget https://github.com/gperftools/gperftools/releases/download/gperftools-2.5/gperftools-2.5.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf gperftools-2.5.tar.gz</span><br><span class="line">cd gperftools-2.5</span><br><span class="line">./configure --prefix=/usr/local/gperftools</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">vi /etc/ld.so.conf.d/usr_local_lib.conf</span><br><span class="line">#加入</span><br><span class="line">/usr/local/lib</span><br><span class="line">ldconfig</span><br><span class="line"></span><br><span class="line"># 添加环境</span><br><span class="line">vi /etc/profile</span><br><span class="line">export LD_PRELOAD=/usr/local/gperftools/lib/libtcmalloc.so</span><br><span class="line">export HEAPPROFILE=/usr/bin/gzip</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>8.模块版本不对 </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[emerg] module &quot;/usr/lib64/nginx/modules/ngx_http_geoip_module.so&quot; version 1012002 instead of 1...ip.conf:1</span><br></pre></td></tr></table></figure>
+
+<p>这个错误是因为之前nginx是yum安装的他的版本是1.12.*的  我这次安装的nginx是最新版本1.14.*的所以我需要对这个模块进行升级</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vi /etc/yum.repos.d/nginx.repo</span><br><span class="line"></span><br><span class="line">[nginx]</span><br><span class="line">name=nginx repo</span><br><span class="line">baseurl=http://nginx.org/packages/centos/7/$basearch/</span><br><span class="line">gpgcheck=0</span><br><span class="line">enabled=1</span><br><span class="line"></span><br><span class="line">yum remove nginx-mod*</span><br><span class="line">yum install nginx-module-*</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/nginx/" title="nginx">nginx </a><i class="fa fa-tag"></i><a class="tag" href="/tags/监控/" title="监控">监控 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/lua/" title="lua">lua </a><span>About 1559 words, 5 min 11 sec  read</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/2/">Next</a></li></ul></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"Posts",pages:"Pages",categories:"Categories",tags:"Tags",untitled:"(Untitled)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
