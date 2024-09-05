@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>系统性能指标 · 少年当自强</title><meta name="description" content="这篇文章记录查看系统负载相关方法
+
+1. uptime命令uptime命令能够打印系统总共运行了多长时间和系统的平均负载。uptime命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的1分钟、5分钟和15分钟内的平均负载。
+12uptime 10:43:"><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/links">友链</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/head_resized.png"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv">次</span></span><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated"><div class="post-title"><h3><a>系统性能指标</a></h3></div><div class="post-content"><p><blockquote>
+<p>这篇文章记录查看系统负载相关方法</p>
+</blockquote>
+<h2 id="1-uptime命令"><a href="#1-uptime命令" class="headerlink" title="1. uptime命令"></a>1. <code>uptime</code>命令</h2><p>uptime命令能够打印系统总共运行了多长时间和系统的平均负载。uptime命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的1分钟、5分钟和15分钟内的平均负载。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uptime</span><br><span class="line"> 10:43:21 up 27 days,  1:46,  1 user,  load average: 0.04, 0.06, 0.06</span><br></pre></td></tr></table></figure>
+
+<p>现在时间，开机27天，，1个用户，负载1、5、15分钟的平均负载</p>
+<h2 id="2-top命令"><a href="#2-top命令" class="headerlink" title="2. top命令"></a>2. <code>top</code>命令</h2><p>top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似于Windows的任务管理器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">top - 10:56:33 up 27 days,  1:59,  1 user,  load average: 0.00, 0.01, 0.05</span><br><span class="line">Tasks: 120 total,   1 running, 119 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.2 us,  0.2 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">KiB Mem :  3881720 total,   937900 free,   646416 used,  2297404 buff/cache</span><br><span class="line">KiB Swap:        0 total,        0 free,        0 used.  2913336 avail Mem</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</span><br><span class="line">12837 yuekang   20   0  157704   2172   1516 R   0.7  0.1   0:00.11 top</span><br><span class="line"> 1729 root      20   0  848356  20452   3000 S   0.3  0.5  35:57.94 YDService</span><br><span class="line"> 2432 root      20   0  534628  10416   2080 S   0.3  0.3 108:29.12 barad_agent</span><br><span class="line">    1 root      20   0   43344   3748   2500 S   0.0  0.1   2:19.44 systemd</span><br><span class="line">    2 root      20   0       0      0      0 S   0.0  0.0   0:00.37 kthreadd</span><br><span class="line">    3 root      20   0       0      0      0 S   0.0  0.0   0:03.52 ksoftirqd/0</span><br><span class="line">    5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H</span><br><span class="line">    7 root      rt   0       0      0      0 S   0.0  0.0   0:01.28 migration/0</span><br><span class="line">    8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh</span><br><span class="line">    9 root      20   0       0      0      0 S   0.0  0.0  12:47.92 rcu_sched</span><br><span class="line">   10 root      rt   0       0      0      0 S   0.0  0.0   0:10.91 watchdog/0</span><br><span class="line">   11 root      rt   0       0      0      0 S   0.0  0.0   0:09.58 watchdog/1</span><br><span class="line">   12 root      rt   0       0      0      0 S   0.0  0.0   0:01.46 migration/1</span><br><span class="line">   13 root      20   0       0      0      0 S   0.0  0.0   0:03.42 ksoftirqd/1</span><br><span class="line">   15 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H</span><br><span class="line">   17 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kdevtmpfs</span><br><span class="line">   18 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 netns</span><br><span class="line">   19 root      20   0       0      0      0 S   0.0  0.0   0:00.77 khungtaskd</span><br><span class="line">   20 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 writeback</span><br><span class="line">   21 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kintegrity</span><br></pre></td></tr></table></figure>
+
+<p>显示的内容非常全，平均负载等内容都被显示出来了</p>
+<h2 id="3-w命令"><a href="#3-w命令" class="headerlink" title="3. w命令"></a>3. <code>w</code>命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">~w</span><br><span class="line"> 10:57:38 up 27 days,  2:00,  1 user,  load average: 0.00, 0.01, 0.05</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">yk  pts/0    120.57.161.139   10:43    2.00s  0.04s  0.00s w</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>w命令的主要功能其实是显示目前登入系统的用户信息。但是与who不同的是，w命令功能更加强大，w命令还可以显示：当前时间，系统启动到现在的时间，登录用户的数目，系统在最近1分钟、5分钟和15分钟的平均负载。然后是每个用户的各项数据，项目显示顺序如下：登录帐号、终端名称、远 程主机名、登录时间、空闲时间、JCPU、PCPU、当前正在运行进程的命令行。</p>
+<hr>
+<h2 id="机器正常负载范围"><a href="#机器正常负载范围" class="headerlink" title="机器正常负载范围"></a>机器正常负载范围</h2><p>对于机器的Load到底多少算正常的问题，一直都是很有争议的，不同人有着不同的理解。对于单个CPU，有人认为如果Load超过0.7就算是超出正常范围了。也有人认为只要不超过1都没问题。也有人认为，单个CPU的负载在2以下都可以接受。<br>为什么会有这么多不同的理解呢，是因为不同的机器除了CPU影响之外还有其他因素的影响，运行的程序、机器内存、甚至是机房温度等都有可能有区别。<br>比如，有些机器用于定时执行大量的跑批任务，这个时间段内，Load可能会飙的比较高。而其他时间可能会比较低。那么这段飙高时间我们要不要去排查问题呢？<br>我的建议是，最好根据自己机器的实际情况，建立一个指标的基线（如近一个月的平均值），只要日常的load在基线上下范围内不太大都可以接收，如果差距太多可能就要人为介入检查了。<br>但是，总要有个建议的阈值吧，关于这个值。阮一峰在自己的博客中有过以下建议：</p>
+<blockquote>
+<p>当系统负荷持续大于0.7，你必须开始调查了，问题出在哪里，防止情况恶化。</p>
+</blockquote>
+<blockquote>
+<p>当系统负荷持续大于1.0，你必须动手寻找解决办法，把这个值降下来。</p>
+</blockquote>
+<blockquote>
+<p>当系统负荷达到5.0，就表明你的系统有很严重的问题，长时间没有响应，或者接近死机了。你不应该让系统达到这个值。</p>
+</blockquote>
+<p>上指标都是基于单CPU的，但是现在很多电脑都是多核的。所以，对一般的系统来说，是根据cpu数量去判断系统是否已经过载（Over Load）的。如果我们认为0.7算是单核机器负载的安全线的话，那么四核机器的负载最好保持在3(4*0.7 &#x3D; 2.8)以下。<br>还有一点需要提一下，在Load Avg的指标中，有三个值，1分钟系统负荷、5分钟系统负荷，15分钟系统负荷。我们在排查问题的时候也是可以参考这三个值的。<br>一般情况下，1分钟系统负荷表示最近的暂时现象。15分钟系统负荷表示是持续现象，并非暂时问题。如果load15较高，而load1较低，可以认为情况有所好转。反之，情况可能在恶化。</p>
+<hr>
+<h2 id="如何降低负载"><a href="#如何降低负载" class="headerlink" title="如何降低负载"></a>如何降低负载</h2><p>导致负载高的原因可能很复杂，有可能是硬件问题也可能是软件问题。<br>如果是硬件问题，那么说明机器性能确实就不行了，那么解决起来很简单，直接换机器就可以了。<br>前面我们提过，CPU使用、内存使用、IO消耗都可能导致负载高。如果是软件问题，有可能由于Java中的某些线程被长时间占用、大量内存持续占用等导致。建议从以下几个方面排查代码问题：<br>1、是否有内存泄露导致频繁GC 2、是否有死锁发生 3、是否有大字段的读写 4、会不会是数据库操作导致的，排查SQL语句问题。<br>这里还有个建议，如果发现线上机器Load飙高，可以考虑先把堆栈内存dump下来后，进行重启，暂时解决问题，然后再考虑回滚和排查问题。</p>
+<blockquote>
+<p>本文摘自：<a href="https://juejin.im/post/5b0262edf265da0b9b079fa7?utm_source=gold_browser_extension">https://juejin.im/post/5b0262edf265da0b9b079fa7?utm_source=gold_browser_extension</a></p>
+</blockquote>
+</p></div><div class="post-footer"><div class="tip">本文采用CC-BY-SA-3.0协议，转载请注明出处<br>作者: Kange</div><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-05-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/linux/" title="linux">linux </a><span>大约1530个字, 5分钟6秒读完</span></div></div></div></div><a id="comments"></a><div id="cyReward" role="cylabs" data-use="reward"></div><script src="https://cy-cdn.kuaizhan.com/js/??lib/jquery.js,changyan.labs.https.js?appid=cyt08N8Y6"></script><div class="share"><div class="share-btn linkonly"><a class="fa fa-link" onclick="Utils.copyToClipboard(window.location.href)" ref="sidebar"></a></div><div class="share-btn evernote"><a class="fa fa-share" onclick="Anatolo.share.native()" ref="sidebar"></a></div><div class="share-btn weibo"><a class="fab fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="share-btn twitter"><a class="fab fa-twitter" href="http://twitter.com/intent/tweet?text=%E5%88%86%E4%BA%AB%E6%96%87%E7%AB%A0%EF%BC%9A%0A%0A%E5%B0%91%E5%B9%B4%E5%BD%93%E8%87%AA%E5%BC%BA%20%C2%B7%20%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%0Ahttps://yuekang.org.cn/2018/05/22/2018-05-22-%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/%0A"></a></div><div class="share-btn mastodon"><a class="fab fa-mastodon" href="https://mastodonshare.com/?text=%E5%88%86%E4%BA%AB%E6%96%87%E7%AB%A0%EF%BC%9A%0A%0A%E5%B0%91%E5%B9%B4%E5%BD%93%E8%87%AA%E5%BC%BA%20%C2%B7%20%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87%0Ahttps://yuekang.org.cn/2018/05/22/2018-05-22-%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/%0A"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/06/12/2018-06-12-PHP%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%99%A8%E6%9C%BA%E5%88%B6/" title="PHP内存管理器机制">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/02/19/2018-02-19-%E7%88%AC%E8%99%AB%E5%B8%B8%E8%A7%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%80%BB%E7%BB%93/" title="爬虫常见请求头总结">下一篇</a></li></ul></div><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><a id="comments"></a><div id="vcomments" style="margin: 0 30px"></div><script>var valine = new Valine({
+  el: "#vcomments",
+  notify: "false" || false,
+  verify: "true" || false,
+  app_id: "yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz",
+  app_key: "Fb1nRCpsNrMB0U2Fv3jJSCsu",
+  placeholder: "ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像",
+  path: window.location.pathname,
+  avatar: "",
+  avatar_cdn: "https://cravatar.cn/avatar/", // 自定义avatar cdn
+  // 设置Bilibili表情包地址
+  emojiCDN: "//i0.hdslb.com/bfs/emote/",
+  // 表情title和图片映射
+  emojiMaps: {
+    tv_doge: "6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png",
+    tv_亲亲: "a8111ad55953ef5e3be3327ef94eb4a39d535d06.png",
+    tv_偷笑: "bb690d4107620f1c15cff29509db529a73aee261.png",
+    tv_再见: "180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png",
+    tv_冷漠: "b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png",
+    tv_可爱: "9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png",
+    tv_吐血: "09dd16a7aa59b77baa1155d47484409624470c77.png",
+    tv_呆: "fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png",
+    tv_呕吐: "9f996894a39e282ccf5e66856af49483f81870f3.png",
+    tv_困: "241ee304e44c0af029adceb294399391e4737ef2.png",
+    tv_坏笑: "1f0b87f731a671079842116e0991c91c2c88645a.png",
+    tv_大佬: "093c1e2c490161aca397afc45573c877cdead616.png",
+    tv_委屈: "d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png",
+    tv_害羞: "a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png",
+    tv_尴尬: "7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png",
+    tv_微笑: "70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png",
+    tv_思考: "90cf159733e558137ed20aa04d09964436f618a1.png",
+    tv_惊吓: "0d15c7e2ee58e935adc6a7193ee042388adc22af.png",
+    tv_打脸: "56ab10b624063e966bfcb76ea5dc4794d87dfd47.png",
+    tv_抓狂: "fe31c08edad661d63762b04e17b8d5ae3c71a757.png",
+    tv_抠鼻: "c666f55e88d471e51bbd9fab9bb308110824a6eb.png",
+    tv_斜眼笑: "911f987aa8bc1bee12d52aafe62bc41ef4474e6c.png",
+    tv_无奈: "ea8ed89ee9878f2fece2dda0ea8a5dbfe21b5751.png",
+    tv_晕: "5443c22b4d07fb1907ccc610c8e6db254f2461b7.png",
+    tv_流汗: "cead1c351ab8d79e9f369605beb90148db0fbed3.png",
+    tv_流泪: "7e71cde7858f0cd50d74b0264aa26db612a8a167.png",
+    tv_流鼻血: "c32d39db2737f89b904ca32700d140a9241b0767.png",
+    tv_点赞: "f85c354995bd99e28fc76c869bfe42ba6438eff4.png",
+    tv_生气: "26702dcafdab5e8225b43ffd23c94ac1ff932654.png",
+    tv_生病: "8b0ec90e6b86771092a498c54f09fc94621c1900.png",
+    tv_疑问: "0793d949b18d7be716078349c202c15ff166f314.png",
+    tv_白眼: "c1d59f439e379ee50eef488bcb5e5378e5044ea4.png",
+    tv_皱眉: "72ccad6679fea0d14cce648b4d818e09b8ffea2d.png",
+    tv_目瞪口呆: "0b8cb81a68de5d5365212c99375e7ace3e7891b7.png",
+    tv_睡着: "8b196675b53af58264f383c50ad0945048290b33.png",
+    tv_笑哭: "1abc628f6d4f4caf9d0e7800878f4697abbc8273.png",
+    tv_腼腆: "89712c0d4af73e67f89e35cbc518420380a7f6f4.png",
+    tv_色: "61822c7e9aae5da76475e7892534545336b23a6f.png",
+    tv_调侃: "4bc022533ef31544ca0d72c12c808cf4a1cce3e3.png",
+    tv_调皮: "b9c41de8e82dd7a8515ae5e3cb63e898bf245186.png",
+    tv_鄙视: "6e72339f346a692a495b123174b49e4e8e781303.png",
+    tv_闭嘴: "c9e990da7f6e93975e25fd8b70e2e290aa4086ef.png",
+    tv_难过: "87f46748d3f142ebc6586ff58860d0e2fc8263ba.png",
+    tv_馋: "fc7e829b845c43c623c8b490ee3602b7f0e76a31.png",
+    tv_鬼脸: "0ffbbddf8a94d124ca2f54b360bbc04feb6bbfea.png",
+    tv_黑人问号: "45821a01f51bc867da9edbaa2e070410819a95b2.png",
+    tv_鼓掌: "1d21793f96ef4e6f48b23e53e3b9e42da833a0f6.png",
+  },
+});
+</script></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"文章",pages:"页面",categories:"分类",tags:"标签",untitled:"(无标题)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="想要查找什么..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="回到顶部"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>

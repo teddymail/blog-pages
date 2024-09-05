@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>LDAP 分享 · 少年当自强</title><meta name="description" content="轻型目录访问协议（英文：Lightweight Directory Access Protocol，缩写：LDAP）是一个开放的，中立的，工业标准的应用协议，通过IP协议提供访问控制和维护分布式信息的目录信息。OpenLDAP是轻型目录访问协议（Lightweight Directory Acces"><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">标签</a></li><li><a href="/about">关于</a></li><li><a href="/links">友链</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/head_resized.png"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv">次</span></span><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated"><div class="post-title"><h3><a>LDAP 分享</a></h3></div><div class="post-content"><p><blockquote>
+<p>轻型目录访问协议（英文：Lightweight Directory Access Protocol，缩写：LDAP）是一个开放的，中立的，工业标准的应用协议，通过IP协议提供访问控制和维护分布式信息的目录信息。<br>OpenLDAP是轻型目录访问协议（Lightweight Directory Access Protocol，LDAP）的自由和开源的实现，在其OpenLDAP许可证下发行，并已经被包含在众多流行的Linux发行版中。</p>
+</blockquote>
+<h2 id="目录服务"><a href="#目录服务" class="headerlink" title="目录服务"></a>目录服务</h2><p>目录是一个为查询、浏览和搜索而优化的专业分布式数据库，它呈树状结构组织数据，就好象Linux&#x2F;Unix系统中的文件目录一样。目录数据库和关系数据库不同，它有优异的读性能，但写性能差，并且没有事务处理、回滚等复杂功能，不适于存储修改频繁的数据。所以目录天生是用来查询的，就好象它的名字一样。</p>
+<h2 id="LDAP特点"><a href="#LDAP特点" class="headerlink" title="LDAP特点"></a>LDAP特点</h2><ul>
+<li><p>LDAP的结构用树来表示，而不是用表格。正因为这样，就不能用SQL语句了</p>
+</li>
+<li><p>LDAP可以很快地得到查询结果，不过在写方面，就慢得多</p>
+</li>
+<li><p>LDAP提供了静态数据的快速查询方式</p>
+</li>
+<li><p>Client&#x2F;server模型，Server 用于存储数据，Client提供操作目录信息树的工具</p>
+</li>
+<li><p>这些工具可以将数据库的内容以文本格式（LDAP 数据交换格式，LDIF）呈现在您的面前</p>
+</li>
+<li><p>LDAP是一种开放Internet标准，LDAP协议是跨平台的Interent协议</p>
+</li>
+</ul>
+<h2 id="LDAP组成形式"><a href="#LDAP组成形式" class="headerlink" title="LDAP组成形式"></a>LDAP组成形式</h2><p><img src="http://img.yuekang.org.cn/2018112801.png" alt="组成图"></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
+<li>Entry<br>条目，也叫记录项，是LDAP中最基本的颗粒，就像字典中的词条，或者是数据库中的记录。通常对LDAP的添加、删除、更改、检索都是以条目为基本对象的。</li>
+</ol>
+<p><strong>DN</strong> 标识名（distinguished Name ，DN） 例如：<strong>cn&#x3D;baby,ou&#x3D;marketing,ou&#x3D;people,dc&#x3D;mydomain,dc&#x3D;org</strong> 通过DN的层次型语法结构，可以方便地表示出条目在LDAP树中的位置，通常用于检索。</p>
+<p><strong>RDN</strong> 一般指dn逗号最左边的部分，如cn&#x3D;baby。它与RootDN不同，RootDN通常与RootPW同时出现，特指管理LDAP中信息的最高权限用户。</p>
+<p><strong>Base DN</strong> LDAP目录树的最顶部就是根，也就是所谓的“Base DN”，如”dc&#x3D;mydomain,dc&#x3D;org”。</p>
+<ol start="2">
+<li>Attribute</li>
+</ol>
+<p>每个条目都可以有很多属性（Attribute），比如常见的人都有姓名、地址、电话等属性。每个属性都有名称及对应的值，属性值可以有单个、多个，比如你有多个邮箱。<br>属性不是随便定义的，需要符合一定的规则，而这个规则可以通过schema制定,在openLDAP中通过导入基础的schema才能导入用户的账户信息</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="right">别名</th>
+<th align="center">语法</th>
+<th align="right">描述</th>
+<th align="right">值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">commonName</td>
+<td align="right">cn</td>
+<td align="center">Directory String</td>
+<td align="right">姓名</td>
+<td align="right">sean</td>
+</tr>
+<tr>
+<td align="left">surname</td>
+<td align="right">sn</td>
+<td align="center">Directory String</td>
+<td align="right">姓</td>
+<td align="right">Chow</td>
+</tr>
+<tr>
+<td align="left">organizationalUnitName</td>
+<td align="right">ou</td>
+<td align="center">Directory String</td>
+<td align="right">单位名</td>
+<td align="right">Chow</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>ObjectClass</li>
+</ol>
+<p>属性不是随便定义的，需要符合一定的规则，而这个规则可以通过schema制定。ObjectClass是属性的集合，LDAP预想了很多人员组织机构中常见的对象，并将其封装成对象类。比如人员（person）含有姓（sn）、名（cn）、电话(telephoneNumber)、密码(userPassword)等属性，单位职工(organizationalPerson)是人员(person)的继承类，除了上述属性之外还含有职务（title）、邮政编码（postalCode）、通信地址(postalAddress)等属性。通过对象类可以方便的定义条目类型。每个条目可以直接继承多个对象类，这样就继承了各种属性。eNumber属性，因为employeeNumber是在inetOrgPerson中定义的。</p>
+<ol start="4">
+<li>Schema</li>
+</ol>
+<p>对象类（ObjectClass）、属性类型（AttributeType）、语法（Syntax）分别约定了条目、属性、值。这些构成了模式(Schema)——对象类的集合。条目数据在导入时通常需要接受模式检查，它确保了目录中所有的条目数据结构都是一致的。</p>
+<ol start="5">
+<li>LDIF</li>
+</ol>
+<p>LDIF（LDAP Data Interchange Format，数据交换格式）是LDAP数据库信息的一种文本格式，用于数据的导入导出，每行都是“属性: 值”<br>行界定<br>冒号分隔<br>属性-值对</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">dn: uid=root,ou=People,dc=ethercap,dc=com</span><br><span class="line">uid: root</span><br><span class="line">cn: root</span><br><span class="line">objectClass: account</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">userPassword: &#123;crypt&#125;$6$gNN9MrahZoiKSplA$2dGv8AIDmGNvwuCxI5LIC6Ub/pMwV0nvKnMoZL/ruagZautrmUQ96I2tjehR9hLt.emzhn/GG9C1dd5qoLHrB.</span><br><span class="line">shadowMin: 0</span><br><span class="line">shadowMax: 99999</span><br><span class="line">shadowWarning: 7</span><br><span class="line">loginShell: /bin/bash</span><br><span class="line">uidNumber: 0</span><br><span class="line">gidNumber: 0</span><br><span class="line">homeDirectory: /root</span><br><span class="line">gecos: root</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="半小时快速搭建实战"><a href="#半小时快速搭建实战" class="headerlink" title="半小时快速搭建实战"></a>半小时快速搭建实战</h2><pre><code class="shell">//安装三大应用，服务端，客户端，导出导入工具
+yum install -y openldap-servers openldap-clients migrationtools
+
+//配置文件
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+chown ldap. /var/lib/ldap/DB_CONFIG
+
+//启动服务
+systemctl start slapd
+systemctl enable slapd
+
+//生成root密码
+╭─root@ykdev ~
+╰─# slappasswd
+New password:
+Re-enter new password:
+&#123;SSHA&#125;/UFZ8EehpMMtKiiAy+vxdxH6fObhaF3l
+
+//修改rootdn密码
+cat chrootpw.ldif
+dn: olcDatabase=&#123;0&#125;config,cn=config
+changetype: modify
+add: olcRootPW
+olcRootPW: &#123;SSHA&#125;/UFZ8EehpMMtKiiAy+vxdxH6fObhaF3l
+
+ldapadd -Y EXTERNAL -H ldapi:/// -f chrootpw.ldif
+
+
+
+//导出基础的Schema，这些 Schema 文件位于 /etc/openldap/schema/ 目录中，定义了我们以后创建的条目可以使用哪些属性
+[root@localhost ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry &quot;cn=cosine,cn=schema,cn=config&quot;
+
+[root@localhost ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry &quot;cn=nis,cn=schema,cn=config&quot;
+
+[root@localhost ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry &quot;cn=inetorgperson,cn=schema,cn=config&quot;
+
+//配置 LDAP 的顶级域
+[root@proxy ldap]# cat chdomain.ldif
+dn: olcDatabase=&#123;1&#125;monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: &#123;0&#125;to * by dn.base=&quot;gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth&quot;
+  read by dn.base=&quot;cn=Manager,dc=my-domain,dc=com&quot; read by * none
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=my-domain,dc=com
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=Manager,dc=my-domain,dc=com
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: &#123;SSHA&#125;/UFZ8EehpMMtKiiAy+vxdxH6fObhaF3l
+
+dn: olcDatabase=&#123;2&#125;hdb,cn=config
+changetype: modify
+add: olcAccess
+olcAccess: &#123;0&#125;to attrs=userPassword,shadowLastChange by
+  dn=&quot;cn=Manager,dc=my-domain,dc=com&quot; write by anonymous auth by self write by * none
+olcAccess: &#123;1&#125;to dn.base=&quot;&quot; by * read
+olcAccess: &#123;2&#125;to * by dn=&quot;cn=Manager,dc=my-domain,dc=com&quot; write by * read
+
+[root@localhost ~]# ldapmodify -Y EXTERNAL -H ldapi:/// -f chdomain.ldif 
+
+//导入基础组信息什么的
+[root@proxy ldap]# cat base.ldif
+dn: dc=my-domain,dc=com
+dc: my-domain
+objectClass: top
+objectClass: domain
+
+dn: ou=People,dc=my-domain,dc=com
+ou: People
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Group,dc=my-domain,dc=com
+ou: Group
+objectClass: top
+objectClass: organizationalUnit
+
+ldapadd -x -D &quot;cn=Manager,dc=my-domain,dc=com&quot; -W -f base.ldif
+
+//导入用户信息
+//修改域名基础信息
+vi /usr/share/migrationtools/migrate_common.ph
+$DEFAULT_BASE = &quot;dc=my-domain,dc=com&quot;;
+[root@proxy ldap]# /usr/share/migrationtools/migrate_passwd.pl /etc/passwd passwd.ldif
+[root@proxy ldap]# /usr/share/migrationtools/migrate_group.pl /etc/group group.ldif
+[root@proxy ldap]# ldapadd -x -D cn=Manager,dc=my-domain,dc=com -W -f passwd.ldif
+[root@proxy ldap]# ldapadd -x -D cn=Manager,dc=my-domain,dc=com -W -f group.ldif
+
+//查看所有记录
+[root@proxy ldap]# ldapsearch -x -b &quot;dc=my-domain,dc=com&quot; -H ldap://192.168.1.1
+
+
+
+</code></pre>
+</p></div><div class="post-footer"><div class="tip">本文采用CC-BY-SA-3.0协议，转载请注明出处<br>作者: Kange</div><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/LDAP/" title="LDAP">LDAP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/OpenLdap/" title="OpenLdap">OpenLdap </a><span>大约1861个字, 6分钟12秒读完</span></div></div></div></div><a id="comments"></a><div id="cyReward" role="cylabs" data-use="reward"></div><script src="https://cy-cdn.kuaizhan.com/js/??lib/jquery.js,changyan.labs.https.js?appid=cyt08N8Y6"></script><div class="share"><div class="share-btn linkonly"><a class="fa fa-link" onclick="Utils.copyToClipboard(window.location.href)" ref="sidebar"></a></div><div class="share-btn evernote"><a class="fa fa-share" onclick="Anatolo.share.native()" ref="sidebar"></a></div><div class="share-btn weibo"><a class="fab fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="share-btn twitter"><a class="fab fa-twitter" href="http://twitter.com/intent/tweet?text=%E5%88%86%E4%BA%AB%E6%96%87%E7%AB%A0%EF%BC%9A%0A%0A%E5%B0%91%E5%B9%B4%E5%BD%93%E8%87%AA%E5%BC%BA%20%C2%B7%20LDAP%20%E5%88%86%E4%BA%AB%0Ahttps://yuekang.org.cn/2018/11/28/2018-11-28-LDAP-%E5%88%86%E4%BA%AB/%0A"></a></div><div class="share-btn mastodon"><a class="fab fa-mastodon" href="https://mastodonshare.com/?text=%E5%88%86%E4%BA%AB%E6%96%87%E7%AB%A0%EF%BC%9A%0A%0A%E5%B0%91%E5%B9%B4%E5%BD%93%E8%87%AA%E5%BC%BA%20%C2%B7%20LDAP%20%E5%88%86%E4%BA%AB%0Ahttps://yuekang.org.cn/2018/11/28/2018-11-28-LDAP-%E5%88%86%E4%BA%AB/%0A"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2018/12/14/2018-12-14-Centos-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E7%AE%A1%E7%90%86/" title="Centos 端口转发管理">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2018/11/14/2018-11-14-%E4%BB%8E%E9%9B%B6%E7%BC%96%E8%AF%91nginx-lua-cjson%E6%A8%A1%E5%9D%97%E7%9A%84nginx%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%E6%97%A5%E5%BF%97%E5%85%A8%E7%A8%8B%E7%9B%91%E6%8E%A7/" title="从零编译nginx+lua+cjson模块的nginx服务实现日志全程监控">下一篇</a></li></ul></div><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><a id="comments"></a><div id="vcomments" style="margin: 0 30px"></div><script>var valine = new Valine({
+  el: "#vcomments",
+  notify: "false" || false,
+  verify: "true" || false,
+  app_id: "yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz",
+  app_key: "Fb1nRCpsNrMB0U2Fv3jJSCsu",
+  placeholder: "ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像",
+  path: window.location.pathname,
+  avatar: "",
+  avatar_cdn: "https://cravatar.cn/avatar/", // 自定义avatar cdn
+  // 设置Bilibili表情包地址
+  emojiCDN: "//i0.hdslb.com/bfs/emote/",
+  // 表情title和图片映射
+  emojiMaps: {
+    tv_doge: "6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png",
+    tv_亲亲: "a8111ad55953ef5e3be3327ef94eb4a39d535d06.png",
+    tv_偷笑: "bb690d4107620f1c15cff29509db529a73aee261.png",
+    tv_再见: "180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png",
+    tv_冷漠: "b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png",
+    tv_可爱: "9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png",
+    tv_吐血: "09dd16a7aa59b77baa1155d47484409624470c77.png",
+    tv_呆: "fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png",
+    tv_呕吐: "9f996894a39e282ccf5e66856af49483f81870f3.png",
+    tv_困: "241ee304e44c0af029adceb294399391e4737ef2.png",
+    tv_坏笑: "1f0b87f731a671079842116e0991c91c2c88645a.png",
+    tv_大佬: "093c1e2c490161aca397afc45573c877cdead616.png",
+    tv_委屈: "d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png",
+    tv_害羞: "a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png",
+    tv_尴尬: "7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png",
+    tv_微笑: "70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png",
+    tv_思考: "90cf159733e558137ed20aa04d09964436f618a1.png",
+    tv_惊吓: "0d15c7e2ee58e935adc6a7193ee042388adc22af.png",
+    tv_打脸: "56ab10b624063e966bfcb76ea5dc4794d87dfd47.png",
+    tv_抓狂: "fe31c08edad661d63762b04e17b8d5ae3c71a757.png",
+    tv_抠鼻: "c666f55e88d471e51bbd9fab9bb308110824a6eb.png",
+    tv_斜眼笑: "911f987aa8bc1bee12d52aafe62bc41ef4474e6c.png",
+    tv_无奈: "ea8ed89ee9878f2fece2dda0ea8a5dbfe21b5751.png",
+    tv_晕: "5443c22b4d07fb1907ccc610c8e6db254f2461b7.png",
+    tv_流汗: "cead1c351ab8d79e9f369605beb90148db0fbed3.png",
+    tv_流泪: "7e71cde7858f0cd50d74b0264aa26db612a8a167.png",
+    tv_流鼻血: "c32d39db2737f89b904ca32700d140a9241b0767.png",
+    tv_点赞: "f85c354995bd99e28fc76c869bfe42ba6438eff4.png",
+    tv_生气: "26702dcafdab5e8225b43ffd23c94ac1ff932654.png",
+    tv_生病: "8b0ec90e6b86771092a498c54f09fc94621c1900.png",
+    tv_疑问: "0793d949b18d7be716078349c202c15ff166f314.png",
+    tv_白眼: "c1d59f439e379ee50eef488bcb5e5378e5044ea4.png",
+    tv_皱眉: "72ccad6679fea0d14cce648b4d818e09b8ffea2d.png",
+    tv_目瞪口呆: "0b8cb81a68de5d5365212c99375e7ace3e7891b7.png",
+    tv_睡着: "8b196675b53af58264f383c50ad0945048290b33.png",
+    tv_笑哭: "1abc628f6d4f4caf9d0e7800878f4697abbc8273.png",
+    tv_腼腆: "89712c0d4af73e67f89e35cbc518420380a7f6f4.png",
+    tv_色: "61822c7e9aae5da76475e7892534545336b23a6f.png",
+    tv_调侃: "4bc022533ef31544ca0d72c12c808cf4a1cce3e3.png",
+    tv_调皮: "b9c41de8e82dd7a8515ae5e3cb63e898bf245186.png",
+    tv_鄙视: "6e72339f346a692a495b123174b49e4e8e781303.png",
+    tv_闭嘴: "c9e990da7f6e93975e25fd8b70e2e290aa4086ef.png",
+    tv_难过: "87f46748d3f142ebc6586ff58860d0e2fc8263ba.png",
+    tv_馋: "fc7e829b845c43c623c8b490ee3602b7f0e76a31.png",
+    tv_鬼脸: "0ffbbddf8a94d124ca2f54b360bbc04feb6bbfea.png",
+    tv_黑人问号: "45821a01f51bc867da9edbaa2e070410819a95b2.png",
+    tv_鼓掌: "1d21793f96ef4e6f48b23e53e3b9e42da833a0f6.png",
+  },
+});
+</script></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"文章",pages:"页面",categories:"分类",tags:"标签",untitled:"(无标题)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="想要查找什么..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="回到顶部"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
