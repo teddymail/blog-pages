@@ -1,360 +1,45 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/tags">Tags</a></li><li><a href="/about">About</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display: none"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2018/06/13/2018-06-13-PHP7%E4%B9%8B%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/">PHP7之线程安全</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>以前总觉得php是多进程单线程的，每个访问都是一个单独的进程互相不干扰各自的数据，数据是隔离的，最早的PHP都是来一个用户新建一个进程，访问结束就销毁这个进程，但是这样非常的浪费性能，后续PHP-fpm的出现将这个进程复用实现了，大大的优化速度，用户来了以后是分配一个线程的空闲进程来服务，用户离开就回到空闲里面给后面的用户使用。现在php早已实现了多线程的功能，今天我来学学这个多线程是怎么实现的。</p>
-</blockquote>
-<p>目前PHP多数是单线程环境，比如cli、fpm、cgi，每个进程只启动一个主线程，这种情况下也就不存在线程安全的情况了，在多线程环境下就需要考虑线程安全的问题了，PHP中有很多的全局变量这个如果多线程公用的情况下就会造成线程安全你的问题，PHP专门做了一个安全机制：Zend线程安全(Zend Thread Safe, ZTS)</p>
-<p>PHP为了解决这个问题做了一个程安全资源管理器(Thread Safe Resource Mananger, TSRM)，其主要实现的原理就是单个进程有一个公用的全局变量，如果多线程互相贡献不安全，就把这些数据拷贝若干份，保证每个线程都有自己的全局变量，这样线程之间互不干扰完美的解决这个安全的问题.</p>
-<p>PHP中定义如下：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">size_t</span> size; <span class="comment">//资源的大小</span></span><br><span class="line">    ts_allocate_ctor ctor; <span class="comment">//初始化函数</span></span><br><span class="line">    ts_allocate_dtor dtor;</span><br><span class="line">    <span class="type">int</span> done;</span><br><span class="line">&#125; tsrm_resource_type;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">tsrm_tls_entry</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> **storage; <span class="comment">//资源数组</span></span><br><span class="line">    <span class="type">int</span> count; <span class="comment">//拥有的资源数:storage数组大小</span></span><br><span class="line">    THREAD_T thread_id; <span class="comment">//所属线程id</span></span><br><span class="line">    tsrm_tls_entry *next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>一个资源如果想被多线程使用，就必须想TSRM注册资源，TSRM会给这个资源分配一个ID,并把资源相关数据初始化保存到<code>tsrm_resource_type</code>中去，所有的线程必须通过这个ID来访问这个资源，如果线程第一次访问这个资源，TSRM会初始化这个资源，也就是复制一份出来给这个线程使用包括后续访问。</p>
-<p><img src="http://img.yuekang.org.cn/2018061301.png" alt="PHP线程安全分配图表"></p>
-<p><code>tsrm_tls_table</code> 保存着所有线程物理位置，这个位置通过根据线程id与预设置的线程数<code>tsrm_tls_table_size</code>取模得到的</p>
-<p>每个线程拥有一个<code>tsrm_tls_entry</code>结构，当前线程的所有资源保存在storage数组中，它是一个链表结构，查找资源时首先根据:线程id % tsrm_tls_table_size得到一个tsrm_tls_entry，然后开始遍历链表比较thread_id确定是否是当前线程的。<br>线程本地存储(Thread Local Storage, TLS)，在创建完当前线程的tsrm_tls_entry后会把这个值保存到当前线程的TLS中，这样在ts_resource()获取资源时中就可以通过tsrm_tls_get()直接取到了，节省加锁检索的时间。</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-13</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/线程安全/" title="线程安全">线程安全 </a><span>About 833 words, 2 min 46 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/12/2018-06-12-PHP%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%99%A8%E6%9C%BA%E5%88%B6/">PHP内存管理器机制</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>概述<br>内存是每个工程师逃避不了的问题，了解内存管理机制更有助于了解PHP7内存分配的原理，更好的使用PHP7这门语言</p>
-</blockquote>
-<p>PHP7内存管理器：</p>
-<p><img src="http://img.yuekang.org.cn/2018061201.png" alt="内存管理器"></p>
-<p>PHP脚本运行不是直接从系统中申请的，而是调用了Zend Memory Manager (Zend 内存管理器)提供的一系列接口函数来间接申请内存，如果管理器内存够用，直接分配PHP程序，如果不够用，则自动向系统中申请。</p>
-<p>PHP7核心代码在zend_alloc.c中实现，一共有三种规格的内存</p>
-<table>
-<thead>
-<tr>
-<th align="left">序号</th>
-<th align="left">规格</th>
-<th align="left">尺寸</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">1</td>
-<td align="left">Huge(chunk)</td>
-<td align="left">申请内存大于2M，直接调用系统分配，分配若干个chunk</td>
-</tr>
-<tr>
-<td align="left">2</td>
-<td align="left">Large(page)</td>
-<td align="left">申请内存大于3K(3&#x2F;4 page_size)，小于2044K(511 page_size)，分配若干个page</td>
-</tr>
-<tr>
-<td align="left">3</td>
-<td align="left">Small(slot)</td>
-<td align="left">申请内存小于等于3K(3&#x2F;4 page_size)</td>
-</tr>
-</tbody></table>
-<p>zval的示意图</p>
-<p><img src="http://img.yuekang.org.cn/2018061202.png" alt="zend堆结构"></p>
-<h3 id="Huge分配"><a href="#Huge分配" class="headerlink" title="Huge分配"></a>Huge分配</h3><p>也是最大力度的分配这个分配是直接向系统中申请的，但一次会申请多个，有合适了则立即返回内存区域，</p>
-<h3 id="Large分配"><a href="#Large分配" class="headerlink" title="Large分配"></a>Large分配</h3><p>一个chunk对应512个page，但是第一个page会始终被chunk结构占用着，可用的也就511个page大小。如果申请多个page的话分配的时候这些page都是连续的 。如果直到最后一个chunk也没找到则重新分配一个新的chunk并插入chunk链表,chunk-&gt;free_map利用bitmap来记录每组的page的使用情况</p>
-<p><img src="http://img.yuekang.org.cn/2018061203.png" alt="Large"></p>
-<h3 id="slot分配"><a href="#slot分配" class="headerlink" title="slot分配"></a>slot分配</h3><p>small内存总共有30种固定大小的规格：8,16,24,32,40,48,56,64,80,96,112,128 … 1792,2048,2560,3072 Byte，这称之为slot，这些slot的大小是有规律的:最小的slot大小为8byte，前8个slot依次递增8byte，后面每隔4个递增值乘以2</p>
-<p><img src="http://img.yuekang.org.cn/2018061204.png" alt="slot"></p>
-<h3 id="php7-内存对齐"><a href="#php7-内存对齐" class="headerlink" title="php7 内存对齐"></a>php7 内存对齐</h3><p>PHP7会对是内存进行对齐例如申请300B内存大小的内存，经过内存管理器的申请，加入是256B对齐，当申请300B内存则会拿到512B的内存，申请对其内存应该是对其内存数的整数倍,其中不符合的会将这个不对齐的区域进行释放掉</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/内存/" title="内存">内存 </a><span>About 566 words, 1 min 53 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/05/22/2018-05-22-%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/">系统性能指标</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>这篇文章记录查看系统负载相关方法</p>
-</blockquote>
-<h2 id="1-uptime命令"><a href="#1-uptime命令" class="headerlink" title="1. uptime命令"></a>1. <code>uptime</code>命令</h2><p>uptime命令能够打印系统总共运行了多长时间和系统的平均负载。uptime命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的1分钟、5分钟和15分钟内的平均负载。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uptime</span><br><span class="line"> 10:43:21 up 27 days,  1:46,  1 user,  load average: 0.04, 0.06, 0.06</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//cdn.jsdelivr.net/gh/xcss/valine@latest/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/tags">Tags</a></li><li><a href="/about">About</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display: none"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/me.jpg"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2018/06/13/2018-06-13-PHP7%E4%B9%8B%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/">PHP7之线程安全</a></h3></div><div class="post-content"><p>
+以前总觉得php是多进程单线程的，每个访问都是一个单独的进程互相不干扰各自的数据，数据是隔离的，最早的PHP都是来一个用户新建一个进程，访问结束就销毁这个进程，但是这样非常的浪费性能，后续PHP-fpm的出现将这个进程复用实现了，大大的优化速度，用户来了以后是分配一个线程的空闲进程来服务，用户离开就回到空闲里...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-13</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/线程安全/" title="线程安全">线程安全 </a><span>About 833 words, 2 min 46 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/12/2018-06-12-PHP%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%99%A8%E6%9C%BA%E5%88%B6/">PHP内存管理器机制</a></h3></div><div class="post-content"><p>
+概述内存是每个工程师逃避不了的问题，了解内存管理机制更有助于了解PHP7内存分配的原理，更好的使用PHP7这门语言
 
-<p>现在时间，开机27天，，1个用户，负载1、5、15分钟的平均负载</p>
-<h2 id="2-top命令"><a href="#2-top命令" class="headerlink" title="2. top命令"></a>2. <code>top</code>命令</h2><p>top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似于Windows的任务管理器。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">top - 10:56:33 up 27 days,  1:59,  1 user,  load average: 0.00, 0.01, 0.05</span><br><span class="line">Tasks: 120 total,   1 running, 119 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.2 us,  0.2 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">KiB Mem :  3881720 total,   937900 free,   646416 used,  2297404 buff/cache</span><br><span class="line">KiB Swap:        0 total,        0 free,        0 used.  2913336 avail Mem</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</span><br><span class="line">12837 yuekang   20   0  157704   2172   1516 R   0.7  0.1   0:00.11 top</span><br><span class="line"> 1729 root      20   0  848356  20452   3000 S   0.3  0.5  35:57.94 YDService</span><br><span class="line"> 2432 root      20   0  534628  10416   2080 S   0.3  0.3 108:29.12 barad_agent</span><br><span class="line">    1 root      20   0   43344   3748   2500 S   0.0  0.1   2:19.44 systemd</span><br><span class="line">    2 root      20   0       0      0      0 S   0.0  0.0   0:00.37 kthreadd</span><br><span class="line">    3 root      20   0       0      0      0 S   0.0  0.0   0:03.52 ksoftirqd/0</span><br><span class="line">    5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H</span><br><span class="line">    7 root      rt   0       0      0      0 S   0.0  0.0   0:01.28 migration/0</span><br><span class="line">    8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh</span><br><span class="line">    9 root      20   0       0      0      0 S   0.0  0.0  12:47.92 rcu_sched</span><br><span class="line">   10 root      rt   0       0      0      0 S   0.0  0.0   0:10.91 watchdog/0</span><br><span class="line">   11 root      rt   0       0      0      0 S   0.0  0.0   0:09.58 watchdog/1</span><br><span class="line">   12 root      rt   0       0      0      0 S   0.0  0.0   0:01.46 migration/1</span><br><span class="line">   13 root      20   0       0      0      0 S   0.0  0.0   0:03.42 ksoftirqd/1</span><br><span class="line">   15 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H</span><br><span class="line">   17 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kdevtmpfs</span><br><span class="line">   18 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 netns</span><br><span class="line">   19 root      20   0       0      0      0 S   0.0  0.0   0:00.77 khungtaskd</span><br><span class="line">   20 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 writeback</span><br><span class="line">   21 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kintegrity</span><br></pre></td></tr></table></figure>
+PHP7内存管理器：
 
-<p>显示的内容非常全，平均负载等内容都被显示出来了</p>
-<h2 id="3-w命令"><a href="#3-w命令" class="headerlink" title="3. w命令"></a>3. <code>w</code>命令</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">~w</span><br><span class="line"> 10:57:38 up 27 days,  2:00,  1 user,  load average: 0.00, 0.01, 0.05</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">yk  pts/0    120.57.161.139   10:43    2.00s  0.04s  0.00s w</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+PHP脚本运行不是直接从系统中申请的，而是调用了Zend Memory Manager (Zend 内存管理器)提供的一系列接口函数来间接申请内存，如果管理器内存够用，...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/内存/" title="内存">内存 </a><span>About 566 words, 1 min 53 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/05/22/2018-05-22-%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/">系统性能指标</a></h3></div><div class="post-content"><p>
+这篇文章记录查看系统负载相关方法
 
-<p>w命令的主要功能其实是显示目前登入系统的用户信息。但是与who不同的是，w命令功能更加强大，w命令还可以显示：当前时间，系统启动到现在的时间，登录用户的数目，系统在最近1分钟、5分钟和15分钟的平均负载。然后是每个用户的各项数据，项目显示顺序如下：登录帐号、终端名称、远 程主机名、登录时间、空闲时间、JCPU、PCPU、当前正在运行进程的命令行。</p>
-<hr>
-<h2 id="机器正常负载范围"><a href="#机器正常负载范围" class="headerlink" title="机器正常负载范围"></a>机器正常负载范围</h2><p>对于机器的Load到底多少算正常的问题，一直都是很有争议的，不同人有着不同的理解。对于单个CPU，有人认为如果Load超过0.7就算是超出正常范围了。也有人认为只要不超过1都没问题。也有人认为，单个CPU的负载在2以下都可以接受。<br>为什么会有这么多不同的理解呢，是因为不同的机器除了CPU影响之外还有其他因素的影响，运行的程序、机器内存、甚至是机房温度等都有可能有区别。<br>比如，有些机器用于定时执行大量的跑批任务，这个时间段内，Load可能会飙的比较高。而其他时间可能会比较低。那么这段飙高时间我们要不要去排查问题呢？<br>我的建议是，最好根据自己机器的实际情况，建立一个指标的基线（如近一个月的平均值），只要日常的load在基线上下范围内不太大都可以接收，如果差距太多可能就要人为介入检查了。<br>但是，总要有个建议的阈值吧，关于这个值。阮一峰在自己的博客中有过以下建议：</p>
-<blockquote>
-<p>当系统负荷持续大于0.7，你必须开始调查了，问题出在哪里，防止情况恶化。</p>
-</blockquote>
-<blockquote>
-<p>当系统负荷持续大于1.0，你必须动手寻找解决办法，把这个值降下来。</p>
-</blockquote>
-<blockquote>
-<p>当系统负荷达到5.0，就表明你的系统有很严重的问题，长时间没有响应，或者接近死机了。你不应该让系统达到这个值。</p>
-</blockquote>
-<p>上指标都是基于单CPU的，但是现在很多电脑都是多核的。所以，对一般的系统来说，是根据cpu数量去判断系统是否已经过载（Over Load）的。如果我们认为0.7算是单核机器负载的安全线的话，那么四核机器的负载最好保持在3(4*0.7 &#x3D; 2.8)以下。<br>还有一点需要提一下，在Load Avg的指标中，有三个值，1分钟系统负荷、5分钟系统负荷，15分钟系统负荷。我们在排查问题的时候也是可以参考这三个值的。<br>一般情况下，1分钟系统负荷表示最近的暂时现象。15分钟系统负荷表示是持续现象，并非暂时问题。如果load15较高，而load1较低，可以认为情况有所好转。反之，情况可能在恶化。</p>
-<hr>
-<h2 id="如何降低负载"><a href="#如何降低负载" class="headerlink" title="如何降低负载"></a>如何降低负载</h2><p>导致负载高的原因可能很复杂，有可能是硬件问题也可能是软件问题。<br>如果是硬件问题，那么说明机器性能确实就不行了，那么解决起来很简单，直接换机器就可以了。<br>前面我们提过，CPU使用、内存使用、IO消耗都可能导致负载高。如果是软件问题，有可能由于Java中的某些线程被长时间占用、大量内存持续占用等导致。建议从以下几个方面排查代码问题：<br>1、是否有内存泄露导致频繁GC 2、是否有死锁发生 3、是否有大字段的读写 4、会不会是数据库操作导致的，排查SQL语句问题。<br>这里还有个建议，如果发现线上机器Load飙高，可以考虑先把堆栈内存dump下来后，进行重启，暂时解决问题，然后再考虑回滚和排查问题。</p>
-<blockquote>
-<p>本文摘自：<a href="https://juejin.im/post/5b0262edf265da0b9b079fa7?utm_source=gold_browser_extension">https://juejin.im/post/5b0262edf265da0b9b079fa7?utm_source=gold_browser_extension</a></p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-05-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/linux/" title="linux">linux </a><span>About 1530 words, 5 min 6 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/19/2018-02-19-%E7%88%AC%E8%99%AB%E5%B8%B8%E8%A7%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%80%BB%E7%BB%93/">爬虫常见请求头总结</a></h3></div><div class="post-content"><div class="card"><p><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>在我们编写爬虫应用的时候经常会遇到不同浏览器返回不同内容的情况，所以这里收集常见的UserAgent来供以后查阅。</p>
-<h2 id="2-PC端的UserAgent"><a href="#2-PC端的UserAgent" class="headerlink" title="2.PC端的UserAgent"></a>2.PC端的UserAgent</h2><ul>
-<li>safari 5.1 – MAC</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit&#x2F;534.50 (KHTML, like Gecko) Version&#x2F;5.1 Safari&#x2F;534.50</p>
-<ul>
-<li>safari 5.1 – Windows</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit&#x2F;534.50 (KHTML, like Gecko) Version&#x2F;5.1 Safari&#x2F;534.50</p>
-<ul>
-<li>Firefox 38esr</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko&#x2F;20100101 Firefox&#x2F;38.0</p>
-<ul>
-<li>IE 11</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (Windows NT 10.0; WOW64; Trident&#x2F;7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; InfoPath.3; rv:11.0) like Gecko</p>
-<ul>
-<li>IE 9.0</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident&#x2F;5.0;</p>
-<ul>
-<li>IE 8.0</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident&#x2F;4.0)</p>
-<ul>
-<li>IE 7.0</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 6.0)</p>
-<ul>
-<li>IE 6.0</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 6.0; Windows NT 5.1)</p>
-<ul>
-<li>Firefox 4.0.1 – MAC</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko&#x2F;20100101 Firefox&#x2F;4.0.1</p>
-<ul>
-<li>Firefox 4.0.1 – Windows</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (Windows NT 6.1; rv:2.0.1) Gecko&#x2F;20100101 Firefox&#x2F;4.0.1</p>
-<ul>
-<li>Opera 11.11 – MAC</li>
-</ul>
-<p>User-Agent:Opera&#x2F;9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto&#x2F;2.8.131 Version&#x2F;11.11</p>
-<ul>
-<li>Opera 11.11 – Windows</li>
-</ul>
-<p>User-Agent:Opera&#x2F;9.80 (Windows NT 6.1; U; en) Presto&#x2F;2.8.131 Version&#x2F;11.11</p>
-<ul>
-<li>Chrome 17.0 – MAC</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit&#x2F;535.11 (KHTML, like Gecko) Chrome&#x2F;17.0.963.56 Safari&#x2F;535.11</p>
-<ul>
-<li>傲游（Maxthon）</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; Maxthon 2.0)</p>
-<ul>
-<li>腾讯TT</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; TencentTraveler 4.0)</p>
-<ul>
-<li>世界之窗（The World） 2.x</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1)</p>
-<ul>
-<li>世界之窗（The World） 3.x</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; The World)</p>
-<ul>
-<li>搜狗浏览器 1.x</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident&#x2F;4.0; SE 2.X MetaSr 1.0; SE 2.X MetaSr 1.0; .NET CLR 2.0.50727; SE 2.X MetaSr 1.0)</p>
-<ul>
-<li>360浏览器</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)</p>
-<ul>
-<li>Avant</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; Avant Browser)</p>
-<ul>
-<li>Green Browser</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1)</p>
-<h2 id="3-移动端UserAgent"><a href="#3-移动端UserAgent" class="headerlink" title="3.移动端UserAgent"></a>3.移动端UserAgent</h2><ul>
-<li>safari iOS 4.33 – iPhone</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit&#x2F;533.17.9 (KHTML, like Gecko) Version&#x2F;5.0.2 Mobile&#x2F;8J2 Safari&#x2F;6533.18.5</p>
-<ul>
-<li>safari iOS 4.33 – iPod Touch</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (iPod; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit&#x2F;533.17.9 (KHTML, like Gecko) Version&#x2F;5.0.2 Mobile&#x2F;8J2 Safari&#x2F;6533.18.5</p>
-<ul>
-<li>safari iOS 4.33 – iPad</li>
-</ul>
-<p>User-Agent:Mozilla&#x2F;5.0 (iPad; U; CPU OS 4_3_3 like Mac OS X; en-us) AppleWebKit&#x2F;533.17.9 (KHTML, like Gecko) Version&#x2F;5.0.2 Mobile&#x2F;8J2 Safari&#x2F;6533.18.5</p>
-<ul>
-<li>Android N1</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (Linux; U; Android 2.3.7; en-us; Nexus One Build&#x2F;FRF91) AppleWebKit&#x2F;533.1 (KHTML, like Gecko) Version&#x2F;4.0 Mobile Safari&#x2F;533.1</p>
-<ul>
-<li>Android QQ浏览器 For android</li>
-</ul>
-<p>User-Agent: MQQBrowser&#x2F;26 Mozilla&#x2F;5.0 (Linux; U; Android 2.3.7; zh-cn; MB200 Build&#x2F;GRJ22; CyanogenMod-7) AppleWebKit&#x2F;533.1 (KHTML, like Gecko) Version&#x2F;4.0 Mobile Safari&#x2F;533.1</p>
-<ul>
-<li>Android Opera Mobile</li>
-</ul>
-<p>User-Agent: Opera&#x2F;9.80 (Android 2.3.4; Linux; Opera Mobi&#x2F;build-1107180945; U; en-GB) Presto&#x2F;2.8.149 Version&#x2F;11.10</p>
-<ul>
-<li>Android Pad Moto Xoom</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (Linux; U; Android 3.0; en-us; Xoom Build&#x2F;HRI39) AppleWebKit&#x2F;534.13 (KHTML, like Gecko) Version&#x2F;4.0 Safari&#x2F;534.13</p>
-<ul>
-<li>BlackBerry</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (BlackBerry; U; BlackBerry 9800; en) AppleWebKit&#x2F;534.1+ (KHTML, like Gecko) Version&#x2F;6.0.0.337 Mobile Safari&#x2F;534.1+</p>
-<ul>
-<li>WebOS HP Touchpad</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (hp-tablet; Linux; hpwOS&#x2F;3.0.0; U; en-US) AppleWebKit&#x2F;534.6 (KHTML, like Gecko) wOSBrowser&#x2F;233.70 Safari&#x2F;534.6 TouchPad&#x2F;1.0</p>
-<ul>
-<li>Nokia N97</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (SymbianOS&#x2F;9.4; Series60&#x2F;5.0 NokiaN97-1&#x2F;20.0.019; Profile&#x2F;MIDP-2.1 Configuration&#x2F;CLDC-1.1) AppleWebKit&#x2F;525 (KHTML, like Gecko) BrowserNG&#x2F;7.1.18124</p>
-<ul>
-<li>Windows Phone Mango</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident&#x2F;5.0; IEMobile&#x2F;9.0; HTC; Titan)</p>
-<ul>
-<li>UC无</li>
-</ul>
-<p>User-Agent: UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
-<ul>
-<li>UC标准</li>
-</ul>
-<p>User-Agent: NOKIA5700&#x2F; UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
-<ul>
-<li>UCOpenwave</li>
-</ul>
-<p>User-Agent: Openwave&#x2F; UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
-<ul>
-<li>UC Opera</li>
-</ul>
-<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 6.0; ) Opera&#x2F;UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
-<blockquote>
-<p>每日一言：勤学的人，总是感到时间过得太快；懒惰的人，却总是埋怨时间跑得太慢。</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/http/" title="http">http </a><i class="fa fa-tag"></i><a class="tag" href="/tags/UserAgent/" title="UserAgent">UserAgent </a><span>About 864 words, 2 min 52 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%8E%A7%E5%88%B6/">php信号量控制</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>上一篇文章学习到了php的共享内存，但是仅仅这个是不够的，我们还需要更精确的控制，避免多个进程同时写入共享内存的情况发生，我们还需奥信号量的控制等内容</p>
-</blockquote>
-<ul>
-<li>准备<br>PHP 也提供了类似的内置扩展 sysvsem（这个扩展在 Windows 环境下没有，文档中将 ftok 函数也归到这个扩展中，但实际上 ftok 是在标准函数库中提供的，所以在 Windows 下也是可用的）。</li>
-</ul>
-<p>检查扩展是否支持通过phpinfo() 检测加载情况</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sysvmsg</span><br><span class="line"></span><br><span class="line">sysvmsg support =&gt; enabled</span><br><span class="line">Revision =&gt; $Id: 8fc76436c42ce984b2ad34ae6b27082d5e66c104 $</span><br></pre></td></tr></table></figure>
+1. uptime命令uptime命令能够打印系统总共运行了多长时间和系统的平均负载。uptime命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的1分钟、5分钟和15分钟内的平均负载。
+uptime 10:43:21 up 27...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-05-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/linux/" title="linux">linux </a><span>About 1530 words, 5 min 6 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/19/2018-02-19-%E7%88%AC%E8%99%AB%E5%B8%B8%E8%A7%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%80%BB%E7%BB%93/">爬虫常见请求头总结</a></h3></div><div class="post-content"><p>1.引言在我们编写爬虫应用的时候经常会遇到不同浏览器返回不同内容的情况，所以这里收集常见的UserAgent来供以后查阅。
+2.PC端的UserAgent
+safari 5.1 – MAC
 
-<p>有以上这样的就属于已经正常加载可以使用这些功能啦</p>
-<ul>
-<li>知识点介绍</li>
-</ul>
-<ul>
-<li>sem_get()   获取信号标识</li>
-<li>sem_acquire()  获取信号量</li>
-<li>sem_release() 信号量发布</li>
-<li>sem_remove() 删除信号量</li>
-<li>shm_attach()  创建或打开共享内存段</li>
-<li>shm_detach() 断开与共享内存段的连接</li>
-</ul>
-<p><a href="http://php.net/manual/zh/ref.sem.php">相关函数列表</a></p>
-<ul>
-<li>样例</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$id_key = ftok(__FILE__, &#x27;t&#x27;);</span><br><span class="line">$sem_id = sem_get($id_key);</span><br><span class="line"># 请求信号控制权</span><br><span class="line">if (sem_acquire($sem_id)) &#123;</span><br><span class="line">    $shm_id = shmop_open($id_key, &#x27;c&#x27;, 0644, 8);</span><br><span class="line">    # 读取并写入数据</span><br><span class="line">    $count = (int) shmop_read($shm_id, 0, 8) + 1;</span><br><span class="line">    shmop_write($shm_id, str_pad($count, 8, &#x27;0&#x27;, STR_PAD_LEFT), 0);</span><br><span class="line">    // echo shmop_read($shm_id, 0, 8);</span><br><span class="line">    # 关闭内存块</span><br><span class="line">    shmop_close($shm_id);</span><br><span class="line">    # 释放信号</span><br><span class="line">    sem_release($sem_id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>测试</li>
-</ul>
-<p><img src="http://img.yuekang.org.cn/WX20180205-161115@2x.png" alt="运行效果图"></p>
-<p><img src="http://img.yuekang.org.cn/WX20180205-161243@2x.png" alt="循环中运行100次效果图"></p>
-<blockquote>
-<p>最后一定要注意关闭信号量，以免造成上一个信号量一直被占用造成下一个无法使用的问题！！</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/php7/" title="php7">php7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/shared-memory/" title="shared-memory">shared-memory </a><span>About 395 words, 1 min 19 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A0/">php共享内存学习</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>php中进程间通信介绍的很少，今天我来学习学习怎么实现共享内存的实现</p>
-</blockquote>
-<ul>
-<li>安装</li>
-</ul>
-<p><a href="http://php.net/manual/zh/shmop.installation.php">安装地址</a></p>
-<p>需要在安装的时候添加 <strong>–enable-shmop</strong> 来启用该函数的功能</p>
-<p>可以通过 ** phpinfo(); ** 来确认是否安装成功，我这里查看 ** shmop support &#x3D;&gt; enabled ** 代表启用成功了</p>
-<ul>
-<li>主要函数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">shmop_close — 关闭共享内存块</span><br><span class="line">shmop_delete — 删除共享内存块</span><br><span class="line">shmop_open — 创建或打开共享内存块</span><br><span class="line">shmop_read — 从共享内存块中读取数据</span><br><span class="line">shmop_size — 获取共享内存块的大小</span><br><span class="line">shmop_write — 向共享内存块中写入数据</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>与此相关的还有一个很重要的函数：<a href="http://php.net/manual/zh/function.ftok.php">ftok</a>，通过文件的 inode 信息（<strong>nix</strong> 上通过 <strong>stat</strong> 或 <strong>ls -i</strong> 命令查看）创建 IPC 的唯一 key（文件&#x2F;文件夹的 inode 是唯一的）。这个函数在 Linux 上也是直接调用同名的系统函数实现，Windows 上还是使用一些封装。</p>
-</blockquote>
-<p>有个需要稍微注意的点：shmop_open 的第二个参数是个 flag，类似 fopen 的第二个参数，其取值有以前几个：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">“a” 只读访问</span><br><span class="line">“c” 如果内存片段不存在，则创建，如果存在，则可读写；</span><br><span class="line"></span><br><span class="line">“w” 读写；</span><br><span class="line"></span><br><span class="line">“n” 创建新的内存片段，如果同样 key 的已存在，则会创建失败，这是为了安全使用共享内存考虑。</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>程序</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//新建一块共享内存（并取得唯一nodeID）</span></span><br><span class="line"><span class="variable">$shm_key</span> = <span class="title function_ invoke__">ftok</span>(<span class="keyword">__FILE__</span>,<span class="string">&#x27;t&#x27;</span>);</span><br><span class="line"><span class="comment">//打开改共享内存文件，采用片段不存在则创建策略</span></span><br><span class="line"><span class="variable">$shm_id</span> = <span class="title function_ invoke__">shmop_open</span>(<span class="variable">$shm_key</span>,<span class="string">&#x27;c&#x27;</span>,<span class="number">0644</span>,<span class="number">8</span>);</span><br><span class="line"><span class="comment"># 读取读取共享内存（8字节读取）</span></span><br><span class="line"><span class="variable">$count</span> = (<span class="keyword">int</span>) <span class="title function_ invoke__">shmop_read</span>(<span class="variable">$shm_id</span>, <span class="number">0</span>, <span class="number">8</span>) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">shmop_write</span>(<span class="variable">$shm_id</span>, <span class="title function_ invoke__">str_pad</span>(<span class="variable">$count</span>, <span class="number">8</span>, <span class="string">&#x27;0&#x27;</span>, STR_PAD_LEFT), <span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$count</span>;</span><br><span class="line"><span class="title function_ invoke__">shmop_close</span>(<span class="variable">$shm_id</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>运行效果图</li>
-</ul>
-<blockquote>
-<p>即使进程关闭重新开启依然能够正常读取数据！</p>
-</blockquote>
-<p><img src="http://img.yuekang.org.cn/20180205150620.png" alt="效果图"></p>
-<blockquote>
-<p>一定要把握长度，否则可能出现读取异常的问题</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/shared-memory/" title="shared-memory">shared-memory </a><span>About 535 words, 1 min 47 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/20/2017-12-20-spring-boot%E9%85%8D%E7%BD%AE%E5%A4%9A%E7%8E%AF%E5%A2%83/">spring boot配置多环境</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>我是经常会遇到不同环境配置不同参数的情况，例如我们在本地开发环境的端口1111 但是测试环境就要换成2222，线上环境端口就要换成8080端口，为了应对这种情况， <code>spring boot</code>给我们提供了更成熟的方案。</p>
-</blockquote>
-<ol>
-<li>配置公共文件<br>  <code>spring boot</code>默认配置文件是<code>application.properties</code>这里我们采用另外一种简便格式 <code>application.yml</code> 我们配置公共内容如下:</li>
-</ol>
-  <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">orivon:</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.2</span><span class="number">.0</span></span><br><span class="line">  <span class="attr">apiversion:</span> <span class="number">1.2</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>第一个是配置我们产品的相关版本信息，这样升级的时候可以很容易看到版本等信息更好的维护产品的运行，第二行就是指明我们默认加载开发环境下的配置内容</li>
-</ul>
-<ol start="2">
-<li>创建环境的配置文件</li>
-</ol>
-<p>  我们假设如下几个环境场景:测试环境，开发环境，线上环境，我们分配配置如下几个文件（<code>spring boot</code>环境配置文件遵循以下格式appilication-{$varsion}.yml）否组不予加载</p>
-<p>  测试环境: application-test.yml<br>  开发环境: application-dev.yml<br>  线上环境: application-prod.yml</p>
-<p>  分别制定在里面写个server.port&#x3D;{$port}</p>
-<p>  我这里设置测试1111，开发8888，线上8080<br>  大家可以随便设置，来测试端口是否已经发生了改变<br>3. 加载不同的配置文件</p>
-<p> 讲完了环境配置文件，我们要切换配置文件怎么办呢？当我们编写完了程序，需要进行打包，这里我就打包成jar文件了，通过<code>mvn install</code>来打包jar文件，生成完毕后会存放在<code>target/XXXX.1.0.0-XXX.jar</code>的文件,我们只需要拷贝到线上环境通过<code>java -jar XXXX.jar --spring.profiles.active=prod</code>后面这个就是配置使用哪个配置文件啦，使用test就可以啦，不用带其他的内容，即可完成配置，并成功运行啦，给个成功运行的效果图</p>
-<p> <img src="http://img.yuekang.org.cn/20171220-143315@2x.png" alt="运行成功效果图"></p>
-<blockquote>
-<p>每日名言：生命力的意义在于拼搏，因为世界本身就是一个竞技场。</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-20</span><i class="fa fa-tag"></i><a class="tag" href="/tags/java/" title="java">java </a><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><i class="fa fa-tag"></i><a class="tag" href="/tags/spring-boot/" title="spring-boot">spring-boot </a><span>About 548 words, 1 min 49 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/19/2017-12-19-Spring-boot-%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8banner%E5%86%85%E5%AE%B9/">Spring boot 修改启动banner内容</a></h3></div><div class="post-content"><div class="card"><p><p>我们在启动Spring boot时候会出现以下情况</p>
-<p><img src="http://img.yuekang.org.cn/20171219-102535@2x.png" alt="banner启动图"></p>
-<p>我们可以将它改成自己产品的内容修改方式如下</p>
-<p>在 src&#x2F;main&#x2F;resources&#x2F;banner.txt 创建并加入内容:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">           _                  </span><br><span class="line">          (_)                 </span><br><span class="line"> ___  _ __ ___   _____  _ __  </span><br><span class="line">/ _ \| &#x27;__| \ \ / / _ \| &#x27;_ \</span><br><span class="line">| (_) | |  | |\ V / (_) | | | |</span><br><span class="line">\___/|_|  |_| \_/ \___/|_| |_|</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$&#123;spring-boot.version&#125;$&#123;spring-boot.formatted-version&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在banner.txt 文件末尾可以加入<code>$&#123;spring-boot.version&#125;$&#123;spring-boot.formatted-version&#125;</code>用来显示最新的版本等信息</p>
-<p>再次启动项目会看到如下结果</p>
-<p><img src="http://img.yuekang.org.cn/20171219-103130@2x.png" alt="修改后的banner效果图"></p>
-<blockquote>
-<p>每日名言：不要向这个世界认输，因为你还有牛逼的梦想！</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Spring-boot/" title="Spring boot">Spring boot </a><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><span>About 135 words, 27 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/09/2017-12-09-Snowflake%EF%BC%88twitter-64%E4%BD%8D%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95%EF%BC%89/">Snowflake（twitter 64位唯一ID生成算法）</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>在很多业务场景中会遇到id唯一的问题，我就遇到很多，<br>数据库中的自增的生成，接下来我们一起学习唯一ID生成算法</p>
-</blockquote>
-<h2 id="Snowflake-组成结构"><a href="#Snowflake-组成结构" class="headerlink" title="Snowflake 组成结构"></a>Snowflake 组成结构</h2><ol>
-<li>雪花算法总共64位组成(不要问我为什么，这是具体规定啊)</li>
-</ol>
-<p>  1.1 正负码1位 （通常为0）</p>
-<p>  1.2 毫秒级时间41位  </p>
-<p>  1.3 节点码10位</p>
-<pre><code>    由于设计之初是分布式ID，所以这里基本上是5位节点码+机器码5位
-</code></pre>
-<p>  1.4 序列码12位<br>      累加计数器 最大1毫秒产生4095个不重复的id</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-09</span><i class="fa fa-tag"></i><a class="tag" href="/tags/算法/" title="算法">算法 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><span>About 153 words, 30 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/09/23/2017-09-23-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-PHP%E5%AE%9E%E7%8E%B0/">单例模式(PHP实现)</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>介绍一下单例的应用场景:最简单的场景就是数据库了， 还有框架中基础的应用配置加载了，使用单例模式有如下好处，避免过多的new对象造成大量资源廊坊和超出最大连接数而产生应用down机问题，可以全局设立一个单访问点避免多出访问点造成难以维护的现象，便于调试直接可以设立日志记录全局设立统一节点，避免导出var_dump，print_r的现象</p>
-</blockquote>
-<h4 id="一、类图"><a href="#一、类图" class="headerlink" title="一、类图"></a>一、类图</h4><p><img src="http://img.jewei.cn/5261067-d237feca85784587.png" alt="单例设计图"><br>单例相对结构上比较简单，总体实现想法就是全局设立一个访问点，全局共同使用一个对象，不会创建多余的对象。</p>
-<h4 id="二、实现思路"><a href="#二、实现思路" class="headerlink" title="二、实现思路"></a>二、实现思路</h4><p>完成单例需要满足以下需求：<br>1、全局隐藏私有构造方法，预防通过new来创建对象。<br>2、隐藏私有克隆方法，预防通过克隆创建对象<br>3、对外暴露一个静态的Instance方法提供统一对外的获取对象的方式</p>
-<h4 id="三、实现单例模式"><a href="#三、实现单例模式" class="headerlink" title="三、实现单例模式"></a>三、实现单例模式</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">//存放实例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$_instance</span> = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造方法、</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;禁止构造&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化克隆方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//公有化获取实例方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!(<span class="built_in">self</span>::<span class="variable">$_instance</span> <span class="keyword">instanceof</span> Singleton)) &#123;</span><br><span class="line">            <span class="built_in">self</span>::<span class="variable">$_instance</span> = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">self</span>::<span class="variable">$_instance</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过Singleon::getInstance();来使用单例</p>
-<hr>
-<h4 id="2、使用trait方式实现"><a href="#2、使用trait方式实现" class="headerlink" title="2、使用trait方式实现"></a>2、使用trait方式实现</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//PHP trait 使用                                     </span></span><br><span class="line">Trait Singleton&#123;                                   </span><br><span class="line">    <span class="comment">//存储实例                                         </span></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$_instance</span> = <span class="literal">null</span>;              </span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化克隆方法                                      </span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span>&#123;&#125;                   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//提供统一对外的实例方法                                  </span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span>(<span class="params"></span>)</span>&#123;          </span><br><span class="line">        <span class="variable">$class</span> = <span class="keyword">__CLASS__</span>;                        </span><br><span class="line">        <span class="keyword">if</span> (!(<span class="built_in">self</span>::<span class="variable">$_instance</span> <span class="keyword">instanceof</span> <span class="variable">$class</span>))&#123;</span><br><span class="line">            <span class="built_in">self</span>::<span class="variable">$_instance</span> = <span class="keyword">new</span> <span class="variable">$class</span>();       </span><br><span class="line">        &#125;                                          </span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">self</span>::<span class="variable">$_instance</span>;                   </span><br><span class="line">    &#125;                                              </span><br><span class="line">&#125;                                                  </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DB</span></span>&#123;                                          </span><br><span class="line">    <span class="keyword">use</span> <span class="title">Singleton</span>;                                 </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)                 </span></span><br><span class="line"><span class="function">    </span>&#123;                                              </span><br><span class="line">       <span class="keyword">echo</span> <span class="string">&#x27;实例被创建了&#x27;</span>;                              </span><br><span class="line">    &#125;                                              </span><br><span class="line">&#125;                                                  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DB::<span class="title function_ invoke__">getInstance</span>();                                 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+User-Agent:Mozilla&#x2F;5.0 (Macintosh; U; Intel Mac OS X 10...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/http/" title="http">http </a><i class="fa fa-tag"></i><a class="tag" href="/tags/UserAgent/" title="UserAgent">UserAgent </a><span>About 864 words, 2 min 52 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%8E%A7%E5%88%B6/">php信号量控制</a></h3></div><div class="post-content"><p>
+上一篇文章学习到了php的共享内存，但是仅仅这个是不够的，我们还需要更精确的控制，避免多个进程同时写入共享内存的情况发生，我们还需奥信号量的控制等内容
 
 
-<hr>
-<p>好了今天的单例就到这里，以后会陆续上其它的设计模式，并且会通过PHP和JAVA两种语言或者多种来去实现来加深印象，好的设计模式能让系统更加的简介代码复用更高，大家努力学习吧</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/设计模式/" title="设计模式">设计模式 </a><span>About 536 words, 1 min 47 sec  read</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/3/">Previous</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/5/">Next</a></li></ul></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"Posts",pages:"Pages",categories:"Categories",tags:"Tags",untitled:"(Untitled)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
+准备PHP 也提供了类似的内置扩展 sysvsem（这个扩展在 Windows 环境下没有，文档中将 ftok 函数也归到这个扩展中，但实际上 ftok 是...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/php7/" title="php7">php7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/shared-memory/" title="shared-memory">shared-memory </a><span>About 395 words, 1 min 19 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A0/">php共享内存学习</a></h3></div><div class="post-content"><p>
+php中进程间通信介绍的很少，今天我来学习学习怎么实现共享内存的实现
+
+
+安装
+
+安装地址
+需要在安装的时候添加 –enable-shmop 来启用该函数的功能
+可以通过 ** phpinfo(); ** 来确认是否安装成功，我这里查看 ** shmop support &#x3D;&gt; enabled *...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/shared-memory/" title="shared-memory">shared-memory </a><span>About 535 words, 1 min 47 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/20/2017-12-20-spring-boot%E9%85%8D%E7%BD%AE%E5%A4%9A%E7%8E%AF%E5%A2%83/">spring boot配置多环境</a></h3></div><div class="post-content"><p>
+我是经常会遇到不同环境配置不同参数的情况，例如我们在本地开发环境的端口1111 但是测试环境就要换成2222，线上环境端口就要换成8080端口，为了应对这种情况， spring boot给我们提供了更成熟的方案。
+
+
+配置公共文件  spring boot默认配置文件是application.propertie...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-20</span><i class="fa fa-tag"></i><a class="tag" href="/tags/java/" title="java">java </a><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><i class="fa fa-tag"></i><a class="tag" href="/tags/spring-boot/" title="spring-boot">spring-boot </a><span>About 548 words, 1 min 49 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/19/2017-12-19-Spring-boot-%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8banner%E5%86%85%E5%AE%B9/">Spring boot 修改启动banner内容</a></h3></div><div class="post-content"><p>我们在启动Spring boot时候会出现以下情况
+
+我们可以将它改成自己产品的内容修改方式如下
+在 src&#x2F;main&#x2F;resources&#x2F;banner.txt 创建并加入内容:
+           _                            (_)         ...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Spring-boot/" title="Spring boot">Spring boot </a><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><span>About 135 words, 27 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/09/2017-12-09-Snowflake%EF%BC%88twitter-64%E4%BD%8D%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95%EF%BC%89/">Snowflake（twitter 64位唯一ID生成算法）</a></h3></div><div class="post-content"><p>
+在很多业务场景中会遇到id唯一的问题，我就遇到很多，数据库中的自增的生成，接下来我们一起学习唯一ID生成算法
+
+Snowflake 组成结构
+雪花算法总共64位组成(不要问我为什么，这是具体规定啊)
+
+  1.1 正负码1位 （通常为0）
+  1.2 毫秒级时间41位  
+  1.3 节点码10位
+    由于...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-09</span><i class="fa fa-tag"></i><a class="tag" href="/tags/算法/" title="算法">算法 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><span>About 153 words, 30 sec  read</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/09/23/2017-09-23-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-PHP%E5%AE%9E%E7%8E%B0/">单例模式(PHP实现)</a></h3></div><div class="post-content"><p>
+介绍一下单例的应用场景:最简单的场景就是数据库了， 还有框架中基础的应用配置加载了，使用单例模式有如下好处，避免过多的new对象造成大量资源廊坊和超出最大连接数而产生应用down机问题，可以全局设立一个单访问点避免多出访问点造成难以维护的现象，便于调试直接可以设立日志记录全局设立统一节点，避免导出var_dum...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/设计模式/" title="设计模式">设计模式 </a><span>About 536 words, 1 min 47 sec  read</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/3/">Previous</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/5/">Next</a></li></ul></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"Posts",pages:"Pages",categories:"Categories",tags:"Tags",untitled:"(Untitled)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
