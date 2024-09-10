@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="Kange"><title>MySQL各模块的作用 · 少年当自强</title><meta name="description" content="我们要学好mysql必须要了解其中都有哪些模块，并且对模块功能要非常清楚，举一反三知道其中原理。
+
+下面是mysql的模块图
+可以看到， MySQL 的架构共分为两层：Server 层和存储引擎层，
+Server 层负责建立连接、分析和执行 SQL。MySQL 大多数的核心功能模块都在这实现,主要包"><meta name="keywords" content="Blog,博客,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.webp"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script src="/js/baidu-tongji.js"></script><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"serverURLs":"https://avoscloud.com","avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><!--script(src="https://img.yuekang.org.cn/static/js/av-min.js")--><script src="https://unpkg.com/valine@1.5.2/dist/Valine.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"><li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/tags">Tags</a></li><li><a href="/about">About</a></li><li><a href="/links">Links</a></li></div><div class="information"><div class="nav_right_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li><li><a class="fa fa-search" onclick="Anatolo.search.openWindow();"></a></li><li><a class="far fa-sun" onclick="Anatolo.darkLightToggle();"></a></li></div><div class="avatar"><img src="http://img.yuekang.org.cn/static/images/head.png"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/images/logo@2x.webp" style="width:220px;" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3><div class="description"><p>Write the code. Change the World.</p></div></div><ul class="social-links"><li><a href="https://github.com/teddymail"><i class="fab fa-github"></i></a></li><li><a href="mailto:iyuekang@gmail.com"><i class="fa fa-envelope"></i></a></li><li><a href="https://weibo.com/teddymail"><i class="fab fa-weibo"></i></a></li></ul></div></div><div class="footer"><div class="p"><span>Copyright © Teddy All rights reserved. </span><i class="fa fa-star"></i><span>Kange</span></div><div class="by_farbox"><span>Powered by</span><a href="https://hexo.io/zh-cn/" target="_blank">Hexo</a><span>&</span><a href="https://github.com/Lhcfl/hexo-theme-anatolo" target="_blank">Anatolo</a></div><div class="beian"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated"><div class="post-title"><h3><a>MySQL各模块的作用</a></h3></div><div class="post-content"><p><blockquote>
+<p>我们要学好mysql必须要了解其中都有哪些模块，并且对模块功能要非常清楚，举一反三知道其中原理。</p>
+</blockquote>
+<p>下面是mysql的模块图<br><img src="https://img.yuekang.org.cn/blog/images/WX20240906-141349%402x.png"></p>
+<p>可以看到， MySQL 的架构共分为两层：Server 层和存储引擎层，</p>
+<p>Server 层负责建立连接、分析和执行 SQL。MySQL 大多数的核心功能模块都在这实现,<br>主要包括连接器，查询缓存、解析器、预处理器、优化器、执行器等。<br>另外，所有的内置函数（如日期、时间、数学和加密函数等）和所有跨存储引擎的功能（如存储过程、触发器、视图等。）<br>都在 Server 层实现。</p>
+<p>存储引擎层负责数据的存储和提取。支持 InnoDB、MyISAM、Memory 等多个存储引擎，<br>不同的存储引擎共用一个 Server 层。现在最常用的存储引擎是 InnoDB，从 MySQL 5.5 版本开始，<br>InnoDB 成为了 MySQL 的默认存储引擎。我们常说的索引数据结构，就是由存储引擎层实现的，<br>不同的存储引擎支持的索引类型也不相同，比如 InnoDB 支持索引类型是 B+树 ，且是默认使用，<br>也就是说在数据表中创建的主键索引和二级索引默认使用的是 B+ 树索引。</p>
+<h1 id="1-连接器"><a href="#1-连接器" class="headerlink" title="1. 连接器"></a>1. 连接器</h1><hr>
+<p>负责建立连接，权限验证</p>
+<h1 id="2-查询缓存"><a href="#2-查询缓存" class="headerlink" title="2.查询缓存"></a>2.查询缓存</h1><hr>
+<p>负责缓存查询出来的数据，通过查询语句作为key来进行match 一旦多次查询相同内容将会立刻返回内容。8.0以后就删除了这个功能，因为很鸡肋，频繁更新表都会导致缓存被清空。</p>
+<h1 id="3-解释器"><a href="#3-解释器" class="headerlink" title="3.解释器"></a>3.解释器</h1><hr>
+<p>负责对查询语句进行 词法分析和语法分析  </p>
+<ul>
+<li><p>词法分析</p>
+<ul>
+<li>根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法，如果没问题就会构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等等。</li>
+</ul>
+</li>
+<li><p>语法分析</p>
+<ul>
+<li>根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法，如果没问题就会构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等等。</li>
+</ul>
+</li>
+</ul>
+<p>如果这里分析出来语法不对就会报错</p>
+<blockquote>
+<p>但是注意，表不存在或者字段不存在，并不是在解析器里做的，《MySQL 45 讲》说是在解析器做的，但是经过我和朋友看 MySQL 源码（5.7和8.0）得出结论是解析器只负责检查语法和构建语法树，但是不会去查表或者字段存不存在。</p>
+</blockquote>
+<h1 id="4-预处理器"><a href="#4-预处理器" class="headerlink" title="4. 预处理器"></a>4. 预处理器</h1><hr>
+<p>经过解析器后，接着就要进入执行 SQL 查询语句的流程了，每条SELECT 查询语句流程主要可以分为下面这三个阶段：</p>
+<ul>
+<li>prepare 阶段，也就是预处理阶段；</li>
+<li>optimize 阶段，也就是优化阶段；</li>
+<li>execute 阶段，也就是执行阶段；</li>
+</ul>
+<h2 id="预处理阶段"><a href="#预处理阶段" class="headerlink" title="预处理阶段"></a>预处理阶段</h2><p>  用来判断表是否存在，表字段是否存在检查</p>
+<h1 id="5-优化器"><a href="#5-优化器" class="headerlink" title="5.优化器"></a>5.优化器</h1><hr>
+<blockquote>
+<p>经过预处理阶段后，还需要为 SQL 查询语句先制定一个执行计划，这个工作交由「优化器」来完成的。</p>
+</blockquote>
+<p>优化器主要负责将 SQL 查询语句的执行方案确定下来，比如在表里面有多个索引的时候，优化器会基于查询成本的考虑，来决定选择使用哪个索引。</p>
+<p>当然，我们本次的查询语句（select * from product where id &#x3D; 1）很简单，就是选择使用主键索引。</p>
+<p>要想知道优化器选择了哪个索引，我们可以在查询语句最前面加个 explain 命令，这样就会输出这条 SQL 语句的执行计划，然后执行计划中的 key 就表示执行过程中使用了哪个索引，比如下图的 key 为 PRIMARY 就是使用了主键索引。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/2024-09-06.webp" alt="执行计划"></p>
+<h1 id="6-执行器"><a href="#6-执行器" class="headerlink" title="6.执行器"></a>6.执行器</h1><hr>
+<p>经历完优化器后，就确定了执行方案，接下来 MySQL 就真正开始执行语句了，<br>这个工作是由「执行器」完成的。在执行的过程中，执行器就会和存储引擎交互了，<br>交互是以记录为单位的。</p>
+</p></div><div class="post-footer"><div class="tip">本文采用CC-BY-SA-3.0协议，转载请注明出处<br>Author: Kange</div><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-06</span><i class="fa fa-tag"></i><a class="tag" href="/tags/面试题/" title="面试题">面试题 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><span>About 1210 words, 4 min 2 sec  read</span></div></div></div></div><div class="share"><div class="share-btn linkonly"><a class="fa fa-link" onclick="Utils.copyToClipboard(window.location.href)" ref="sidebar"></a></div><div class="share-btn evernote"><a class="fa fa-share" onclick="Anatolo.share.native()" ref="sidebar"></a></div><div class="share-btn weibo"><a class="fab fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="share-btn twitter"><a class="fab fa-twitter" href="http://twitter.com/intent/tweet?text=I%20have%20found%20a%20great%20blog.%0A%0A%E5%B0%91%E5%B9%B4%E5%BD%93%E8%87%AA%E5%BC%BA%20%C2%B7%20MySQL%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%9C%E7%94%A8%0Ahttps://yuekang.org.cn/2024/09/06/MySQL%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%9C%E7%94%A8/%0A"></a></div><div class="share-btn mastodon"><a class="fab fa-mastodon" href="https://mastodonshare.com/?text=I%20have%20found%20a%20great%20blog.%0A%0A%E5%B0%91%E5%B9%B4%E5%BD%93%E8%87%AA%E5%BC%BA%20%C2%B7%20MySQL%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%9C%E7%94%A8%0Ahttps://yuekang.org.cn/2024/09/06/MySQL%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%9C%E7%94%A8/%0A"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2024/09/08/explain%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E5%8F%82%E6%95%B0%E8%AE%B0%E5%BD%95/" title="explain执行计划参数">Previous</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/09/04/2024-09-04-%E4%B8%BAHexo-%E7%9A%84-md-%E6%96%87%E4%BB%B6%E7%BB%9F%E4%B8%80%E9%87%8D%E5%91%BD%E5%90%8D/" title="为Hexo 的 md 文件统一重命名">Next</a></li></ul></div><script>Anatolo.comment.setConfig({"valine":{"enable":true,"appid":"yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz","appkey":"Fb1nRCpsNrMB0U2Fv3jJSCsu","notify":false,"verify":true,"serverURLs":"https://avoscloud.com","avatar":"","placeholder":"ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像"},"duoshuo":null,"disqus":null,"gentie":null})</script><a id="comments"></a><div id="gitment_valine" style="padding: 10px"></div><script>var valine = new Valine({
+  el: "#gitment_valine",
+  notify: "false" || false,
+  verify: "true" || false,
+  app_id: "yXrP5LiEu8aLiXNMbcMkjTgk-gzGzoHsz",
+  app_key: "Fb1nRCpsNrMB0U2Fv3jJSCsu",
+  placeholder: "ψ(｀∇´)ψ 快说说你得想法吧！cn.gravatar.com注册专属头像",
+  path: window.location.pathname,
+  meta: ['nick','mail'],
+  visitor: true,
+  recordIP: true,
+  requiredFields: ['nick'],
+  avatar: "",
+  // serverURLs: "https://avoscloud.com",
+  avatar_cdn: "https://cravatar.cn/avatar/", // 自定义avatar cdn
+  // 设置Bilibili表情包地址
+  emojiCDN: "//i0.hdslb.com/bfs/emote/",
+  // 表情title和图片映射
+  emojiMaps: {
+    tv_doge: "6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png",
+    tv_亲亲: "a8111ad55953ef5e3be3327ef94eb4a39d535d06.png",
+    tv_偷笑: "bb690d4107620f1c15cff29509db529a73aee261.png",
+    tv_再见: "180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png",
+    tv_冷漠: "b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png",
+    tv_可爱: "9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png",
+    tv_吐血: "09dd16a7aa59b77baa1155d47484409624470c77.png",
+    tv_呆: "fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png",
+    tv_呕吐: "9f996894a39e282ccf5e66856af49483f81870f3.png",
+    tv_困: "241ee304e44c0af029adceb294399391e4737ef2.png",
+    tv_坏笑: "1f0b87f731a671079842116e0991c91c2c88645a.png",
+    tv_大佬: "093c1e2c490161aca397afc45573c877cdead616.png",
+    tv_委屈: "d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png",
+    tv_害羞: "a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png",
+    tv_尴尬: "7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png",
+    tv_微笑: "70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png",
+    tv_思考: "90cf159733e558137ed20aa04d09964436f618a1.png",
+    tv_惊吓: "0d15c7e2ee58e935adc6a7193ee042388adc22af.png",
+    tv_打脸: "56ab10b624063e966bfcb76ea5dc4794d87dfd47.png",
+    tv_抓狂: "fe31c08edad661d63762b04e17b8d5ae3c71a757.png",
+    tv_抠鼻: "c666f55e88d471e51bbd9fab9bb308110824a6eb.png",
+    tv_斜眼笑: "911f987aa8bc1bee12d52aafe62bc41ef4474e6c.png",
+    tv_无奈: "ea8ed89ee9878f2fece2dda0ea8a5dbfe21b5751.png",
+    tv_晕: "5443c22b4d07fb1907ccc610c8e6db254f2461b7.png",
+    tv_流汗: "cead1c351ab8d79e9f369605beb90148db0fbed3.png",
+    tv_流泪: "7e71cde7858f0cd50d74b0264aa26db612a8a167.png",
+    tv_流鼻血: "c32d39db2737f89b904ca32700d140a9241b0767.png",
+    tv_点赞: "f85c354995bd99e28fc76c869bfe42ba6438eff4.png",
+    tv_生气: "26702dcafdab5e8225b43ffd23c94ac1ff932654.png",
+    tv_生病: "8b0ec90e6b86771092a498c54f09fc94621c1900.png",
+    tv_疑问: "0793d949b18d7be716078349c202c15ff166f314.png",
+    tv_白眼: "c1d59f439e379ee50eef488bcb5e5378e5044ea4.png",
+    tv_皱眉: "72ccad6679fea0d14cce648b4d818e09b8ffea2d.png",
+    tv_目瞪口呆: "0b8cb81a68de5d5365212c99375e7ace3e7891b7.png",
+    tv_睡着: "8b196675b53af58264f383c50ad0945048290b33.png",
+    tv_笑哭: "1abc628f6d4f4caf9d0e7800878f4697abbc8273.png",
+    tv_腼腆: "89712c0d4af73e67f89e35cbc518420380a7f6f4.png",
+    tv_色: "61822c7e9aae5da76475e7892534545336b23a6f.png",
+    tv_调侃: "4bc022533ef31544ca0d72c12c808cf4a1cce3e3.png",
+    tv_调皮: "b9c41de8e82dd7a8515ae5e3cb63e898bf245186.png",
+    tv_鄙视: "6e72339f346a692a495b123174b49e4e8e781303.png",
+    tv_闭嘴: "c9e990da7f6e93975e25fd8b70e2e290aa4086ef.png",
+    tv_难过: "87f46748d3f142ebc6586ff58860d0e2fc8263ba.png",
+    tv_馋: "fc7e829b845c43c623c8b490ee3602b7f0e76a31.png",
+    tv_鬼脸: "0ffbbddf8a94d124ca2f54b360bbc04feb6bbfea.png",
+    tv_黑人问号: "45821a01f51bc867da9edbaa2e070410819a95b2.png",
+    tv_鼓掌: "1d21793f96ef4e6f48b23e53e3b9e42da833a0f6.png",
+  },
+});
+// 隐藏空属性
+document.querySelector('.vempty').style.display = 'none';
+
+</script></div></div></div></div></main-outlet><script>(async function(){ if (Anatolo.search == null) await Anatolo.getMsg("search-init"); Anatolo.search.config = {translation:{posts:"Posts",pages:"Pages",categories:"Categories",tags:"Tags",untitled:"(Untitled)",} }; })()</script><div class="searchbox ins-search modal-cover"><div class="searchbox-container ins-search-container modal-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="Search..."><span class="searchbox-close"><a class="fa fa-times-circle" onclick="Anatolo.search.closeWindow();"></a></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"><p>Seraching...</p></div></div></div></div><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
