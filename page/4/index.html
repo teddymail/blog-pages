@@ -1,0 +1,518 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>少年当自强</title><meta name="description" content="A Blog Powered By Hexo"><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script>Anatolo.comment.setConfig({})</script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"></div><div class="information"><div class="nav_right_btn"></div><div class="avatar"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3></div><ul class="social-links"></ul></div></div><div class="footer"><div class="p"><i class="fa fa-star"></i></div><div class="by_farbox"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2018/07/04/2018-07-04-find-locate%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6/">find,locate查找文件</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>在使用linux时经常会不知道自己想要的文件在哪里存放着，可能会知道一个大致的位置但是却不知道精确目录和位置，这个时候搜索变得异常的方便，今天就来学学搜索命令。</p>
+</blockquote>
+<h1 id="find-搜索命令"><a href="#find-搜索命令" class="headerlink" title="find 搜索命令"></a>find 搜索命令</h1><blockquote>
+<p>这个命令是真实的遍历模式，会逐层搜索需要匹配的目标，直到搜索完毕。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">//列出当前目录文件以及子目录的所有文件</span><br><span class="line">[yuekang@ykdev test]$ find .</span><br><span class="line">.</span><br><span class="line">./abnc.txt</span><br><span class="line"></span><br><span class="line">//指定文件搜索</span><br><span class="line">[yuekang@ykdev test]$ find -name &quot;ab*&quot;</span><br><span class="line">./abnc.txt</span><br><span class="line"></span><br><span class="line">//忽略大小写搜索</span><br><span class="line">[yuekang@ykdev test]$ find -iname &quot;AB*&quot;</span><br><span class="line">./abnc.txt</span><br><span class="line"></span><br><span class="line">//搜索多个文件</span><br><span class="line">[yuekang@ykdev test]$ find . -name &quot;*.txt&quot; -o -name &quot;*.pdf&quot;</span><br><span class="line">./abnc.txt</span><br><span class="line">./ab.pdf</span><br><span class="line"></span><br><span class="line">//匹配文件路径或文件,实际上还是匹配文件</span><br><span class="line">[yuekang@ykdev test]$ find . -path &quot;*yuekang*&quot;</span><br><span class="line">[yuekang@ykdev test]$ find . -path &quot;*ab*&quot;</span><br><span class="line">./abnc.txt</span><br><span class="line">./ab.pdf</span><br><span class="line">[yuekang@ykdev ~]$ find /home/ -path &quot;*yuekang*&quot;</span><br><span class="line">find: ‘/home/jira’: 权限不够</span><br><span class="line">/home/yuekang</span><br><span class="line"></span><br><span class="line">//正则匹配文件</span><br><span class="line">[yuekang@ykdev test]$ find . -regex &quot;.*\(\.txt\|\.pdf\)$&quot;</span><br><span class="line">./abnc.txt</span><br><span class="line">./ab.pdf</span><br><span class="line"></span><br><span class="line">//否定查找</span><br><span class="line">[yuekang@ykdev test]$ find . ! -name &quot;*.pdf&quot;</span><br><span class="line">.</span><br><span class="line">./abnc.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="locate-搜索命令"><a href="#locate-搜索命令" class="headerlink" title="locate 搜索命令"></a>locate 搜索命令</h1><blockquote>
+<p>这个命令不搜索具体目录，而是搜索一个数据库记录（&#x2F;var&#x2F;lib&#x2F;mlocate&#x2F;mlocate.db），更新频率为每天更新，所以可能会搜索到已经删除或者搜索不到刚创建的文件，<code>updatedb</code> 可以完成重新刷新文件信息。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//查找文件，当新建文件查询不到时需要手动updatedb更新本地文件数据库</span><br><span class="line">╭─root@ykdev /home/yuekang/test</span><br><span class="line">╰─# locate abnc.txt</span><br><span class="line">╭─root@ykdev /home/yuekang/test</span><br><span class="line">╰─# updatedb</span><br><span class="line">╭─root@ykdev /home/yuekang/test</span><br><span class="line">╰─# locate abnc.txt</span><br><span class="line">/home/yuekang/test/abnc.txt</span><br><span class="line"></span><br><span class="line">//通过regex 正则匹配文件</span><br><span class="line"></span><br><span class="line">root@ykdev /home/yuekang/test</span><br><span class="line">╰─# locate -r &quot;.*\(\.pdf\)&quot;</span><br><span class="line">/home/yuekang/test/ab.pdf</span><br><span class="line">/usr/share/doc/aic94xx-firmware-30/README-94xx.pdf</span><br><span class="line">/usr/share/doc/bzip2-devel-1.0.6/manual.pdf</span><br><span class="line">/usr/share/doc/libtasn1-4.10/libtasn1.pdf</span><br><span class="line">/usr/share/doc/libxml2-devel-2.9.1/tutorial/xmltutorial.pdf</span><br></pre></td></tr></table></figure></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-07-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Linux/" title="Linux">Linux </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Shell/" title="Shell">Shell </a><span>About501words, 1min40secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/27/2018-06-27-Yii-mail%E6%A8%A1%E5%9D%97%E5%AD%A6%E4%B9%A0/">Yii-mail模块学习</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>邮件已经是办公必备了，在Yii中已经封装了一套完整邮件代码，帮助我们快速的建立系统邮件的邮件发送功能，其易于扩展的设计结构功能开发变得简化。</p>
+</blockquote>
+<h1 id="邮件发送格式"><a href="#邮件发送格式" class="headerlink" title="邮件发送格式"></a>邮件发送格式</h1><p><img src="http://img.yuekang.org.cn/blog/images/2018062701.png" alt="邮件发送格式"></p>
+<p>一个正常的邮件具有：发件人、收件人、回复地址、抄送地址、主题、正文</p>
+<h1 id="Yii中mail模块是怎么设计的？"><a href="#Yii中mail模块是怎么设计的？" class="headerlink" title="Yii中mail模块是怎么设计的？"></a>Yii中mail模块是怎么设计的？</h1><p><img src="http://img.yuekang.org.cn/blog/images/2018062702.png" alt="yii mail模块"></p>
+<p>分三块，分别是管理邮件发送相关的，邮件格式相关的，邮件事件相关</p>
+<p>1.1 MessageInterface</p>
+<p>定义了邮件相关格式相关</p>
+<p>1.2 MailerInterface<br>定义邮件应该具有相关功能</p>
+<p>1.3 BaseMessage<br>实现了个邮件send和toString作为初始化的补充</p>
+<p>1.4 BaseMailer<br>它就厉害了，是个头，兼顾邮件发送格式内容的处理，事件发送，邮件动作等功能</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-27</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Yii/" title="Yii">Yii </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Mail/" title="Mail">Mail </a><span>About230words, 46secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/24/2018-06-24-yar%E5%AD%A6%E4%B9%A0/">yar学习</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>Yar(yet another RPC framework), RPC框架, 和现有的RPC框架(xml-rpc, soap)不同, 这是一个轻量级的框架, 支持多种打包协议(msgpack, json, php), 并且最重要的一个特点是, 它是可并行化的…</p>
+</blockquote>
+<h1 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h1><ol>
+<li>快速，简单，简单</li>
+<li>并发RPC调用</li>
+<li>支持多个数据包装器（内置php，json，msgpack）</li>
+<li>支持多种传输协议（http实现，稍后将支持tcp &#x2F; unix）</li>
+<li>详细的调试信息</li>
+</ol>
+<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>作者要求至少满足以下条件</p>
+<ol>
+<li>PHP 5.2+</li>
+<li>Curl</li>
+<li>Json</li>
+<li>Msgpack (Optional)： 新型二进制打包协议比json和xml快很多，和序列化的效率差不多</li>
+</ol>
+<h1 id="环境安装"><a href="#环境安装" class="headerlink" title="环境安装"></a>环境安装</h1><ol>
+<li>安装yar</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pecl install yar</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>安装msgpack</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pecl install msgpack</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>运行时配置</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yar.timeout //默认5000（ms）</span><br><span class="line">yar.connect_timeout //默认值1000（ms）</span><br><span class="line">yar.packager //默认“php”，当使用--enable-msgpack然后默认“msgpack”构建时，它应该是“php”，“json”，“msgpack”</span><br><span class="line">yar.debug //默认关闭</span><br><span class="line">yar.expose_info //默认为On，是否输出GET请求的API信息</span><br><span class="line">yar.content_type //默认的“application / octet-stream”</span><br><span class="line">yar.allow_persistent //默认关闭</span><br></pre></td></tr></table></figure>
+<h1 id="编写第一个server"><a href="#编写第一个server" class="headerlink" title="编写第一个server"></a>编写第一个server</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Api</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试Name</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> $key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> $value</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getName</span>(<span class="params"><span class="variable">$key</span>, <span class="variable">$value</span>= <span class="string">&#x27;foo&#x27;</span></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$value</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getB</span>(<span class="params"><span class="variable">$key</span></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$service</span> = <span class="keyword">new</span> <span class="title class_">Yar_Server</span>(<span class="keyword">new</span> <span class="title class_">Api</span>());</span><br><span class="line"><span class="variable">$service</span>-&gt;<span class="title function_ invoke__">handle</span>();</span><br></pre></td></tr></table></figure>
+
+<p>直接访问网页可以看到对应的内容已经展现出来了</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018062401.png" alt="运行效果"></p>
+<h1 id="编写第一个客户端请求rpc接口"><a href="#编写第一个客户端请求rpc接口" class="headerlink" title="编写第一个客户端请求rpc接口"></a>编写第一个客户端请求rpc接口</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$client</span> = <span class="keyword">new</span> <span class="title class_">Yar_Client</span>(<span class="string">&quot;https://admin.myhost.top/Api/&quot;</span>);</span><br><span class="line"><span class="variable">$result</span> = <span class="variable">$client</span>-&gt;<span class="title function_ invoke__">getName</span>(<span class="string">&quot;key&quot;</span>,<span class="string">&quot;my value&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$result</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>请求后可以获得如下结果</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">8</span>) <span class="string">&quot;my value&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>至此一个简单的rpc功能完成了，后续会学习更深层的使用方式</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-24</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><i class="fa fa-tag"></i><a class="tag" href="/tags/RPC/" title="RPC">RPC </a><span>About434words, 1min26secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/21/2018-06-21-PHP7-IO%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0/">PHP7- I/O模型学习</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>四种响应模型</p>
+<ol>
+<li>同步：调用后，死等，等到结果为止</li>
+<li>异步：调用立即返回，等到有结果通知</li>
+<li>阻塞：数据没有处理完成前不返回</li>
+<li>非阻塞：调用立即返回等到有结果通知我</li>
+</ol>
+</blockquote>
+<h1 id="五种I-O模型"><a href="#五种I-O模型" class="headerlink" title="五种I&#x2F;O模型"></a>五种I&#x2F;O模型</h1><ol>
+<li>阻塞I&#x2F;O (Blocking I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/blog/images/blog/images/2018062101.png" alt="阻塞I/O"></p>
+<p>当进程进行系统调用时，内核开始了IO的第一个阶段准备数据，准备完成交给内核缓冲最后拷贝到用户进程的内存中，然后才解锁进程，这个等待过程称为阻塞。</p>
+<ol start="2">
+<li>非阻塞I&#x2F;O (Non-Blocking I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018062102.png" alt="非阻塞I/O"></p>
+<p>进程在第二阶段被阻塞，调用的时候没有阻塞，第二阶段开始不断轮训CPU询问数据是否准备完毕，所以比较消耗CPU资源的模型</p>
+<ol start="3">
+<li>I&#x2F;O复用（I&#x2F;O Multiplexing)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018062103.png" alt="I/O复用"></p>
+<p>IO执行的两个阶段进程都是阻塞的，在这次完整的过程中，进程发起了两次系统调用。和阻塞IO不同的是第一阶段可以等待多个调用结果</p>
+<ol start="4">
+<li>信号驱动的I&#x2F;O (Signal Driven I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018062104.png" alt="信号驱动的I/O"></p>
+<p>只有在IO执行的第二阶段阻塞了进程，该模型在IO执行的第一阶段，当数据完成之后，会主动通知进程数据已经准备好，对进程做一个回调，通知分为两种，一位水平触发，及时进程不响应会一直发送通知，二为边缘触发，即只通知一次</p>
+<ol start="5">
+<li>异步I&#x2F;O (Asynchrnous I&#x2F;O)</li>
+</ol>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018062105.png" alt="异步I/O"></p>
+<p>当进程发起系统调用后，立刻就可以开始做其它事情，然后知道IO执行的两个阶段都完成之后，内核会给集成发送通知，告之进程已经完成处理了。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-21</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/IO/" title="IO">IO </a><span>About497words, 1min39secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/19/2018-06-19-array%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86/">array常用函数整理</a></h3></div><div class="post-content"><div class="card"><p><h1 id="array-chunk"><a href="#array-chunk" class="headerlink" title="array_chunk"></a><a href="http://php.net/manual/zh/function.array-chunk.php">array_chunk</a></h1><blockquote>
+<p>array_chunk — 将一个数组分割成多个</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$arr</span> = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_chunk</span>(<span class="variable">$arr</span>, <span class="number">2</span>));</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_chunk</span>(<span class="variable">$arr</span>, <span class="number">2</span>, <span class="literal">false</span>));</span><br><span class="line"></span><br><span class="line">结果：</span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">    [<span class="number">0</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;a&quot;</span></span><br><span class="line">    [<span class="number">1</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;b&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">    [<span class="number">0</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;c&quot;</span></span><br><span class="line">    [<span class="number">1</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;d&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  <span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">    [<span class="number">0</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;e&quot;</span></span><br><span class="line">    [<span class="number">1</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;f&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">    [<span class="number">0</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;a&quot;</span></span><br><span class="line">    [<span class="number">1</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;b&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">    [<span class="number">0</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;c&quot;</span></span><br><span class="line">    [<span class="number">1</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;d&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  <span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">    [<span class="number">0</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;e&quot;</span></span><br><span class="line">    [<span class="number">1</span>]=&gt;</span><br><span class="line">    <span class="keyword">string</span>(<span class="number">1</span>) <span class="string">&quot;f&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="array-column"><a href="#array-column" class="headerlink" title="array_column"></a><a href="http://php.net/manual/zh/function.array-column.php">array_column</a></h1><blockquote>
+<p>array_column — 返回数组中指定的一列</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$arr</span> = [</span><br><span class="line">    [</span><br><span class="line">        <span class="string">&#x27;id&#x27;</span> =&gt; <span class="number">123</span>,</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;name1&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">        <span class="string">&#x27;id&#x27;</span> =&gt; <span class="number">124</span>,</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;name2&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">        <span class="string">&#x27;id&#x27;</span> =&gt; <span class="number">125</span>,</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;name3&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">        <span class="string">&#x27;id&#x27;</span> =&gt; <span class="number">126</span>,</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;name4&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_column</span>(<span class="variable">$arr</span>, <span class="string">&#x27;name&#x27;</span>));</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_column</span>(<span class="variable">$arr</span>, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;id&#x27;</span>));</span><br><span class="line"></span><br><span class="line">结果:</span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">4</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name1&quot;</span></span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name2&quot;</span></span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name3&quot;</span></span><br><span class="line">  [<span class="number">3</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name4&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">array</span>(<span class="number">4</span>) &#123;</span><br><span class="line">  [<span class="number">123</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name1&quot;</span></span><br><span class="line">  [<span class="number">124</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name2&quot;</span></span><br><span class="line">  [<span class="number">125</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name3&quot;</span></span><br><span class="line">  [<span class="number">126</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;name4&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-combine"><a href="#array-combine" class="headerlink" title="array_combine"></a><a href="http://php.net/manual/zh/function.array-combine.php">array_combine</a></h1><blockquote>
+<p>array_combine — 创建一个数组，用一个数组的值作为其键名，另一个数组的值作为其值</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$key</span> = [<span class="string">&#x27;one&#x27;</span>, <span class="string">&#x27;two&#x27;</span>, <span class="string">&#x27;three&#x27;</span>];</span><br><span class="line"><span class="variable">$value</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_combine</span>(<span class="variable">$key</span>,<span class="variable">$value</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="string">&quot;one&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">1</span>)</span><br><span class="line">  [<span class="string">&quot;two&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">  [<span class="string">&quot;three&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-count-values"><a href="#array-count-values" class="headerlink" title="array_count_values"></a><a href="http://php.net/manual/zh/function.array-count-values.php">array_count_values</a></h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$array</span> = <span class="keyword">array</span>(<span class="number">1</span>, <span class="string">&quot;hello&quot;</span>, <span class="number">1</span>, <span class="string">&quot;world&quot;</span>, <span class="string">&quot;hello&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_count_values</span>(<span class="variable">$array</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">  [<span class="string">&quot;hello&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">  [<span class="string">&quot;world&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="array-diff"><a href="#array-diff" class="headerlink" title="array_diff"></a><a href="http://php.net/manual/zh/function.array-diff.php">array_diff</a></h1><blockquote>
+<p>array_diff — 计算数组的差集</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$array1</span> = <span class="keyword">array</span>(<span class="string">&quot;a&quot;</span> =&gt; <span class="string">&quot;green&quot;</span>, <span class="string">&quot;red&quot;</span>, <span class="string">&quot;blue&quot;</span>, <span class="string">&quot;red&quot;</span>);</span><br><span class="line"><span class="variable">$array2</span> = <span class="keyword">array</span>(<span class="string">&quot;b&quot;</span> =&gt; <span class="string">&quot;green&quot;</span>, <span class="string">&quot;yellow&quot;</span>, <span class="string">&quot;red&quot;</span>);</span><br><span class="line"><span class="variable">$result</span> = <span class="title function_ invoke__">array_diff</span>(<span class="variable">$array1</span>, <span class="variable">$array2</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$result</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">4</span>) <span class="string">&quot;blue&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-fill"><a href="#array-fill" class="headerlink" title="array_fill"></a><a href="http://php.net/manual/zh/function.array-fill.php">array_fill</a></h1><blockquote>
+<p>array_fill — 用给定的值填充数组</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">array_fill</span>(<span class="number">5</span>, <span class="number">6</span>, <span class="string">&#x27;banana&#x27;</span>);</span><br><span class="line"><span class="variable">$b</span> = <span class="title function_ invoke__">array_fill</span>(-<span class="number">2</span>, <span class="number">4</span>, <span class="string">&#x27;pear&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$b</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">Array</span></span><br><span class="line">(</span><br><span class="line">    [<span class="number">5</span>] =&gt; banana</span><br><span class="line">    [<span class="number">6</span>] =&gt; banana</span><br><span class="line">    [<span class="number">7</span>] =&gt; banana</span><br><span class="line">    [<span class="number">8</span>] =&gt; banana</span><br><span class="line">    [<span class="number">9</span>] =&gt; banana</span><br><span class="line">    [<span class="number">10</span>] =&gt; banana</span><br><span class="line">)</span><br><span class="line"><span class="title function_ invoke__">Array</span></span><br><span class="line">(</span><br><span class="line">    [-<span class="number">2</span>] =&gt; pear</span><br><span class="line">    [<span class="number">0</span>] =&gt; pear</span><br><span class="line">    [<span class="number">1</span>] =&gt; pear</span><br><span class="line">    [<span class="number">2</span>] =&gt; pear</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-filter"><a href="#array-filter" class="headerlink" title="array_filter"></a><a href="http://php.net/manual/en/function.array-filter.php">array_filter</a></h1><blockquote>
+<p>array_filter — 用回调函数过滤数组中的单元</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$arr</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable">$res</span> = <span class="title function_ invoke__">array_filter</span>(<span class="variable">$arr</span>, function (<span class="variable">$val</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$val</span> % <span class="number">2</span> == <span class="number">0</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$res</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">5</span>) &#123;</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">  [<span class="number">3</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">4</span>)</span><br><span class="line">  [<span class="number">4</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">6</span>)</span><br><span class="line">  [<span class="number">6</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">8</span>)</span><br><span class="line">  [<span class="number">8</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">10</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-flip"><a href="#array-flip" class="headerlink" title="array_flip"></a><a href="http://php.net/manual/zh/function.array-flip.php">array_flip</a></h1><blockquote>
+<p>array_flip — 交换数组中的键和值</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$input</span> = <span class="keyword">array</span>(<span class="string">&quot;oranges&quot;</span>, <span class="string">&quot;apples&quot;</span>, <span class="string">&quot;pears&quot;</span>);</span><br><span class="line"><span class="variable">$flipped</span> = <span class="title function_ invoke__">array_flip</span>(<span class="variable">$input</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$flipped</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="string">&quot;oranges&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">0</span>)</span><br><span class="line">  [<span class="string">&quot;apples&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">1</span>)</span><br><span class="line">  [<span class="string">&quot;pears&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="array-keys"><a href="#array-keys" class="headerlink" title="array_keys"></a><a href="http://php.net/manual/zh/function.array-keys.php">array_keys</a></h1><blockquote>
+<p>array_keys — 返回数组中部分的或所有的键名</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$input</span> = <span class="keyword">array</span>(<span class="string">&quot;oranges&quot;</span>, <span class="string">&quot;apples&quot;</span>, <span class="string">&quot;pears&quot;</span>);</span><br><span class="line"><span class="variable">$flipped</span> = <span class="title function_ invoke__">array_keys</span>(<span class="variable">$input</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$flipped</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">0</span>)</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">1</span>)</span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="array-map"><a href="#array-map" class="headerlink" title="array_map"></a><a href="http://php.net/manual/zh/function.array-map.php">array_map</a></h1><blockquote>
+<p>array_map — 为数组的每个元素应用回调函数</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$input</span> = <span class="keyword">array</span>(<span class="string">&quot;oranges&quot;</span>, <span class="string">&quot;apples&quot;</span>, <span class="string">&quot;pears&quot;</span>);</span><br><span class="line"><span class="variable">$res</span> = <span class="title function_ invoke__">array_map</span>(function (<span class="variable">$val</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$val</span> . <span class="string">&#x27;123&#x27;</span>;</span><br><span class="line">&#125;, <span class="variable">$input</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$res</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">3</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">10</span>) <span class="string">&quot;oranges123&quot;</span></span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">9</span>) <span class="string">&quot;apples123&quot;</span></span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">8</span>) <span class="string">&quot;pears123&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="array-rand"><a href="#array-rand" class="headerlink" title="array_rand"></a><a href="http://php.net/manual/zh/function.array-rand.php">array_rand</a></h1><blockquote>
+<p>array_rand — 从数组中随机取出一个或多个单元</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$input</span> = <span class="keyword">array</span>(<span class="string">&quot;oranges&quot;</span>, <span class="string">&quot;apples&quot;</span>, <span class="string">&quot;pears&quot;</span>);</span><br><span class="line"><span class="variable">$res</span> = <span class="title function_ invoke__">array_rand</span>(<span class="variable">$input</span>, <span class="number">2</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$res</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$input</span>[<span class="variable">$res</span>[<span class="number">1</span>]]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">1</span>)</span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">int</span>(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;pears&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-replace"><a href="#array-replace" class="headerlink" title="array_replace"></a><a href="http://php.net/manual/zh/function.array-replace.php">array_replace</a></h1><blockquote>
+<p>array_replace — 使用传递的数组替换第一个数组的元素</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$base</span> = <span class="keyword">array</span>(<span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;raspberry&quot;</span>);</span><br><span class="line"><span class="variable">$replacements</span> = <span class="keyword">array</span>(<span class="number">0</span> =&gt; <span class="string">&quot;pineapple&quot;</span>, <span class="number">4</span> =&gt; <span class="string">&quot;cherry&quot;</span>);</span><br><span class="line"><span class="variable">$replacements2</span> = <span class="keyword">array</span>(<span class="number">0</span> =&gt; <span class="string">&quot;grape&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$basket</span> = <span class="title function_ invoke__">array_replace</span>(<span class="variable">$base</span>, <span class="variable">$replacements</span>, <span class="variable">$replacements2</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$basket</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">Array</span></span><br><span class="line">(</span><br><span class="line">    [<span class="number">0</span>] =&gt; grape</span><br><span class="line">    [<span class="number">1</span>] =&gt; banana</span><br><span class="line">    [<span class="number">2</span>] =&gt; apple</span><br><span class="line">    [<span class="number">3</span>] =&gt; raspberry</span><br><span class="line">    [<span class="number">4</span>] =&gt; cherry</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="array-slice"><a href="#array-slice" class="headerlink" title="array_slice"></a><a href="http://php.net/manual/zh/function.array-slice.php">array_slice</a></h1><blockquote>
+<p>array_slice — 从数组中取出一段</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$base</span> = <span class="keyword">array</span>(<span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;raspberry&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">array_slice</span>(<span class="variable">$base</span>, <span class="number">0</span>, <span class="number">2</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">2</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;orange&quot;</span></span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;banana&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="arsort"><a href="#arsort" class="headerlink" title="arsort"></a><a href="http://php.net/manual/zh/function.arsort.php">arsort</a></h1><blockquote>
+<p>arsort — 对数组进行逆向排序并保持索引关系</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$fruits</span> = <span class="keyword">array</span>(<span class="string">&quot;d&quot;</span> =&gt; <span class="string">&quot;aemon&quot;</span>, <span class="string">&quot;a&quot;</span> =&gt; <span class="string">&quot;brange&quot;</span>, <span class="string">&quot;b&quot;</span> =&gt; <span class="string">&quot;canana&quot;</span>, <span class="string">&quot;c&quot;</span> =&gt; <span class="string">&quot;dpple&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">arsort</span>(<span class="variable">$fruits</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$fruits</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">4</span>) &#123;</span><br><span class="line">  [<span class="string">&quot;c&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;dpple&quot;</span></span><br><span class="line">  [<span class="string">&quot;b&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;canana&quot;</span></span><br><span class="line">  [<span class="string">&quot;a&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;brange&quot;</span></span><br><span class="line">  [<span class="string">&quot;d&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;aemon&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="asort"><a href="#asort" class="headerlink" title="asort"></a><a href="http://php.net/manual/zh/function.asort.php">asort</a></h1><blockquote>
+<p>asort — 对数组进行排序并保持索引关系</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$fruits</span> = <span class="keyword">array</span>(<span class="string">&quot;d&quot;</span> =&gt; <span class="string">&quot;aemon&quot;</span>, <span class="string">&quot;a&quot;</span> =&gt; <span class="string">&quot;brange&quot;</span>, <span class="string">&quot;b&quot;</span> =&gt; <span class="string">&quot;canana&quot;</span>, <span class="string">&quot;c&quot;</span> =&gt; <span class="string">&quot;dpple&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">asort</span>(<span class="variable">$fruits</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$fruits</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">4</span>) &#123;</span><br><span class="line">  [<span class="string">&quot;d&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;aemon&quot;</span></span><br><span class="line">  [<span class="string">&quot;a&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;brange&quot;</span></span><br><span class="line">  [<span class="string">&quot;b&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;canana&quot;</span></span><br><span class="line">  [<span class="string">&quot;c&quot;</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;dpple&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="sort"><a href="#sort" class="headerlink" title="sort"></a><a href="http://php.net/manual/zh/function.sort.php">sort</a></h1><blockquote>
+<p>sort — 对数组排序</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="variable">$fruits</span> = <span class="keyword">array</span>(<span class="string">&quot;lemon&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;apple&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">sort</span>(<span class="variable">$fruits</span>);</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$fruits</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">array</span>(<span class="number">4</span>) &#123;</span><br><span class="line">  [<span class="number">0</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;apple&quot;</span></span><br><span class="line">  [<span class="number">1</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;banana&quot;</span></span><br><span class="line">  [<span class="number">2</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;lemon&quot;</span></span><br><span class="line">  [<span class="number">3</span>]=&gt;</span><br><span class="line">  <span class="keyword">string</span>(<span class="number">6</span>) <span class="string">&quot;orange&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="list"><a href="#list" class="headerlink" title="list"></a><a href="http://php.net/manual/zh/function.list.php">list</a></h1><blockquote>
+<p>list — 把数组中的值赋给一组变量</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$fruits</span> = <span class="keyword">array</span>(<span class="string">&quot;lemon&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;apple&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">list</span>(<span class="variable">$a</span>, <span class="variable">$b</span>, <span class="variable">$c</span>) = <span class="variable">$fruits</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$a</span>,<span class="variable">$b</span>,<span class="variable">$c</span>, <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">list</span>(<span class="variable">$a</span>,,<span class="variable">$c</span>) = <span class="variable">$fruits</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$a</span>,<span class="variable">$c</span>, <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">lemonorangebanana</span><br><span class="line">lemonbanana</span><br></pre></td></tr></table></figure>
+
+
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Array/" title="Array">Array </a><span>About1090words, 3min38secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/14/2018-06-14-PHP7-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">PHP7-垃圾回收机制</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>垃圾回收是一种自动的内存管理机制，当一个变量在程序中不再被使用时，应该予以释放，这种内存资源管理称为垃圾回收。其中一种垃圾回收方式是使用引用计数，通过对数据存储的物理空间多附加一个计数器空间，当其他数据与其相关是，计数器加一，反之，相关解除时计数器减一。定期检查各存储对象的计数器，计数器为零的话，则认为该对象已经被抛弃而应将其所占物理空间回收。</p>
+</blockquote>
+<p>下面是GC的核心数据结构:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">zend_refcounted</span> &#123;</span></span><br><span class="line">    <span class="type">uint32_t</span> refcount;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            ZEND_ENDIAN_LOHI_3(</span><br><span class="line">                zend_uchar    type,</span><br><span class="line">                zend_uchar    flags,</span><br><span class="line">                <span class="type">uint16_t</span>      gc_info)</span><br><span class="line">        &#125; v;</span><br><span class="line">        <span class="type">uint32_t</span> type_info;</span><br><span class="line">    &#125; u;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061401.png" alt="zend_refcounted_h的结构"></p>
+<p>zend_refcounted由32位bit的refcount和32bit的type_info组成</p>
+<p>1. type 第一个字节记录当前元素的类型</p>
+<ol start="2">
+<li><p>flags 第二个字节用来记录数据类型</p>
+</li>
+<li><p>gc_info 后面的两个字节标记当前元素的颜色和垃圾回收池中的位置，其中高地址的两位用来标记颜色。</p>
+</li>
+</ol>
+<p>3.1 颜色有 黑色，白色，灰色，紫色</p>
+<p>php性能提升<br><img src="http://img.yuekang.org.cn/blog/images/2018061404.gif"></p>
+<h2 id="gc垃圾收集器"><a href="#gc垃圾收集器" class="headerlink" title="gc垃圾收集器"></a>gc垃圾收集器</h2><p>下面是gc_globals的结构</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061802.png"></p>
+<p>gc_root_buffer 是一个双向链表，同时记录引用计数的相关信息，zend_gc_globals维护者gc的整个信息，这里列出个字段的含义。</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">字段</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">gc_enabled</td>
+<td align="left">是否开启gc</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">gc_active</td>
+<td align="left">垃圾回收算法是否运行</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">gc_full</td>
+<td align="left">垃圾缓冲区是否满了，在debug模式下有用</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">buf</td>
+<td align="left">垃圾缓冲区，PHP7默认大小为10 000个节点位置，0位置保留</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">roots</td>
+<td align="left">指向缓冲区中最新加入的可能是垃圾的元素</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">unused</td>
+<td align="left">指向缓冲区中没有使用的位置，在没有启动垃圾回收算法前，指向空</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">first_unused</td>
+<td align="left">指向缓冲区中第一个未使用的位置，新的元素插入缓冲区后，指针会后移动一位</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">last_unused</td>
+<td align="left">指向缓冲区中最后一个位置</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">to_free</td>
+<td align="left">待释放的列表</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">next_to_free</td>
+<td align="left">下一个待释放的列表</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">gc_runs</td>
+<td align="left">记录gc算法的运行的次数，当缓冲区满了，才会运行gc算法</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">collected</td>
+<td align="left">记录gc算法回收的垃圾数</td>
+</tr>
+</tbody></table>
+<h2 id="垃圾收集过程"><a href="#垃圾收集过程" class="headerlink" title="垃圾收集过程"></a>垃圾收集过程</h2><ol>
+<li>要求数据类型是数组和对象</li>
+<li>没有在缓冲区中存在过</li>
+<li>没有被标记过</li>
+<li>将其gc_info标记为紫色的，且记录其在缓冲区的位置</li>
+</ol>
+<p>当缓冲区满时，再收集新的元素会出发垃圾回收算法。</p>
+<p>垃圾流转图：</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061801.png"></p>
+<p>回收过程分为4部分</p>
+<ol>
+<li><p>对roots环中每一个元素进行深度优先遍历，将每个元素中gc_info为紫色的标记元素为灰色，且引用计数-1</p>
+</li>
+<li><p>扫描roots换中gc_info为灰色的元素，如果发现引用计数仍旧大于0，说明这个元素在其他地方使用，那么将其颜色重新标记为黑色，如果发现其引用计数是0则将其标记为白色，该过程同样为深度优先遍历。</p>
+</li>
+<li><p>扫描roots换，将gc_info颜色为黑色的的元素从roots移除，然后对roots中颜色为白色的元素进行深度有限遍历，将其引用计数+1，然后将roots链表移动到待释放列表中（to_free）中等待回收</p>
+</li>
+</ol>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-14</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/垃圾回收/" title="垃圾回收">垃圾回收 </a><span>About908words, 3min1secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/13/2018-06-13-PHP7%E4%B9%8B%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/">PHP7之线程安全</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>以前总觉得php是多进程单线程的，每个访问都是一个单独的进程互相不干扰各自的数据，数据是隔离的，最早的PHP都是来一个用户新建一个进程，访问结束就销毁这个进程，但是这样非常的浪费性能，后续PHP-fpm的出现将这个进程复用实现了，大大的优化速度，用户来了以后是分配一个线程的空闲进程来服务，用户离开就回到空闲里面给后面的用户使用。现在php早已实现了多线程的功能，今天我来学学这个多线程是怎么实现的。</p>
+</blockquote>
+<p>目前PHP多数是单线程环境，比如cli、fpm、cgi，每个进程只启动一个主线程，这种情况下也就不存在线程安全的情况了，在多线程环境下就需要考虑线程安全的问题了，PHP中有很多的全局变量这个如果多线程公用的情况下就会造成线程安全你的问题，PHP专门做了一个安全机制：Zend线程安全(Zend Thread Safe, ZTS)</p>
+<p>PHP为了解决这个问题做了一个程安全资源管理器(Thread Safe Resource Mananger, TSRM)，其主要实现的原理就是单个进程有一个公用的全局变量，如果多线程互相贡献不安全，就把这些数据拷贝若干份，保证每个线程都有自己的全局变量，这样线程之间互不干扰完美的解决这个安全的问题.</p>
+<p>PHP中定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">size_t</span> size; <span class="comment">//资源的大小</span></span><br><span class="line">    ts_allocate_ctor ctor; <span class="comment">//初始化函数</span></span><br><span class="line">    ts_allocate_dtor dtor;</span><br><span class="line">    <span class="type">int</span> done;</span><br><span class="line">&#125; tsrm_resource_type;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">tsrm_tls_entry</span> &#123;</span></span><br><span class="line">    <span class="type">void</span> **storage; <span class="comment">//资源数组</span></span><br><span class="line">    <span class="type">int</span> count; <span class="comment">//拥有的资源数:storage数组大小</span></span><br><span class="line">    THREAD_T thread_id; <span class="comment">//所属线程id</span></span><br><span class="line">    tsrm_tls_entry *next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>一个资源如果想被多线程使用，就必须想TSRM注册资源，TSRM会给这个资源分配一个ID,并把资源相关数据初始化保存到<code>tsrm_resource_type</code>中去，所有的线程必须通过这个ID来访问这个资源，如果线程第一次访问这个资源，TSRM会初始化这个资源，也就是复制一份出来给这个线程使用包括后续访问。</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061301.png" alt="PHP线程安全分配图表"></p>
+<p><code>tsrm_tls_table</code> 保存着所有线程物理位置，这个位置通过根据线程id与预设置的线程数<code>tsrm_tls_table_size</code>取模得到的</p>
+<p>每个线程拥有一个<code>tsrm_tls_entry</code>结构，当前线程的所有资源保存在storage数组中，它是一个链表结构，查找资源时首先根据:线程id % tsrm_tls_table_size得到一个tsrm_tls_entry，然后开始遍历链表比较thread_id确定是否是当前线程的。<br>线程本地存储(Thread Local Storage, TLS)，在创建完当前线程的tsrm_tls_entry后会把这个值保存到当前线程的TLS中，这样在ts_resource()获取资源时中就可以通过tsrm_tls_get()直接取到了，节省加锁检索的时间。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-13</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Thread-Safety/" title="Thread Safety">Thread Safety </a><span>About833words, 2min46secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/06/12/2018-06-12-PHP%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%99%A8%E6%9C%BA%E5%88%B6/">PHP内存管理器机制</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>概述<br>内存是每个工程师逃避不了的问题，了解内存管理机制更有助于了解PHP7内存分配的原理，更好的使用PHP7这门语言</p>
+</blockquote>
+<p>PHP7内存管理器：</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061201.png" alt="内存管理器"></p>
+<p>PHP脚本运行不是直接从系统中申请的，而是调用了Zend Memory Manager (Zend 内存管理器)提供的一系列接口函数来间接申请内存，如果管理器内存够用，直接分配PHP程序，如果不够用，则自动向系统中申请。</p>
+<p>PHP7核心代码在zend_alloc.c中实现，一共有三种规格的内存</p>
+<table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">规格</th>
+<th align="left">尺寸</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Huge(chunk)</td>
+<td align="left">申请内存大于2M，直接调用系统分配，分配若干个chunk</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Large(page)</td>
+<td align="left">申请内存大于3K(3&#x2F;4 page_size)，小于2044K(511 page_size)，分配若干个page</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Small(slot)</td>
+<td align="left">申请内存小于等于3K(3&#x2F;4 page_size)</td>
+</tr>
+</tbody></table>
+<p>zval的示意图</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061202.png" alt="zend堆结构"></p>
+<h3 id="Huge分配"><a href="#Huge分配" class="headerlink" title="Huge分配"></a>Huge分配</h3><p>也是最大力度的分配这个分配是直接向系统中申请的，但一次会申请多个，有合适了则立即返回内存区域，</p>
+<h3 id="Large分配"><a href="#Large分配" class="headerlink" title="Large分配"></a>Large分配</h3><p>一个chunk对应512个page，但是第一个page会始终被chunk结构占用着，可用的也就511个page大小。如果申请多个page的话分配的时候这些page都是连续的 。如果直到最后一个chunk也没找到则重新分配一个新的chunk并插入chunk链表,chunk-&gt;free_map利用bitmap来记录每组的page的使用情况</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061203.png" alt="Large"></p>
+<h3 id="slot分配"><a href="#slot分配" class="headerlink" title="slot分配"></a>slot分配</h3><p>small内存总共有30种固定大小的规格：8,16,24,32,40,48,56,64,80,96,112,128 … 1792,2048,2560,3072 Byte，这称之为slot，这些slot的大小是有规律的:最小的slot大小为8byte，前8个slot依次递增8byte，后面每隔4个递增值乘以2</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2018061204.png" alt="slot"></p>
+<h3 id="php7-内存对齐"><a href="#php7-内存对齐" class="headerlink" title="php7 内存对齐"></a>php7 内存对齐</h3><p>PHP7会对是内存进行对齐例如申请300B内存大小的内存，经过内存管理器的申请，加入是256B对齐，当申请300B内存则会拿到512B的内存，申请对其内存应该是对其内存数的整数倍,其中不符合的会将这个不对齐的区域进行释放掉</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-06-12</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP7/" title="PHP7">PHP7 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Memory/" title="Memory">Memory </a><span>About566words, 1min53secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/05/22/2018-05-22-%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/">系统性能指标</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>这篇文章记录查看系统负载相关方法</p>
+</blockquote>
+<h2 id="1-uptime命令"><a href="#1-uptime命令" class="headerlink" title="1. uptime命令"></a>1. <code>uptime</code>命令</h2><p>uptime命令能够打印系统总共运行了多长时间和系统的平均负载。uptime命令可以显示的信息显示依次为：现在时间、系统已经运行了多长时间、目前有多少登陆用户、系统在过去的1分钟、5分钟和15分钟内的平均负载。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uptime</span><br><span class="line"> 10:43:21 up 27 days,  1:46,  1 user,  load average: 0.04, 0.06, 0.06</span><br></pre></td></tr></table></figure>
+
+<p>现在时间，开机27天，，1个用户，负载1、5、15分钟的平均负载</p>
+<h2 id="2-top命令"><a href="#2-top命令" class="headerlink" title="2. top命令"></a>2. <code>top</code>命令</h2><p>top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似于Windows的任务管理器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">top - 10:56:33 up 27 days,  1:59,  1 user,  load average: 0.00, 0.01, 0.05</span><br><span class="line">Tasks: 120 total,   1 running, 119 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.2 us,  0.2 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">KiB Mem :  3881720 total,   937900 free,   646416 used,  2297404 buff/cache</span><br><span class="line">KiB Swap:        0 total,        0 free,        0 used.  2913336 avail Mem</span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</span><br><span class="line">12837 yuekang   20   0  157704   2172   1516 R   0.7  0.1   0:00.11 top</span><br><span class="line"> 1729 root      20   0  848356  20452   3000 S   0.3  0.5  35:57.94 YDService</span><br><span class="line"> 2432 root      20   0  534628  10416   2080 S   0.3  0.3 108:29.12 barad_agent</span><br><span class="line">    1 root      20   0   43344   3748   2500 S   0.0  0.1   2:19.44 systemd</span><br><span class="line">    2 root      20   0       0      0      0 S   0.0  0.0   0:00.37 kthreadd</span><br><span class="line">    3 root      20   0       0      0      0 S   0.0  0.0   0:03.52 ksoftirqd/0</span><br><span class="line">    5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H</span><br><span class="line">    7 root      rt   0       0      0      0 S   0.0  0.0   0:01.28 migration/0</span><br><span class="line">    8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh</span><br><span class="line">    9 root      20   0       0      0      0 S   0.0  0.0  12:47.92 rcu_sched</span><br><span class="line">   10 root      rt   0       0      0      0 S   0.0  0.0   0:10.91 watchdog/0</span><br><span class="line">   11 root      rt   0       0      0      0 S   0.0  0.0   0:09.58 watchdog/1</span><br><span class="line">   12 root      rt   0       0      0      0 S   0.0  0.0   0:01.46 migration/1</span><br><span class="line">   13 root      20   0       0      0      0 S   0.0  0.0   0:03.42 ksoftirqd/1</span><br><span class="line">   15 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H</span><br><span class="line">   17 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kdevtmpfs</span><br><span class="line">   18 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 netns</span><br><span class="line">   19 root      20   0       0      0      0 S   0.0  0.0   0:00.77 khungtaskd</span><br><span class="line">   20 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 writeback</span><br><span class="line">   21 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kintegrity</span><br></pre></td></tr></table></figure>
+
+<p>显示的内容非常全，平均负载等内容都被显示出来了</p>
+<h2 id="3-w命令"><a href="#3-w命令" class="headerlink" title="3. w命令"></a>3. <code>w</code>命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">~w</span><br><span class="line"> 10:57:38 up 27 days,  2:00,  1 user,  load average: 0.00, 0.01, 0.05</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">yk  pts/0    120.57.161.139   10:43    2.00s  0.04s  0.00s w</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>w命令的主要功能其实是显示目前登入系统的用户信息。但是与who不同的是，w命令功能更加强大，w命令还可以显示：当前时间，系统启动到现在的时间，登录用户的数目，系统在最近1分钟、5分钟和15分钟的平均负载。然后是每个用户的各项数据，项目显示顺序如下：登录帐号、终端名称、远 程主机名、登录时间、空闲时间、JCPU、PCPU、当前正在运行进程的命令行。</p>
+<hr>
+<h2 id="机器正常负载范围"><a href="#机器正常负载范围" class="headerlink" title="机器正常负载范围"></a>机器正常负载范围</h2><p>对于机器的Load到底多少算正常的问题，一直都是很有争议的，不同人有着不同的理解。对于单个CPU，有人认为如果Load超过0.7就算是超出正常范围了。也有人认为只要不超过1都没问题。也有人认为，单个CPU的负载在2以下都可以接受。<br>为什么会有这么多不同的理解呢，是因为不同的机器除了CPU影响之外还有其他因素的影响，运行的程序、机器内存、甚至是机房温度等都有可能有区别。<br>比如，有些机器用于定时执行大量的跑批任务，这个时间段内，Load可能会飙的比较高。而其他时间可能会比较低。那么这段飙高时间我们要不要去排查问题呢？<br>我的建议是，最好根据自己机器的实际情况，建立一个指标的基线（如近一个月的平均值），只要日常的load在基线上下范围内不太大都可以接收，如果差距太多可能就要人为介入检查了。<br>但是，总要有个建议的阈值吧，关于这个值。阮一峰在自己的博客中有过以下建议：</p>
+<blockquote>
+<p>当系统负荷持续大于0.7，你必须开始调查了，问题出在哪里，防止情况恶化。</p>
+</blockquote>
+<blockquote>
+<p>当系统负荷持续大于1.0，你必须动手寻找解决办法，把这个值降下来。</p>
+</blockquote>
+<blockquote>
+<p>当系统负荷达到5.0，就表明你的系统有很严重的问题，长时间没有响应，或者接近死机了。你不应该让系统达到这个值。</p>
+</blockquote>
+<p>上指标都是基于单CPU的，但是现在很多电脑都是多核的。所以，对一般的系统来说，是根据cpu数量去判断系统是否已经过载（Over Load）的。如果我们认为0.7算是单核机器负载的安全线的话，那么四核机器的负载最好保持在3(4*0.7 &#x3D; 2.8)以下。<br>还有一点需要提一下，在Load Avg的指标中，有三个值，1分钟系统负荷、5分钟系统负荷，15分钟系统负荷。我们在排查问题的时候也是可以参考这三个值的。<br>一般情况下，1分钟系统负荷表示最近的暂时现象。15分钟系统负荷表示是持续现象，并非暂时问题。如果load15较高，而load1较低，可以认为情况有所好转。反之，情况可能在恶化。</p>
+<hr>
+<h2 id="如何降低负载"><a href="#如何降低负载" class="headerlink" title="如何降低负载"></a>如何降低负载</h2><p>导致负载高的原因可能很复杂，有可能是硬件问题也可能是软件问题。<br>如果是硬件问题，那么说明机器性能确实就不行了，那么解决起来很简单，直接换机器就可以了。<br>前面我们提过，CPU使用、内存使用、IO消耗都可能导致负载高。如果是软件问题，有可能由于Java中的某些线程被长时间占用、大量内存持续占用等导致。建议从以下几个方面排查代码问题：<br>1、是否有内存泄露导致频繁GC 2、是否有死锁发生 3、是否有大字段的读写 4、会不会是数据库操作导致的，排查SQL语句问题。<br>这里还有个建议，如果发现线上机器Load飙高，可以考虑先把堆栈内存dump下来后，进行重启，暂时解决问题，然后再考虑回滚和排查问题。</p>
+<blockquote>
+<p>本文摘自：<a href="https://juejin.im/post/5b0262edf265da0b9b079fa7?utm_source=gold_browser_extension">https://juejin.im/post/5b0262edf265da0b9b079fa7?utm_source=gold_browser_extension</a></p>
+</blockquote>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-05-22</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Linux/" title="Linux">Linux </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Target/" title="Target">Target </a><span>About1530words, 5min6secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/19/2018-02-19-%E7%88%AC%E8%99%AB%E5%B8%B8%E8%A7%81%E8%AF%B7%E6%B1%82%E5%A4%B4%E6%80%BB%E7%BB%93/">爬虫常见请求头总结</a></h3></div><div class="post-content"><div class="card"><p><h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>在我们编写爬虫应用的时候经常会遇到不同浏览器返回不同内容的情况，所以这里收集常见的UserAgent来供以后查阅。</p>
+<h2 id="2-PC端的UserAgent"><a href="#2-PC端的UserAgent" class="headerlink" title="2.PC端的UserAgent"></a>2.PC端的UserAgent</h2><ul>
+<li>safari 5.1 – MAC</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit&#x2F;534.50 (KHTML, like Gecko) Version&#x2F;5.1 Safari&#x2F;534.50</p>
+<ul>
+<li>safari 5.1 – Windows</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit&#x2F;534.50 (KHTML, like Gecko) Version&#x2F;5.1 Safari&#x2F;534.50</p>
+<ul>
+<li>Firefox 38esr</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko&#x2F;20100101 Firefox&#x2F;38.0</p>
+<ul>
+<li>IE 11</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (Windows NT 10.0; WOW64; Trident&#x2F;7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; InfoPath.3; rv:11.0) like Gecko</p>
+<ul>
+<li>IE 9.0</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident&#x2F;5.0;</p>
+<ul>
+<li>IE 8.0</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident&#x2F;4.0)</p>
+<ul>
+<li>IE 7.0</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 6.0)</p>
+<ul>
+<li>IE 6.0</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 6.0; Windows NT 5.1)</p>
+<ul>
+<li>Firefox 4.0.1 – MAC</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko&#x2F;20100101 Firefox&#x2F;4.0.1</p>
+<ul>
+<li>Firefox 4.0.1 – Windows</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (Windows NT 6.1; rv:2.0.1) Gecko&#x2F;20100101 Firefox&#x2F;4.0.1</p>
+<ul>
+<li>Opera 11.11 – MAC</li>
+</ul>
+<p>User-Agent:Opera&#x2F;9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto&#x2F;2.8.131 Version&#x2F;11.11</p>
+<ul>
+<li>Opera 11.11 – Windows</li>
+</ul>
+<p>User-Agent:Opera&#x2F;9.80 (Windows NT 6.1; U; en) Presto&#x2F;2.8.131 Version&#x2F;11.11</p>
+<ul>
+<li>Chrome 17.0 – MAC</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit&#x2F;535.11 (KHTML, like Gecko) Chrome&#x2F;17.0.963.56 Safari&#x2F;535.11</p>
+<ul>
+<li>傲游（Maxthon）</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; Maxthon 2.0)</p>
+<ul>
+<li>腾讯TT</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; TencentTraveler 4.0)</p>
+<ul>
+<li>世界之窗（The World） 2.x</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1)</p>
+<ul>
+<li>世界之窗（The World） 3.x</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; The World)</p>
+<ul>
+<li>搜狗浏览器 1.x</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident&#x2F;4.0; SE 2.X MetaSr 1.0; SE 2.X MetaSr 1.0; .NET CLR 2.0.50727; SE 2.X MetaSr 1.0)</p>
+<ul>
+<li>360浏览器</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)</p>
+<ul>
+<li>Avant</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1; Avant Browser)</p>
+<ul>
+<li>Green Browser</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 7.0; Windows NT 5.1)</p>
+<h2 id="3-移动端UserAgent"><a href="#3-移动端UserAgent" class="headerlink" title="3.移动端UserAgent"></a>3.移动端UserAgent</h2><ul>
+<li>safari iOS 4.33 – iPhone</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit&#x2F;533.17.9 (KHTML, like Gecko) Version&#x2F;5.0.2 Mobile&#x2F;8J2 Safari&#x2F;6533.18.5</p>
+<ul>
+<li>safari iOS 4.33 – iPod Touch</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (iPod; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit&#x2F;533.17.9 (KHTML, like Gecko) Version&#x2F;5.0.2 Mobile&#x2F;8J2 Safari&#x2F;6533.18.5</p>
+<ul>
+<li>safari iOS 4.33 – iPad</li>
+</ul>
+<p>User-Agent:Mozilla&#x2F;5.0 (iPad; U; CPU OS 4_3_3 like Mac OS X; en-us) AppleWebKit&#x2F;533.17.9 (KHTML, like Gecko) Version&#x2F;5.0.2 Mobile&#x2F;8J2 Safari&#x2F;6533.18.5</p>
+<ul>
+<li>Android N1</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (Linux; U; Android 2.3.7; en-us; Nexus One Build&#x2F;FRF91) AppleWebKit&#x2F;533.1 (KHTML, like Gecko) Version&#x2F;4.0 Mobile Safari&#x2F;533.1</p>
+<ul>
+<li>Android QQ浏览器 For android</li>
+</ul>
+<p>User-Agent: MQQBrowser&#x2F;26 Mozilla&#x2F;5.0 (Linux; U; Android 2.3.7; zh-cn; MB200 Build&#x2F;GRJ22; CyanogenMod-7) AppleWebKit&#x2F;533.1 (KHTML, like Gecko) Version&#x2F;4.0 Mobile Safari&#x2F;533.1</p>
+<ul>
+<li>Android Opera Mobile</li>
+</ul>
+<p>User-Agent: Opera&#x2F;9.80 (Android 2.3.4; Linux; Opera Mobi&#x2F;build-1107180945; U; en-GB) Presto&#x2F;2.8.149 Version&#x2F;11.10</p>
+<ul>
+<li>Android Pad Moto Xoom</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (Linux; U; Android 3.0; en-us; Xoom Build&#x2F;HRI39) AppleWebKit&#x2F;534.13 (KHTML, like Gecko) Version&#x2F;4.0 Safari&#x2F;534.13</p>
+<ul>
+<li>BlackBerry</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (BlackBerry; U; BlackBerry 9800; en) AppleWebKit&#x2F;534.1+ (KHTML, like Gecko) Version&#x2F;6.0.0.337 Mobile Safari&#x2F;534.1+</p>
+<ul>
+<li>WebOS HP Touchpad</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (hp-tablet; Linux; hpwOS&#x2F;3.0.0; U; en-US) AppleWebKit&#x2F;534.6 (KHTML, like Gecko) wOSBrowser&#x2F;233.70 Safari&#x2F;534.6 TouchPad&#x2F;1.0</p>
+<ul>
+<li>Nokia N97</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (SymbianOS&#x2F;9.4; Series60&#x2F;5.0 NokiaN97-1&#x2F;20.0.019; Profile&#x2F;MIDP-2.1 Configuration&#x2F;CLDC-1.1) AppleWebKit&#x2F;525 (KHTML, like Gecko) BrowserNG&#x2F;7.1.18124</p>
+<ul>
+<li>Windows Phone Mango</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident&#x2F;5.0; IEMobile&#x2F;9.0; HTC; Titan)</p>
+<ul>
+<li>UC无</li>
+</ul>
+<p>User-Agent: UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
+<ul>
+<li>UC标准</li>
+</ul>
+<p>User-Agent: NOKIA5700&#x2F; UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
+<ul>
+<li>UCOpenwave</li>
+</ul>
+<p>User-Agent: Openwave&#x2F; UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
+<ul>
+<li>UC Opera</li>
+</ul>
+<p>User-Agent: Mozilla&#x2F;4.0 (compatible; MSIE 6.0; ) Opera&#x2F;UCWEB7.0.2.37&#x2F;28&#x2F;999</p>
+<blockquote>
+<p>每日一言：勤学的人，总是感到时间过得太快；懒惰的人，却总是埋怨时间跑得太慢。</p>
+</blockquote>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/Spider/" title="Spider">Spider </a><i class="fa fa-tag"></i><a class="tag" href="/tags/UserAgent/" title="UserAgent">UserAgent </a><span>About864words, 2min52secread</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/3/">Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/5/">Próximo</a></li></ul></div></div></div></div></main-outlet><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>

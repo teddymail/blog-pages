@@ -1,0 +1,437 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>少年当自强</title><meta name="description" content="A Blog Powered By Hexo"><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script>Anatolo.comment.setConfig({})</script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"></div><div class="information"><div class="nav_right_btn"></div><div class="avatar"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3></div><ul class="social-links"></ul></div></div><div class="footer"><div class="p"><i class="fa fa-star"></i></div><div class="by_farbox"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2025/02/27/vue%E5%BC%95%E5%85%A5%E9%98%BF%E9%87%8C%E4%BA%91%E7%BB%83%E9%9B%86%E6%88%90AI%E5%A4%A7%E6%A8%A1%E5%9E%8B/">vue引入阿里云大模型集成AI大模型</a></h3></div><div class="post-content"><div class="card"><p><h1 id="在Vue项目中引入阿里云大模型"><a href="#在Vue项目中引入阿里云大模型" class="headerlink" title="在Vue项目中引入阿里云大模型"></a>在Vue项目中引入阿里云大模型</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>随着人工智能技术的不断发展，越来越多的企业和开发者开始寻求将AI能力集成到自己的应用中。阿里云提供了强大的AI大模型服务，可以帮助开发者快速实现AI功能。本文将详细介绍如何在Vue项目中引入阿里云大模型。</p>
+<h2 id="步骤一：创建Vue项目"><a href="#步骤一：创建Vue项目" class="headerlink" title="步骤一：创建Vue项目"></a>步骤一：创建Vue项目</h2><p>首先，确保您已经安装了Vue CLI。如果没有安装，可以通过以下命令进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @vue/cli</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="步骤二：安装依赖包"><a href="#步骤二：安装依赖包" class="headerlink" title="步骤二：安装依赖包"></a>步骤二：安装依赖包</h2><p>在Vue项目中，我们需要安装一些依赖包，以实现与阿里云大模型集成。我们可以使用以下命令进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install axios vue-router vuex</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li>axios：用于发送HTTP请求</li>
+<li>vue-router：用于实现路由功能</li>
+<li>vuex：用于管理全局状态</li>
+</ul>
+<h2 id="步骤三：申请阿里云大模型服务"><a href="#步骤三：申请阿里云大模型服务" class="headerlink" title="步骤三：申请阿里云大模型服务"></a>步骤三：申请阿里云大模型服务</h2><p>在Vue项目中，我们需要申请阿里云大模型服务，以实现与大模型集成。我们可以使用以下步骤进行申请：</p>
+<ol>
+<li>登录阿里云控制台， 进入阿里云练平台： <a href="https://bailian.console.aliyun.com/">https://bailian.console.aliyun.com/</a></li>
+<li>选择 “模型服务” &gt; “大模型” &gt; “大模型服务”， 并点击“创建服务”按钮</li>
+<li>创建apikey </li>
+<li>在创建服务页面中，选择模型类型为”大模型”， 并点击“创建服务”按钮</li>
+<li>查看调用案例：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import OpenAI from &quot;openai&quot;;</span><br><span class="line"></span><br><span class="line">const openai = new OpenAI(</span><br><span class="line">    &#123;</span><br><span class="line">        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: &quot;sk-xxx&quot;,</span><br><span class="line">        apiKey: process.env.DASHSCOPE_API_KEY,</span><br><span class="line">        baseURL: &quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">async function main() &#123;</span><br><span class="line">    const completion = await openai.chat.completions.create(&#123;</span><br><span class="line">        model: &quot;qwen-plus&quot;,  //此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models</span><br><span class="line">        messages: [</span><br><span class="line">            &#123; role: &quot;system&quot;, content: &quot;You are a helpful assistant.&quot; &#125;,</span><br><span class="line">            &#123; role: &quot;user&quot;, content: &quot;你是谁？&quot; &#125;</span><br><span class="line">        ],</span><br><span class="line">    &#125;);</span><br><span class="line">    console.log(JSON.stringify(completion))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">main();</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="步骤四：配置阿里云大模型服务"><a href="#步骤四：配置阿里云大模型服务" class="headerlink" title="步骤四：配置阿里云大模型服务"></a>步骤四：配置阿里云大模型服务</h2><p>在Vue项目中，我们需要配置阿里云大模型服务，以实现与大模型集成。我们可以使用以下代码进行配置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> openaiClient = <span class="keyword">new</span> <span class="title class_">OpenAI</span>(&#123;</span><br><span class="line">  <span class="attr">apiKey</span>: process.<span class="property">env</span>.<span class="property">VUE_APP_OPENAI_API_KEY</span>, <span class="comment">// 使用环境变量中的API密钥</span></span><br><span class="line">  <span class="attr">baseURL</span>: <span class="string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span>,</span><br><span class="line">  <span class="attr">dangerouslyAllowBrowser</span>: <span class="literal">true</span> <span class="comment">// 允许在浏览器环境中使用OpenAI客户端</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="步骤五：-创建一个模版"><a href="#步骤五：-创建一个模版" class="headerlink" title="步骤五： 创建一个模版"></a>步骤五： 创建一个模版</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;news-detail-container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;news-content&quot;&gt;</span><br><span class="line">      &lt;!-- 新闻标题 --&gt;</span><br><span class="line">      &lt;div class=&quot;news-title&quot;&gt;&#123;&#123; newsDetail.title &#125;&#125;&lt;/div&gt;</span><br><span class="line">      &lt;!-- 新闻内容 --&gt;</span><br><span class="line">      &lt;div class=&quot;news-detail&quot;&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; newsDetail.content &#125;&#125;&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;!-- 查看原文 --&gt;</span><br><span class="line">      &lt;div class=&quot;view-original&quot;&gt;</span><br><span class="line">        &lt;a :href=&quot;newsDetail.link&quot; target=&quot;_blank&quot;&gt;查看原文&lt;/a&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;chat-box&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;chat-display&quot; id=&quot;chatDisplay&quot;&gt;</span><br><span class="line">        &lt;!-- 聊天记录会动态显示在这里 --&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div class=&quot;chat-input-area&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; class=&quot;chat-input&quot; id=&quot;userInput&quot; placeholder=&quot;请输入您的问题...&quot; v-model=&quot;userInput&quot;&gt;</span><br><span class="line">        &lt;button class=&quot;chat-submit&quot; @click=&quot;sendMessage&quot; :disabled=&quot;isSending&quot; :class=&quot;&#123; &#x27;disabled&#x27;: isSending &#125;&quot;&gt;发送&lt;/button&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="步骤六：发送消息核心代码"><a href="#步骤六：发送消息核心代码" class="headerlink" title="步骤六：发送消息核心代码"></a>步骤六：发送消息核心代码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">async sendMessage() &#123;</span><br><span class="line">      if (this.userInput.trim() === &quot;&quot;) return;</span><br><span class="line">      this.isSending = true; // 发送开始时禁用按钮</span><br><span class="line">      const userMessage = &#123;</span><br><span class="line">        role: &#x27;user&#x27;,</span><br><span class="line">        content: this.userInput,</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      // Get the current time</span><br><span class="line">      const time = this.getCurrentTime();</span><br><span class="line"></span><br><span class="line">      // Create the user message element</span><br><span class="line">      const userMessageEle = document.createElement(&quot;div&quot;);</span><br><span class="line">      userMessageEle.className = &quot;chat-message user&quot;;</span><br><span class="line">      if (this.messages.length &gt; 1) &#123;</span><br><span class="line">        userMessageEle.innerHTML = `</span><br><span class="line">&lt;div class=&quot;message-header&quot;&gt;</span><br><span class="line">  &lt;img src=&quot;https://img.icons8.com/ios/50/000000/user-male.png&quot; class=&quot;avatar&quot; alt=&quot;User&quot;&gt;</span><br><span class="line">  &lt;span class=&quot;timestamp&quot;&gt;$&#123;time&#125;&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div class=&quot;message-bubble&quot;&gt;$&#123;this.renderMarkdown(this.userInput)&#125;&lt;/div&gt;</span><br><span class="line">`;</span><br><span class="line">      &#125;</span><br><span class="line">      const chatDisplay = document.getElementById(&quot;chatDisplay&quot;);</span><br><span class="line">      if (chatDisplay) &#123;</span><br><span class="line">        chatDisplay.appendChild(userMessageEle);</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        console.error(&#x27;Element with id &quot;chatDisplay&quot; not found&#x27;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      // Display the loading message</span><br><span class="line">      const loadingMessage = document.createElement(&quot;div&quot;);</span><br><span class="line">      loadingMessage.className = &quot;loading-message&quot;;</span><br><span class="line">      loadingMessage.innerHTML = &quot;DeepSeek 正在处理中...&quot;;</span><br><span class="line">      if (chatDisplay) &#123;</span><br><span class="line">        chatDisplay.appendChild(loadingMessage);</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        console.error(&#x27;Element with id &quot;chatDisplay&quot; not found&#x27;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      this.messages.push(userMessage);</span><br><span class="line">      this.userInput = &#x27;&#x27;; // Clear the input box</span><br><span class="line"></span><br><span class="line">      try &#123;</span><br><span class="line">        const completion = await this.openAi.chat.completions.create(&#123;</span><br><span class="line">          model: &quot;qwen-long&quot;, // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models</span><br><span class="line">          messages: this.messages,</span><br><span class="line">          stream: true,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        // 创建助手消息元素</span><br><span class="line">        const botMessage = document.createElement(&quot;div&quot;);</span><br><span class="line">        botMessage.className = &quot;chat-message bot&quot;;</span><br><span class="line">        botMessage.innerHTML = `</span><br><span class="line">  &lt;div class=&quot;message-header&quot;&gt;</span><br><span class="line">    &lt;img src=&quot;https://img.icons8.com/ios/50/000000/robot.png&quot; class=&quot;avatar&quot; alt=&quot;ChatGPT&quot;&gt;</span><br><span class="line">    &lt;span class=&quot;timestamp&quot;&gt;$&#123;this.getCurrentTime()&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;message-bubble&quot; id=&quot;assistantMessage$&#123;++this.index&#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">`;</span><br><span class="line">        if (chatDisplay) &#123;</span><br><span class="line">          chatDisplay.appendChild(botMessage);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          console.error(&#x27;Element with id &quot;chatDisplay&quot; not found&#x27;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 移除加载消息</span><br><span class="line">        if (chatDisplay &amp;&amp; chatDisplay.contains(loadingMessage)) &#123;</span><br><span class="line">          chatDisplay.removeChild(loadingMessage);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        let assistantMessageContent = &#x27;&#x27;;</span><br><span class="line">        for await (const chunk of completion) &#123;</span><br><span class="line">          const chunkStr = chunk.choices[0].delta.content || &#x27;&#x27;; // 确保正确获取 chunk 内容</span><br><span class="line">          assistantMessageContent += chunkStr;</span><br><span class="line">          let assistantMessageElement = document.getElementById(&quot;assistantMessage&quot;+this.index);</span><br><span class="line">          assistantMessageElement.innerHTML = this.renderMarkdown(assistantMessageContent);</span><br><span class="line">          // 滚动到底部</span><br><span class="line">          if (chatDisplay) &#123;</span><br><span class="line">            chatDisplay.scrollTop = chatDisplay.scrollHeight;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        const assistantMessage = &#123;</span><br><span class="line">          role: &#x27;system&#x27;,</span><br><span class="line">          content: assistantMessageContent,</span><br><span class="line">        &#125;;</span><br><span class="line">        this.messages.push(assistantMessage);</span><br><span class="line">        this.isSending = false; // 发送成功后启用按钮</span><br><span class="line"></span><br><span class="line">      &#125; catch (error) &#123;</span><br><span class="line">        console.error(&#x27;请求失败:&#x27;, error);</span><br><span class="line">        this.responseMessage = &#x27;请求失败，请稍后再试。&#x27;;</span><br><span class="line"></span><br><span class="line">        this.isSending = false; // 发送失败后启用按钮</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>核心内容就是发送消息的核心代码，它涉及到了用户输入的内容、消息的显示、请求的创建、响应的处理等。</p>
+<h2 id="步骤七：因为返回的内容都是markdown格式的需要转换为html"><a href="#步骤七：因为返回的内容都是markdown格式的需要转换为html" class="headerlink" title="步骤七：因为返回的内容都是markdown格式的需要转换为html"></a>步骤七：因为返回的内容都是markdown格式的需要转换为html</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">renderMarkdown(content) &#123;</span><br><span class="line">    return marked(content);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果展示如下：<br><img src="/../../images/250227.png" alt="效果展示"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个项目是一个新闻详情页面，它使用了OpenAI的API来获取新闻内容，并使用AI模型来生成新闻的摘要和评论。它还使用了Markdown来格式化新闻内容，并使用Vue.js来构建前端界面。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-02-27</span><i class="fa fa-tag"></i><a class="tag" href="/tags/ai/" title="ai">ai </a><i class="fa fa-tag"></i><a class="tag" href="/tags/vue/" title="vue">vue </a><span>About1551words, 5min10secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2024/09/11/2024-09-11-mysql%E9%94%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F/">mysql锁系列-行级锁有哪些？</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>学习mysql不得不学习mysql行级锁，目前Innodb是支持行级锁的引擎，下面一起学习一下。</p>
+</blockquote>
+<p>InnoDB 引擎是支持行级锁的，而 MyISAM 引擎并不支持行级锁。</p>
+<p>普通的 select 语句是不会对记录加锁的，因为它属于快照读。如果要在查询时对记录加行锁，可以使用下面这两个方式，这种查询会加锁的语句称为<strong>锁定读</strong>。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>对读取的记录加共享锁</span><br><span class="line"><span class="keyword">select</span> ... lock <span class="keyword">in</span> share mode;</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>对读取的记录加独占锁</span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上面这两条语句必须在一个事务中，因为当<strong>事务提交了，锁就会被释放</strong>，所以在使用这两条语句的时候，要加上 begin、start transaction 或者 set autocommit &#x3D; 0。</p>
+<p>共享锁（S锁）满足读读共享，读写互斥。独占锁（X锁）满足写写互斥、读写互斥。</p>
+<blockquote>
+<p>什么是S锁？</p>
+<p>在数据库管理系统和并发控制中，共享锁（通常称为S锁）是一种用于保证数据一致性的机制。它允许多个事务同时读取数据，但在持有共享锁的事务完成之前，不允许任何事务修改该数据。</p>
+<p>共享锁有如下特点：</p>
+<p><strong>允许共享读取</strong>：多个事务可以同时持有共享锁，从而允许它们同时读取数据。这不会造成数据的不一致，因为没有事务可以在此时修改数据。</p>
+<p><strong>阻止修改</strong>：即使多个事务持有共享锁，也不能有任何事务对数据进行写入或修改，直到所有持有共享锁的事务都释放锁为止。</p>
+<p><strong>互斥</strong>：如果一个事务持有共享锁，则其他事务不能获得排他锁（X锁）。排他锁允许事务对数据进行修改，并会阻止其他事务对该数据进行任何类型的锁操作（包括共享锁和其他排他锁）。</p>
+<p>什么是X锁？</p>
+<p>在数据库管理系统和并发控制中，排他锁（通常称为X锁）是一种更为严格的锁定机制，用于确保数据的完整性和一致性。</p>
+<p><strong>阻止所有其他操作</strong>：持有排他锁的事务可以读取和修改数据。与此同时，其他任何事务都不能对这块数据进行读取或修改操作，直到排他锁被释放。</p>
+<p><strong>互斥性</strong>：在一个事务持有排他锁期间，其他事务不能获得该数据的任何类型的锁，包括共享锁和其他排他锁。这保证了对数据的完全控制，防止了并发操作引起的冲突和数据不一致。</p>
+<p><strong>独占访问</strong>：因为排他锁会阻止其他事务的访问，所以它适用于需要对数据进行写操作的场景，如更新、删除等。</p>
+<p><strong>锁升级</strong>：在某些数据库系统中，当事务需要从共享锁升级为排他锁时，可能会导致锁的升级过程，期间可能需要等待其他持有共享锁的事务完成。</p>
+</blockquote>
+<h1 id="Mysql-行级锁有哪些？"><a href="#Mysql-行级锁有哪些？" class="headerlink" title="Mysql 行级锁有哪些？"></a>Mysql 行级锁有哪些？</h1><h2 id="1-Record-Lock，记录锁，也就是仅仅把一条记录锁上；"><a href="#1-Record-Lock，记录锁，也就是仅仅把一条记录锁上；" class="headerlink" title="1. Record Lock，记录锁，也就是仅仅把一条记录锁上；"></a>1. Record Lock，记录锁，也就是仅仅把一条记录锁上；</h2><p>Record Lock 称为记录锁，锁住的是一条记录。而且记录锁是有 S 锁和 X 锁之分的：</p>
+<p>例如以下语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">&gt;</span> <span class="keyword">begin</span>;</span><br><span class="line">mysql <span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_test <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img.yuekang.org.cn/blog/images/20240912110316.webp" alt="记录锁"><br>事务会对表中主键 id &#x3D; 1 的这条记录加上 X 型的记录锁，如果这时候其他事务对这条记录进行删除或者更新操作， 那么这些操作都会被阻塞。<br>注意，其他事务插入一条 id &#x3D; 1 的新记录并不会被阻塞，而是会报主键冲突的错误，这是因为主键有唯一性的约束。</p>
+<h2 id="2-Gap-Lock，间隙锁，锁定一个范围，但是不包含记录本身；"><a href="#2-Gap-Lock，间隙锁，锁定一个范围，但是不包含记录本身；" class="headerlink" title="2. Gap Lock，间隙锁，锁定一个范围，但是不包含记录本身；"></a>2. Gap Lock，间隙锁，锁定一个范围，但是不包含记录本身；</h2><p>Gap Lock 称为间隙锁，只存在于可重复读隔离级别，目的是为了解决可重复读隔离级别下幻读的现象。</p>
+<p>假设，表中有一个范围 id 为（3，5）间隙锁，那么其他事务就无法插入 id &#x3D; 4 这条记录了，这样就有效的防止幻读现象的发生。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240912110250.webp" alt="间隙锁"></p>
+<h2 id="3-Next-Key-Lock：Record-Lock-Gap-Lock-的组合，锁定一个范围，并且锁定记录本身。"><a href="#3-Next-Key-Lock：Record-Lock-Gap-Lock-的组合，锁定一个范围，并且锁定记录本身。" class="headerlink" title="3. Next-Key Lock：Record Lock + Gap Lock 的组合，锁定一个范围，并且锁定记录本身。"></a>3. Next-Key Lock：Record Lock + Gap Lock 的组合，锁定一个范围，并且锁定记录本身。</h2><p>Next-Key Lock 称为临键锁，是 Record Lock + Gap Lock 的组合，锁定一个范围，并且锁定记录本身。</p>
+<p>假设，表中有一个范围 id 为（3，5] 的 next-key lock，那么其他事务即不能插入 id &#x3D; 4 记录，也不能修改 id &#x3D; 5 这条记录。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240912111440.webp" alt="临键锁"></p>
+<p>所以，next-key lock 即能保护该记录，又能阻止其他事务将新纪录插入到被保护记录前面的间隙中。</p>
+<p><strong>next-keyW lock 是包含间隙锁+记录锁的，如果一个事务获取了 X 型的 next-key lock，那么另外一个事务在获取相同范围的 X 型的 next-key lock 时，是会被阻塞的。</strong></p>
+<hr>
+<p>好了今天只是其中的一小步分暂时整理到这，后续会继续积累总结</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-11</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><i class="fa fa-tag"></i><a class="tag" href="/tags/锁/" title="锁">锁 </a><span>About1426words, 4min45secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2024/09/10/2024-09-10-mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">mysql事务隔离级别</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>使用数据库怎么不会遇到事务呢？ 今天我们就一起总结一下吧<br>只要涉及到金钱转账，强一致性的数据问题  都需要采用事务来去解决</p>
+</blockquote>
+<p>说到事务不得不关注以下几个问题：</p>
+<blockquote>
+<p>事务的特征有哪些？</p>
+</blockquote>
+<ol>
+<li>原子性（Atomicity）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节，而且事务在执行过程中发生错误，会被回滚到事务开始前的状态，就像这个事务从来没有执行过一样，就好比买一件商品，购买成功时，则给商家付了钱，商品到手；购买失败时，则商品在商家手中，消费者的钱也没花出去。</li>
+<li>一致性（Consistency）：是指事务操作前和操作后，数据满足完整性约束，数据库保持一致性状态。比如，用户 A 和用户 B 在银行分别有 800 元和 600 元，总共 1400 元，用户 A 给用户 B 转账 200 元，分为两个步骤，从 A 的账户扣除 200 元和对 B 的账户增加 200 元。一致性就是要求上述步骤操作后，最后的结果是用户 A 还有 600 元，用户 B 有 800 元，总共 1400 元，而不会出现用户 A 扣除了 200 元，但用户 B 未增加的情况（该情况，用户 A 和 B 均为 600 元，总共 1200 元）。</li>
+<li>隔离性（Isolation）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致，因为多个事务同时使用相同的数据时，不会相互干扰，每个事务都有一个完整的数据空间，对其他并发事务是隔离的。也就是说，消费者购买商品这个事务，是不影响其他消费者购买的。</li>
+<li>持久性（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
+</ol>
+<blockquote>
+<p>mysql如何保证?</p>
+</blockquote>
+<ol>
+<li>持久性是通过 redo log （重做日志）来保证的；</li>
+<li>原子性是通过 undo log（回滚日志） 来保证的；</li>
+<li>隔离性是通过 MVCC（多版本并发控制） 或锁机制来保证的；</li>
+<li>一致性则是通过持久性+原子性+隔离性来保证；</li>
+</ol>
+<blockquote>
+<p>为什么事务要有隔离性？</p>
+</blockquote>
+<p>为什么事务要有隔离性，我们就要知道并发事务时会引发什么问题！</p>
+<p>MySQL 服务端是允许多个客户端连接的，这意味着 MySQL 会出现同时处理多个事务的情况。</p>
+<p>那么在同时处理多个事务的时候，就可能出现<br><strong>脏读（dirty read）</strong>、<br><strong>不可重复读（non-repeatable read</strong>、<br><strong>幻读（phantom read)</strong> 的问题。</p>
+<h1 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h1><p>如果一个事务「读到」了另一个「未提交事务修改过的数据」，就意味着发生了「脏读」现象。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910145752.webp" alt="脏读图例"></p>
+<p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取我的余额数据，然后再执行更新操作，<br>如果此时事务 A 还没有提交事务，而此时正好事务 B 也从数据库中读取我的余额数据，<br>那么事务 B 读取到的余额数据是刚才事务 A 更新后的数据，即使没有提交事务。</p>
+<h1 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h1><p>在一个事务内多次读取同一个数据，如果出现前后两次读到的数据不一样的情况，就意味着发生了「不可重复读」现象。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910145805.webp" alt="不可重复读图例"></p>
+<p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取我的余额数据，<br>然后继续执行代码逻辑处理，在这过程中如果事务 B 更新了这条数据，并提交了事务，<br>那么当事务 A 再次读取该数据时，就会发现前后两次读到的数据是不一致的，<br>这种现象就被称为不可重复读。</p>
+<h1 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h1><p>在一个事务内多次查询某个符合查询条件的「记录数量」，如果出现前后两次查询到的记录数量不一样的情况，就意味着发生了「幻读」现象。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910145809.webp" alt="幻读图例"></p>
+<p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库查询账户余额大于 100 万的记录，<br>发现共有 5 条，然后事务 B 也按相同的搜索条件也是查询出了 5 条记录。<br>接下来，事务 A 插入了一条余额超过 100 万的账号，并提交了事务，此时数据库超过 100 万余额的账号个数就变为 6。<br>然后事务 B 再次查询账户余额大于 100 万的记录，此时查询到的记录数量有 6 条，发现和前一次读到的记录数量不一样了，<br>就感觉发生了幻觉一样，这种现象就被称为幻读。</p>
+<blockquote>
+<p>SQL 标准提出了四种隔离级别来规避这些现象，隔离级别越高，性能效率就越低，这四个隔离级别如下：</p>
+</blockquote>
+<ol>
+<li>读未提交（read uncommitted），指一个事务还没提交时，它做的变更就能被其他事务看到；</li>
+<li>读提交（read committed），指一个事务提交之后，它做的变更才能被其他事务看到；</li>
+<li>可重复读（repeatable read），指一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，MySQL InnoDB 引擎的默认隔离级别；</li>
+<li>串行化（serializable ）；会对记录加上读写锁，在多个事务对这条记录进行读写操作时，如果发生了读写冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行；</li>
+</ol>
+<p>按隔离水平高低排序如下：</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910152306.webp" alt="隔离水平高低排序"></p>
+<p>针对不同的隔离级别，并发事务时可能发生的现象也会不同</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910152312.webp" alt="隔离级别对应问题"></p>
+<ol>
+<li>在「读未提交」隔离级别下，可能发生脏读、不可重复读和幻读现象；</li>
+<li>在「读提交」隔离级别下，可能发生不可重复读和幻读现象，但是不可能发生脏读现象；</li>
+<li>在「可重复读」隔离级别下，可能发生幻读现象，但是不可能脏读和不可重复读现象；</li>
+<li>在「串行化」隔离级别下，脏读、不可重复读和幻读现象都不可能会发生。</li>
+</ol>
+<hr>
+<p>至此我们了解了相关隔离级别和不同级别带来的问题等相关知识概念，后面我会继续学习更加深入的概念并总结。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-10</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><i class="fa fa-tag"></i><a class="tag" href="/tags/事务/" title="事务">事务 </a><span>About1878words, 6min15secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2024/09/09/2024-09-09-%E6%80%BB%E7%BB%93%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/">总结索引失效</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>我们都知道针对搜索列需要增加索引来提高我们的查询效率，但是索引并不是万能的。建立了索引，并不意味着任何查询语句都能走索引扫描。<br>一旦不注意就会导致数据库放弃索引采用全表搜索的问题产生，本文就是来总结怎么预防这种情况的？</p>
+</blockquote>
+<h1 id="索引失效有哪些情况？"><a href="#索引失效有哪些情况？" class="headerlink" title="索引失效有哪些情况？"></a>索引失效有哪些情况？</h1><p><img src="https://img.yuekang.org.cn/blog/images/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E6%9C%89%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5.webp" alt="索引失效的情况"></p>
+<h1 id="索引存储结构长什么样？"><a href="#索引存储结构长什么样？" class="headerlink" title="索引存储结构长什么样？"></a>索引存储结构长什么样？</h1><p>MyISAM 索引结构如下：</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/MyISAM%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84.webp" alt="MyISAM索引结构"></p>
+<p>InnoDb 索引结构如下：</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/InnoDb%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84.webp" alt="InnoDb索引结构"></p>
+<h1 id="对索引使用左或者左右模糊匹配"><a href="#对索引使用左或者左右模糊匹配" class="headerlink" title="对索引使用左或者左右模糊匹配"></a>对索引使用左或者左右模糊匹配</h1><p>当我们使用左或者左右模糊匹配的时候，也就是 like %xx 或者 like %xx% 这两种方式都会造成索引失效。</p>
+<p>比如下面的 like 语句，查询 name 后缀为「康」的用户，执行计划中的 type&#x3D;ALL 就代表了全表扫描，而没有走索引。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span> name 字段为二级索引</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_user <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;%康&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.yuekang.org.cn/blog/images/WX20240909-174818%402x.png" alt="放弃索引结果"></p>
+<p>因为索引 B+ 树是按照「索引值」有序排列存储的，只能根据前缀进行比较。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/WX20240909-175316%402x.png" alt="索引值存储"></p>
+<h1 id="对索引使用函数"><a href="#对索引使用函数" class="headerlink" title="对索引使用函数"></a>对索引使用函数</h1><p>一些情况我们希望通过函数来达到我们的搜索目的但是恰恰这种方式会导致索引失效。</p>
+<p>比如下面这条语句查询条件中对 name 字段使用了 LENGTH 函数，执行计划中的 type&#x3D;ALL，代表了全表扫描：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span> name 为二级索引</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_user <span class="keyword">where</span> length(name)<span class="operator">=</span><span class="number">6</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这个时候type就会为All 走的全表扫描</p>
+<blockquote>
+<p>为什么对索引使用函数，就无法走索引了呢？</p>
+</blockquote>
+<p>因为索引保存的是索引字段的原始值，而不是经过函数计算后的值，自然就没办法走索引了。</p>
+<blockquote>
+<p>不过，从 MySQL 8.0 开始，索引特性增加了函数索引，即可以针对函数计算后的值建立一个索引，也就是说该索引的值是函数计算后的值，所以就可以通过扫描索引来查询数据。</p>
+</blockquote>
+<p>举个例子，我通过下面这条语句，对 length(name) 的计算结果建立一个名为 idx_name_length 的索引。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t_user <span class="keyword">add</span> key idx_name_length ((length(name)));</span><br></pre></td></tr></table></figure>
+<p>这样就会针对于函数计算的内容从新建立一个索引这样就可以实现索引的利用了！</p>
+<h1 id="对索引进行表达式计算"><a href="#对索引进行表达式计算" class="headerlink" title="对索引进行表达式计算"></a>对索引进行表达式计算</h1><p>下面这种对表达式进行计算的也是无法走索引的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_user <span class="keyword">where</span> id <span class="operator">+</span> <span class="number">1</span> <span class="operator">=</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>为什么对索引进行表达式计算，就无法走索引了呢？</p>
+</blockquote>
+<p>原因跟对索引使用函数差不多。</p>
+<p>因为索引保存的是索引字段的原始值，而不是 id + 1 表达式计算后的值，所以无法走索引，只能通过把索引字段的取值都取出来，然后依次进行表达式的计算来进行条件判断，因此采用的就是全表扫描的方式。</p>
+<h1 id="对索引隐式类型转换"><a href="#对索引隐式类型转换" class="headerlink" title="对索引隐式类型转换"></a>对索引隐式类型转换</h1><p>如果索引字段是字符串类型，但是在条件查询中，输入的参数是整型的话，你会在执行计划的结果发现这条语句会走全表扫描。</p>
+<p>但是如果索引字段是整型类型，查询条件中的输入参数即使字符串，是不会导致索引失效，还是可以走索引扫描。</p>
+<blockquote>
+<p>为什么第一种会放弃索引？ 第二种就不会了呢？</p>
+</blockquote>
+<p>要明白这个原因，首先我们要知道 MySQL 的数据类型转换规则是什么？就是看 MySQL 是会将字符串转成数字处理，还是将数字转换成字符串处理。</p>
+<ul>
+<li>如果规则是 MySQL 会将自动「字符串」转换成「数字」，就相当于 select 10 &gt; 9，这个就是数字比较，所以结果应该是 1；</li>
+<li>如果规则是 MySQL 会将自动「数字」转换成「字符串」，就相当于 select “10” &gt; “9”，这个是字符串比较，字符串比较大小是逐位从高位到低位逐个比较（按ascii码） ，那么”10”字符串相当于 “1”和“0”字符的组合，所以先是拿 “1” 字符和 “9” 字符比较，因为 “1” 字符比 “9” 字符小，所以结果应该是 0。</li>
+</ul>
+<p><strong>MySQL 在遇到字符串和数字比较的时候，会自动把字符串转为数字，然后再进行比较。</strong></p>
+<h1 id="联合索引非最左匹配"><a href="#联合索引非最左匹配" class="headerlink" title="联合索引非最左匹配"></a>联合索引非最左匹配</h1><p>对主键字段建立的索引叫做聚簇索引，对普通字段建立的索引叫做二级索引。</p>
+<p>那么多个普通字段组合在一起创建的索引就叫做联合索引，也叫组合索引。</p>
+<p>创建联合索引时，我们需要注意创建时的顺序问题，因为联合索引 (a, b, c) 和 (c, b, a) 在使用的时候会存在差别。</p>
+<p>联合索引要能正确使用需要遵循最左匹配原则，也就是按照最左优先的方式进行索引的匹配。</p>
+<p>比如，如果创建了一个 (a, b, c) 联合索引，如果查询条件是以下这几种，就可以匹配上联合索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">where</span> a<span class="operator">=</span><span class="number">1</span>；</span><br><span class="line"><span class="keyword">where</span> a<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> b<span class="operator">=</span><span class="number">2</span> <span class="keyword">and</span> c<span class="operator">=</span><span class="number">3</span>；</span><br><span class="line"><span class="keyword">where</span> a<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> b<span class="operator">=</span><span class="number">2</span>；</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，因为有查询优化器，所以 a 字段在 where 子句的顺序并不重要。</p>
+<p>但是，如果查询条件是以下这几种，因为不符合最左匹配原则，所以就无法匹配上联合索引，联合索引就会失效:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">where</span> b<span class="operator">=</span><span class="number">2</span>；</span><br><span class="line"><span class="keyword">where</span> c<span class="operator">=</span><span class="number">3</span>；</span><br><span class="line"><span class="keyword">where</span> b<span class="operator">=</span><span class="number">2</span> <span class="keyword">and</span> c<span class="operator">=</span><span class="number">3</span>；</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>为什么联合索引不遵循最左匹配原则就会失效？</p>
+</blockquote>
+<p>原因是，在联合索引的情况下，数据是按照索引第一列排序，第一列数据相同时才会按照第二列排序。</p>
+<p>也就是说，如果我们想使用联合索引中尽可能多的列，查询条件中的各个列必须是联合索引中从最左边开始连续的列。如果我们仅仅按照第二列搜索，肯定无法走索引。</p>
+<h1 id="WHERE-子句中的-OR"><a href="#WHERE-子句中的-OR" class="headerlink" title="WHERE 子句中的 OR"></a>WHERE 子句中的 OR</h1><p>在 WHERE 子句中，如果在 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效。</p>
+<p>举个例子，比如下面的查询语句，id 是主键，age 是普通列，从执行计划的结果看，是走了全表扫描。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t_user <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">or</span> age <span class="operator">=</span> <span class="number">18</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样的语句执行以后不会走索引的</p>
+<p>这是因为 OR 的含义就是两个只要满足一个即可，因此只有一个条件列是索引列是没有意义的，只要有条件列不是索引列，就会进行全表扫描。</p>
+<blockquote>
+<p>如何解决？</p>
+</blockquote>
+<p>要解决办法很简单，将 age 字段设置为索引即可。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
+<p>今天介绍了 6 种会发生索引失效的情况：</p>
+<ul>
+<li>当我们使用左或者左右模糊匹配的时候，也就是 like %xx 或者 like %xx%这两种方式都会造成索引失效；</li>
+<li>当我们在查询条件中对索引列使用函数，就会导致索引失效。</li>
+<li>当我们在查询条件中对索引列进行表达式计算，也是无法走索引的。</li>
+<li>MySQL 在遇到字符串和数字比较的时候，会自动把字符串转为数字，然后再进行比较。如果字符串是索引列，而条件语句中的输入参数是数字的话，那么索引列会发生隐式类型转换，由于隐式类型转换是通过 CAST 函数实现的，等同于对索引列使用了函数，所以就会导致索引失效。</li>
+<li>联合索引要能正确使用需要遵循最左匹配原则，也就是按照最左优先的方式进行索引的匹配，否则就会导致索引失效。</li>
+<li>在 WHERE 子句中，如果在 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效。</li>
+</ul>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-09</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><i class="fa fa-tag"></i><a class="tag" href="/tags/索引/" title="索引">索引 </a><span>About2194words, 7min18secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2024/09/08/2024-09-08-explain%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E5%8F%82%E6%95%B0/">explain执行计划参数</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>我们经常会遇到数据库优化相关内容 会使用explain 关键字对执行的sql进行查询计划分析，下面将对一些重要的指标进行记录。</p>
+</blockquote>
+<p>我们会经常使用exlain来进行查询优化分析，<br>例如以下查询:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> kt_course <span class="keyword">order</span> <span class="keyword">by</span> create_time <span class="keyword">desc</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-----------+------+---------------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="operator">|</span> id <span class="operator">|</span> select_type <span class="operator">|</span> <span class="keyword">table</span>     <span class="operator">|</span> type <span class="operator">|</span> possible_keys <span class="operator">|</span> key  <span class="operator">|</span> key_len <span class="operator">|</span> <span class="keyword">ref</span>  <span class="operator">|</span> <span class="keyword">rows</span> <span class="operator">|</span> Extra          <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-----------+------+---------------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="operator">|</span>  <span class="number">1</span> <span class="operator">|</span> SIMPLE      <span class="operator">|</span> kt_course <span class="operator">|</span> <span class="keyword">ALL</span>  <span class="operator">|</span> <span class="keyword">NULL</span>          <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>    <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span>   <span class="number">29</span> <span class="operator">|</span> <span class="keyword">Using</span> filesort <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">----+-------------+-----------+------+---------------+------+---------+------+------+----------------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到有很多的参数</p>
+<ul>
+<li>select_type 查询类型</li>
+</ul>
+<ol>
+<li>SIMPLE：简单的SELECT，不实用UNION或者子查询。</li>
+<li>PRIMARY：最外层SELECT。</li>
+<li>UNION：第二层，在SELECT之后使用了UNION。</li>
+<li>DEPENDENT UNION：UNION语句中的第二个SELECT，依赖于外部子查询。</li>
+<li>UNION RESULT：UNION的结果。</li>
+<li>SUBQUERY：子查询中的第一个SELECT。</li>
+<li>DEPENDENT SUBQUERY：子查询中的第一个SELECT，取决于外面的查询。</li>
+<li>DERIVED：导出表的SELECT（FROM子句的子查询）</li>
+</ol>
+<ul>
+<li>table 查询的那张表</li>
+</ul>
+<p>显示这一行的数据是关于哪张表的</p>
+<ul>
+<li>type 查询类型</li>
+</ul>
+<p>这是重要的列，显示连接使用了何种类型。<br>从最好到最差的连接类型：const、eq_reg、ref、range、index和ALL</p>
+<p>Type：告诉我们对表使用的访问方式，主要包含如下集中类型。</p>
+<ol>
+<li>all：全表扫描。</li>
+<li>const：读常量，最多只会有一条记录匹配，由于是常量，实际上只须要读一次。</li>
+<li>eq_ref：最多只会有一条匹配结果，一般是通过主键或唯一键索引来访问。</li>
+<li>fulltext：进行全文索引检索。</li>
+<li>index：全索引扫描。</li>
+<li>index_merge：查询中同时使用两个（或更多）索引，然后对索引结果进行合并（merge），再读取表数据。</li>
+<li>index_subquery：子查询中的返回结果字段组合是一个索引（或索引组合），但不是一个主键或唯一索引。</li>
+<li>rang：索引范围扫描。</li>
+<li>ref：Join语句中被驱动表索引引用的查询。</li>
+<li>ref_or_null：与ref的唯一区别就是在使用索引引用的查询之外再增加一个空值的查询。</li>
+<li>system：系统表，表中只有一行数据；</li>
+<li>unique_subquery：子查询中的返回结果字段组合是主键或唯一约束。</li>
+</ol>
+<ul>
+<li>possible_keys 可能用到的索引</li>
+</ul>
+<p>显示可能应用在这张表中的索引。如果为空，没有可能的索引。可以为相关的域从WHERE语句中选择一个合适的语句</p>
+<ul>
+<li>key 使用的索引</li>
+</ul>
+<p>实际使用的索引。如果为NULL，则没有使用索引。很少的情况下，MYSQL会选择优化不足的索引。这种情况下，可以在SELECT语句中使用USE INDEX（indexname）来强制使用一个索引或者用IGNORE INDEX（indexname）来强制MYSQL忽略索引</p>
+<ul>
+<li>key_len</li>
+</ul>
+<p>使用的索引的长度。在不损失精确性的情况下，长度越短越好</p>
+<ul>
+<li><p>ref<br>显示索引的哪一列被使用了，如果可能的话，是一个常数</p>
+</li>
+<li><p>rows</p>
+</li>
+</ul>
+<p>MYSQL认为必须检查的用来返回请求数据的行数</p>
+<ul>
+<li>Extra</li>
+</ul>
+<ol>
+<li>Extra：查询中每一步实现的额外细节信息，主要会是以下内容。</li>
+<li>Distinct：查找distinct 值，当mysql找到了第一条匹配的结果时，将停止该值的查询，转为后面其他值查询。</li>
+<li>Full scan on NULL key：子查询中的一种优化方式，主要在遇到无法通过索引访问null值的使用。</li>
+<li>Range checked for each record (index map: N)：通过 MySQL 官方手册的描述，当 MySQL Query Optimizer 没有发现好的可以使用的索引时，如果发现前面表的列值已知，部分索引可以使用。对前面表的每个行组合，MySQL检查是否可以使用range或 index_merge访问方法来索取行。</li>
+<li>SELECT tables optimized away：当我们使用某些聚合函数来访问存在索引的某个字段时，MySQL Query Optimizer 会通过索引直接一次定位到所需的数据行完成整个查询。当然，前提是在 Query 中不能有 GROUP BY 操作。如使用MIN()或MAX()的时候。</li>
+<li>Using filesort：当Query 中包含 ORDER BY 操作，而且无法利用索引完成排序操作的时候，MySQL Query Optimizer 不得不选择相应的排序算法来实现。</li>
+<li>Using index：所需数据只需在 Index 即可全部获得，不须要再到表中取数据。</li>
+<li>Using index for group-by：数据访问和 Using index 一样，所需数据只须要读取索引，当Query 中使用GROUP BY或DISTINCT 子句时，如果分组字段也在索引中，Extra中的信息就会是 Using index for group-by。</li>
+<li>Using temporary：当 MySQL 在某些操作中必须使用临时表时，在 Extra 信息中就会出现Using temporary 。主要常见于 GROUP BY 和 ORDER BY 等操作中。</li>
+<li>Using where：如果不读取表的所有数据，或不是仅仅通过索引就可以获取所有需要的数据，则会出现 Using where 信息。</li>
+<li>Using where with pushed condition：这是一个仅仅在 NDBCluster存储引擎中才会出现的信息，而且还须要通过打开 Condition Pushdown 优化功能才可能被使用。控制参数为 engine_condition_pushdown 。</li>
+<li>Impossible WHERE noticed after reading const tables：MySQL Query Optimizer 通过收集到的统计信息判断出不可能存在结果。</li>
+<li>No tables：Query 语句中使用 FROM DUAL或不包含任何 FROM子句。</li>
+<li>Not exists：在某些左连接中，MySQL Query Optimizer通过改变原有 Query 的组成而使用的优化方法，可以部分减少数据访问次数。</li>
+</ol>
+<hr>
+<p>非常感谢你得阅读！</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/面试/" title="面试">面试 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><span>About1542words, 5min8secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2024/09/06/2024-09-06-MySQL%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84%E4%BD%9C%E7%94%A8/">MySQL各模块的作用</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>我们要学好mysql必须要了解其中都有哪些模块，并且对模块功能要非常清楚，举一反三知道其中原理。</p>
+</blockquote>
+<p>下面是mysql的模块图<br><img src="https://img.yuekang.org.cn/blog/images/WX20240906-141349%402x.png"></p>
+<p>可以看到， MySQL 的架构共分为两层：Server 层和存储引擎层，</p>
+<p>Server 层负责建立连接、分析和执行 SQL。MySQL 大多数的核心功能模块都在这实现,<br>主要包括连接器，查询缓存、解析器、预处理器、优化器、执行器等。<br>另外，所有的内置函数（如日期、时间、数学和加密函数等）和所有跨存储引擎的功能（如存储过程、触发器、视图等。）<br>都在 Server 层实现。</p>
+<p>存储引擎层负责数据的存储和提取。支持 InnoDB、MyISAM、Memory 等多个存储引擎，<br>不同的存储引擎共用一个 Server 层。现在最常用的存储引擎是 InnoDB，从 MySQL 5.5 版本开始，<br>InnoDB 成为了 MySQL 的默认存储引擎。我们常说的索引数据结构，就是由存储引擎层实现的，<br>不同的存储引擎支持的索引类型也不相同，比如 InnoDB 支持索引类型是 B+树 ，且是默认使用，<br>也就是说在数据表中创建的主键索引和二级索引默认使用的是 B+ 树索引。</p>
+<h1 id="1-连接器"><a href="#1-连接器" class="headerlink" title="1. 连接器"></a>1. 连接器</h1><hr>
+<p>负责建立连接，权限验证</p>
+<h1 id="2-查询缓存"><a href="#2-查询缓存" class="headerlink" title="2.查询缓存"></a>2.查询缓存</h1><hr>
+<p>负责缓存查询出来的数据，通过查询语句作为key来进行match 一旦多次查询相同内容将会立刻返回内容。8.0以后就删除了这个功能，因为很鸡肋，频繁更新表都会导致缓存被清空。</p>
+<h1 id="3-解释器"><a href="#3-解释器" class="headerlink" title="3.解释器"></a>3.解释器</h1><hr>
+<p>负责对查询语句进行 词法分析和语法分析  </p>
+<ul>
+<li><p>词法分析</p>
+<ul>
+<li>根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法，如果没问题就会构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等等。</li>
+</ul>
+</li>
+<li><p>语法分析</p>
+<ul>
+<li>根据词法分析的结果，语法解析器会根据语法规则，判断你输入的这个 SQL 语句是否满足 MySQL 语法，如果没问题就会构建出 SQL 语法树，这样方便后面模块获取 SQL 类型、表名、字段名、 where 条件等等。</li>
+</ul>
+</li>
+</ul>
+<p>如果这里分析出来语法不对就会报错</p>
+<blockquote>
+<p>但是注意，表不存在或者字段不存在，并不是在解析器里做的，《MySQL 45 讲》说是在解析器做的，但是经过我和朋友看 MySQL 源码（5.7和8.0）得出结论是解析器只负责检查语法和构建语法树，但是不会去查表或者字段存不存在。</p>
+</blockquote>
+<h1 id="4-预处理器"><a href="#4-预处理器" class="headerlink" title="4. 预处理器"></a>4. 预处理器</h1><hr>
+<p>经过解析器后，接着就要进入执行 SQL 查询语句的流程了，每条SELECT 查询语句流程主要可以分为下面这三个阶段：</p>
+<ul>
+<li>prepare 阶段，也就是预处理阶段；</li>
+<li>optimize 阶段，也就是优化阶段；</li>
+<li>execute 阶段，也就是执行阶段；</li>
+</ul>
+<h2 id="预处理阶段"><a href="#预处理阶段" class="headerlink" title="预处理阶段"></a>预处理阶段</h2><p>  用来判断表是否存在，表字段是否存在检查</p>
+<h1 id="5-优化器"><a href="#5-优化器" class="headerlink" title="5.优化器"></a>5.优化器</h1><hr>
+<blockquote>
+<p>经过预处理阶段后，还需要为 SQL 查询语句先制定一个执行计划，这个工作交由「优化器」来完成的。</p>
+</blockquote>
+<p>优化器主要负责将 SQL 查询语句的执行方案确定下来，比如在表里面有多个索引的时候，优化器会基于查询成本的考虑，来决定选择使用哪个索引。</p>
+<p>当然，我们本次的查询语句（select * from product where id &#x3D; 1）很简单，就是选择使用主键索引。</p>
+<p>要想知道优化器选择了哪个索引，我们可以在查询语句最前面加个 explain 命令，这样就会输出这条 SQL 语句的执行计划，然后执行计划中的 key 就表示执行过程中使用了哪个索引，比如下图的 key 为 PRIMARY 就是使用了主键索引。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/2024-09-06.webp" alt="执行计划"></p>
+<h1 id="6-执行器"><a href="#6-执行器" class="headerlink" title="6.执行器"></a>6.执行器</h1><hr>
+<p>经历完优化器后，就确定了执行方案，接下来 MySQL 就真正开始执行语句了，<br>这个工作是由「执行器」完成的。在执行的过程中，执行器就会和存储引擎交互了，<br>交互是以记录为单位的。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-06</span><i class="fa fa-tag"></i><a class="tag" href="/tags/面试题/" title="面试题">面试题 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><span>About1210words, 4min2secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2024/09/04/2024-09-04-%E4%B8%BAHexo-%E7%9A%84-md-%E6%96%87%E4%BB%B6%E7%BB%9F%E4%B8%80%E9%87%8D%E5%91%BD%E5%90%8D/">为Hexo 的 md 文件统一重命名</a></h3></div><div class="post-content"><div class="card"><p><p>换用 Hexo 之后发现 _post 目录里面乱乱的，比如从 WordPress 中导入的中文标题文章的文件名会变成乱乱的字符串，看着很难受。所以搞了个改名的脚本来重命名文件。</p>
+<p>重命名之后的格式为 PO文日期.文章标题.md，如果文件内有注明 urlname 的话就是 PO文日期.文章标题.urlname.md。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">保存系统默认的 IFS</span></span><br><span class="line">SAVEIFS=$IFS</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">更改 IFS 为换行（用于处理文件名含有空格的文件</span></span><br><span class="line">IFS=$&#x27;\n&#x27;</span><br><span class="line"></span><br><span class="line">for filename in *.md; do</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">标题（不想替换空格的话就删除“s/ /_/g”。</span></span><br><span class="line">  title=$(grep &quot;title: &quot; $filename | head -1 | sed -e &#x27;s/title: //g; s#/##g;s/ /_/g&#x27;)</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">发文日期</span></span><br><span class="line">  date=$(grep &quot;date: &quot; $filename | awk &#x27;NR==1&#123;printf $2&#125;&#x27; )</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">urlname</span></span><br><span class="line">  link=$(grep &quot;urlname: &quot; $filename | head -1 | sed &#x27;s/urlname: //g&#x27; )</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">新文件名</span></span><br><span class="line">  if [ -z &quot;$link&quot; ]; then</span><br><span class="line">    newname=&quot;$date.$title.md&quot;</span><br><span class="line">    else</span><br><span class="line">    newname=&quot;$date.$title.$link.md&quot;</span><br><span class="line">  fi</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">过滤掉名字正确的</span></span><br><span class="line">  if [ &quot;$filename&quot; != &quot;$newname&quot; ]; then</span><br><span class="line">     #开始改名</span><br><span class="line">     echo &quot;Rename $filename to $newname&quot;</span><br><span class="line">     mv $filename $newname</span><br><span class="line">  fi</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">echo done!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>展示效果:</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/2024-09-04%2014-01-13.png" alt="展示效果"></p>
+<p>这样就舒服好多了。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/shell/" title="shell">shell </a><i class="fa fa-tag"></i><a class="tag" href="/tags/hexo/" title="hexo">hexo </a><i class="fa fa-tag"></i><a class="tag" href="/tags/rename/" title="rename">rename </a><span>About287words, 57secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2020/01/04/2020-01-04-%E6%90%AD%E5%BB%BAES%E6%9C%8D%E5%8A%A1/">搭建ES服务</a></h3></div><div class="post-content"><div class="card"><p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Es</p>
+<h1 id="ES-搭建"><a href="#ES-搭建" class="headerlink" title="ES 搭建"></a>ES 搭建</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//添加官方源</span><br><span class="line">vi /etc/yum.repos.d/elasticsearch.repo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//安装ES服务</span><br><span class="line">yum install --enablerepo=elasticsearch elasticsearch</span><br><span class="line"></span><br><span class="line">//服务启停 service方式</span><br><span class="line">sudo chkconfig --add elasticsearch</span><br><span class="line">sudo -i service elasticsearch start</span><br><span class="line">sudo -i service elasticsearch stop</span><br><span class="line"></span><br><span class="line">//systemctl方式</span><br><span class="line">sudo /bin/systemctl daemon-reload</span><br><span class="line">sudo /bin/systemctl enable elasticsearch.service</span><br><span class="line">sudo systemctl start elasticsearch.service</span><br><span class="line">sudo systemctl stop elasticsearch.service</span><br></pre></td></tr></table></figure>
+
+<h1 id="Kibana-搭建"><a href="#Kibana-搭建" class="headerlink" title="Kibana 搭建"></a>Kibana 搭建</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/yum.repos.d/kibana.repo</span><br><span class="line">[kibana-7.x]</span><br><span class="line">name=Kibana repository for 7.x packages</span><br><span class="line">baseurl=https://artifacts.elastic.co/packages/7.x/yum</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch</span><br><span class="line">enabled=1</span><br><span class="line">autorefresh=1</span><br><span class="line">type=rpm-md</span><br><span class="line"></span><br><span class="line">//添加服务</span><br><span class="line">sudo chkconfig --add kibana</span><br><span class="line">sudo -i service kibana start</span><br><span class="line">sudo -i service kibana stop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//systemd管理</span><br><span class="line">sudo /bin/systemctl daemon-reload</span><br><span class="line">sudo /bin/systemctl enable kibana.service</span><br><span class="line">sudo systemctl start kibana.service</span><br><span class="line">sudo systemctl stop kibana.service</span><br></pre></td></tr></table></figure></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-01-04</span><i class="fa fa-tag"></i><a class="tag" href="/tags/ES/" title="ES">ES </a><i class="fa fa-tag"></i><a class="tag" href="/tags/服务/" title="服务">服务 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/搜索服务/" title="搜索服务">搜索服务 </a><span>About142words, 28secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/04/08/2019-04-08-k8s%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F%E6%95%B4%E7%90%86/">k8s部署方式整理</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>是不会方式多种多样</p>
+</blockquote>
+<h2 id="MicroK8s部署"><a href="#MicroK8s部署" class="headerlink" title="MicroK8s部署"></a>MicroK8s部署</h2><blockquote>
+<p>MicroK8s适合单机测试环境，友好的操作体验可以很轻松的上手k8s集群控制和开发。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// MicroK8s 依赖 snapd工具需要第一个安装</span><br><span class="line">sudo yum install epel-release</span><br><span class="line">sudo yum install snapd</span><br><span class="line">sudo systemctl enable --now snapd.socket</span><br><span class="line">sudo ln -s /var/lib/snapd/snap /snap</span><br><span class="line"></span><br><span class="line">//通过snap工具安装microk8s</span><br><span class="line">sudo snap install microk8s --classic</span><br><span class="line">snap info microk8s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 启动集群</span><br><span class="line">sudo microk8s.start</span><br><span class="line">//停止集群</span><br><span class="line">sudo microk8s.stop</span><br><span class="line"></span><br><span class="line">//查看所有容器启动情况</span><br><span class="line">microk8s.kubectl get all --all-namespaces                                               </span><br><span class="line">NAMESPACE     NAME                                                  READY   STATUS              RESTARTS   AGE</span><br><span class="line">default       pod/nginx-7db9fccd9b-7klhs                            0/1     ContainerCreating   0          76m</span><br><span class="line">default       pod/nginx-7db9fccd9b-8zjwg                            0/1     ContainerCreating   0          7</span><br><span class="line"></span><br><span class="line">//查看当前集群的编号和版本</span><br><span class="line">[root@k8smaster ~]# microk8s.kubectl get no</span><br><span class="line">NAME        STATUS   ROLES    AGE    VERSION</span><br><span class="line">k8smaster   Ready    &lt;none&gt;   109m   v1.14.0</span><br><span class="line"></span><br><span class="line">//监控当前所有容器工作状态</span><br><span class="line">watch microk8s.kubectl get all --all-namespaces</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.yuekang.org.cn/blog/images/2019040805.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//删除容器</span><br><span class="line">microk8s.kubectl delete deployment/nginx</span><br><span class="line">deployment.extensions &quot;nginx&quot; deleted</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="以安装包的方式直接搭建"><a href="#以安装包的方式直接搭建" class="headerlink" title="以安装包的方式直接搭建"></a>以安装包的方式直接搭建</h2><h3 id="etcd服务"><a href="#etcd服务" class="headerlink" title="etcd服务"></a>etcd服务</h3><blockquote>
+<p>etcd 服务是作为k8s集群的主数据库，用来存放所有的容器状态的主数据库。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// 安装etcd</span><br><span class="line">yum install etcd</span><br><span class="line"></span><br><span class="line">// etcd配置文件, 默认监听在2379号端口</span><br><span class="line">vi /etc/etcd/etcd.conf</span><br><span class="line">//指定数据存放位置</span><br><span class="line">ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;</span><br><span class="line">//指定该节点名称</span><br><span class="line">ETCD_NAME=&quot;master&quot;</span><br><span class="line">//指定客户端监听url，对外提供服务的地址</span><br><span class="line">ETCD_LISTEN_CLIENT_URLS=&quot;http://localhost:2379&quot;</span><br><span class="line">//对外公告该客户端监听地址</span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS=&quot;http://localhost:2379&quot;</span><br><span class="line"></span><br><span class="line">// 启动服务</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line">// 启动服务</span><br><span class="line">systemctl enable etcd.service</span><br><span class="line"></span><br><span class="line">systemctl start etcd.service</span><br><span class="line"></span><br><span class="line">//验证etcd健康状态</span><br><span class="line">etcdctl -C http://localhost:2379 cluster-health</span><br><span class="line">member 8e9e05c52164694d is healthy: got healthy result from http://localhost:2379</span><br><span class="line">cluster is healthy</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="k8s-Mster-相关服务安装"><a href="#k8s-Mster-相关服务安装" class="headerlink" title="k8s Mster 相关服务安装"></a>k8s Mster 相关服务安装</h3><blockquote>
+<p>接下来将是我们非常重要的服务，k8s它有三个主要的服务：</p>
+<ol>
+<li>kube-apiserver服务</li>
+<li>kube-kube-controller-manager服务,依赖apiserver</li>
+<li>kube-scheduler服务,依赖apiserver</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">//三个服务都已经集成到kubernetes中了</span><br><span class="line">yum install kubernetes -y</span><br><span class="line"></span><br><span class="line">//配置kube-apiserver</span><br><span class="line">vi /etc/kubernetes/apiserver</span><br><span class="line">KUBE_API_ADDRESS=&quot;--insecure-bind-address=0.0.0.0&quot; </span><br><span class="line">KUBE_ETCD_SERVERS=&quot;--etcd-servers=http://127.0.0.1:2379&quot; </span><br><span class="line">KUBE_SERVICE_ADDRESSES=&quot;--service-cluster-ip-range=10.254.0.0/16&quot;</span><br><span class="line">KUBE_ADMISSION_CONTROL=&quot;--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota&quot;</span><br><span class="line">KUBE_API_ARGS=&quot;</span><br><span class="line">--insecure-port=8000</span><br><span class="line">--service-cluster-ip-range=169.169.0.0/16</span><br><span class="line">--service-node-port-range=1-65535</span><br><span class="line">-logtostderr=false</span><br><span class="line">--log-dir=/var/log/kubernetes</span><br><span class="line">-v=2</span><br><span class="line">&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//配置kube-controller-manager</span><br><span class="line">vi /etc/kubernetes/controller-manager</span><br><span class="line">KUBE_CONTROLLER_MANAGER_ARGS=&quot;</span><br><span class="line">--master=http://127.0.0.1:8000</span><br><span class="line">--logtostderr=false</span><br><span class="line">--v=2</span><br><span class="line">&quot;         </span><br><span class="line"></span><br><span class="line">//配置kube-scheduler</span><br><span class="line">vi /etc/kubernetes/scheduler</span><br><span class="line">KUBE_SCHEDULER_ARGS=&quot;</span><br><span class="line">-master=http://127.0.0.1:8000</span><br><span class="line">--logtostderr=false</span><br><span class="line">--log-dir=/var/log/kubernetes</span><br><span class="line">--v=2</span><br><span class="line">&quot; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//k8s配置config</span><br><span class="line">vi /etc/kubernetes/config</span><br><span class="line">KUBE_LOGTOSTDERR=&quot;--logtostderr=true&quot; </span><br><span class="line">KUBE_LOG_LEVEL=&quot;--v=0&quot;</span><br><span class="line">KUBE_ALLOW_PRIV=&quot;--allow-privileged=false&quot;</span><br><span class="line">KUBE_MASTER=&quot;--master=http://127.0.0.1:8000&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//启动k8s各个组件</span><br><span class="line">systemctl start kube-apiserver.service</span><br><span class="line">systemctl start kube-controller-manager.service</span><br><span class="line">systemctl start kube-scheduler.service</span><br><span class="line"></span><br><span class="line">//加入到系统服务中</span><br><span class="line">systemctl enable kube-apiserver.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/kube-apiserver.service to /usr/lib/systemd/system/kube-apiserver.service.</span><br><span class="line"></span><br><span class="line">systemctl enable kube-controller-manager.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/kube-controller-manager.service to /usr/lib/systemd/system/kube-controller-manager.service.</span><br><span class="line"></span><br><span class="line">systemctl enable kube-scheduler.service</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/kube-scheduler.service to /usr/lib/systemd/system/kube-scheduler.service.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="k8s-Worker服务搭建"><a href="#k8s-Worker服务搭建" class="headerlink" title="k8s Worker服务搭建"></a>k8s Worker服务搭建</h3><blockquote>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//安装服务</span><br><span class="line">yum install kubernetes -y</span><br><span class="line"></span><br><span class="line">//k8s配置</span><br><span class="line">vi /etc/kubernetes/config</span><br><span class="line">//指定master地址位置</span><br><span class="line">KUBE_MASTER=&quot;--master=http://127.0.0.1:8000&quot;</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">systemctl enable kubelet.service</span><br><span class="line">systemctl enable kube-proxy.service</span><br><span class="line"></span><br><span class="line">//配置master节点地址</span><br><span class="line">export KUBERNETES_MASTER=http://centos-master:8080</span><br></pre></td></tr></table></figure></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/K8S/" title="K8S">K8S </a><span>About794words, 2min38secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2019/04/08/2019-04-08-k8s%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD%E5%92%8C%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93/">k8s关键术语和概念总结</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
+<p>Kubernetes是一个全新的基于容器技术的分布式架构领先方案。这个方案虽然很新，但谷歌已经稳定运行了十几年以来大规模应用容器化技术的积累和升华的重要成功。运用K8s我们不仅能节省不少于30%的开发成本，同时可以将更多地经历放到业务本身，我们不必再费心于服务监控和故障处理模块的开发和开发复杂的服务治理框架，一切的一切它都为我们做好了。</p>
+</blockquote>
+<h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>为了更好地了解k8s我先从整体架构开始，了解一件事情先要总览，然后逐步了解每个细节的内容，逐步应用容器编排技术。</p>
+<p><img src="http://img.yuekang.org.cn/blog/images/2019040801.png" alt="k8s架构图"></p>
+<p>上面是k8s设计架构图，从图中可以看到<br>Kubernetes主要由以下几个核心组件组成：</p>
+<ul>
+<li>etcd保存了整个集群的状态</li>
+<li>apiserver提供了资源操作的唯一入口，并提供认证、授权、访问控制、API注册和发现等机制</li>
+<li>controller manager负责维护集群的状态，比如故障检测、自动扩展、滚动更新等</li>
+<li>scheduler负责资源的调度，按照预定的调度策略将Pod调度到相应的机器上</li>
+<li>kubelet负责维护容器的生命周期，同时也负责Volume（CVI）和网络（CNI）的管理</li>
+<li>Container runtime负责镜像管理以及Pod和容器的真正运行（CRI）</li>
+<li>kube-proxy负责为Service提供cluster内部的服务发现和负载均衡</li>
+</ul>
+<p>官方还推荐一些其他组件：</p>
+<ul>
+<li>kube-dns负责为整个集群提供DNS服务</li>
+<li>Ingress Controller为服务提供外网入口</li>
+<li>Heapster提供资源监控</li>
+<li>Dashboard提供GUI</li>
+<li>Federation提供跨可用区的集群</li>
+<li>Fluentd-elasticsearch提供集群日志采集、存储与查询</li>
+</ul>
+<h2 id="K8s分层架构"><a href="#K8s分层架构" class="headerlink" title="K8s分层架构"></a>K8s分层架构</h2><p><img src="http://img.yuekang.org.cn/blog/images/2019040804.jpg" alt="k8s总体结构"></p>
+<ul>
+<li>核心层：Kubernetes最核心的功能，对外提供API构建高层的应用，对内提供插件式应用执行环境</li>
+<li>应用层：部署（无状态应用、有状态应用、批处理任务、集群应用等）和路由（服务发现、DNS解析等）</li>
+<li>管理层：系统度量（如基础设施、容器和网络的度量），自动化（如自动扩展、动态Provision等）以及策略管理（RBAC、Quota、PSP、NetworkPolicy等）</li>
+<li>接口层：kubectl命令行工具、客户端SDK以及集群联邦</li>
+<li>生态系统：在接口层之上的庞大容器集群管理调度的生态系统，可以划分为两个范畴</li>
+<li>Kubernetes外部：日志、监控、配置管理、CI、CD、Workflow、FaaS、OTS应用、ChatOps等</li>
+<li>Kubernetes内部：CRI、CNI、CVI、镜像仓库、Cloud Provider、集群自身的配置和管理等</li>
+</ul>
+<h2 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h2><p><img src="http://img.yuekang.org.cn/blog/images/2019040802.png" alt="Master结构2019图"></p>
+<p>Master是集群控制节点，每个K8s集群需要有一个Master节点来负责整个集群的管理和控制，基本上k8s所有的控制命令都是发给它的，它来负责具体的执行过程，Master节点通常会占据一个独立的x86服务器（或者一个虚拟机），正因为如此重要所有它挂掉了整个集群的所有控制命令都将失效，所以他就是军队的司令部大脑，正因为如此重要他就是集群的单点了，测试环境我们可以设置一个Master主机，生产环境我们一般会设置多个Master来达到高可用的目的，阿里云容器服务k8s已经为我们做到了高可用，它默认创建集群服务会为你创建三台主机来运行Mster，它的运行模式也是采用选举算法，这也就是为什么Master数量是偶数的，所以达到高可用至少3台主机以上的奇数个主机数量才能达到高可用的目的。</p>
+<p>Mster运行着一下一组关键进程：</p>
+<ul>
+<li>kube-apiserver: 提供Rest接口的关键服务进程，是真个k8s里所有资源的增删改查操作的唯一入口，也是集群控制的入口进程。</li>
+<li>kube-controller-manager： k8s所有资源对象的自动化控制中心，可以理解为资源对象的“内务大总管”。</li>
+<li>kube-scheduler: 负责资源调度（Pod）的进程，相当于地铁的“调度中心”。</li>
+<li>etcd: 主节点一般都会启动这个服务，主要提供所有资源对象数据都存在在里面，如果其中一台机pod节点发生故障或者未达到预期目标，k8s会读取etcd里面的数据进行重新资源的部署。</li>
+</ul>
+<h2 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h2><p><img src="http://img.yuekang.org.cn/blog/images/2019040803.png" alt="Node结构图"></p>
+<p>除了Master, k8s集群里面其他机器一律称作为Node节点，Node节点和主节点一样可以使一台物理主机也可以是一台虚拟机。Node节点是k8s集群中的工作负载节点，每一台Node都会被Master分到一部分工作负载（docker容器），当其中某个Node节点宕机时，其上的工作负载还会被Master自动转移到其他节点上去。</p>
+<p>每个Node节点上都运行着以下一组关键进程。</p>
+<ul>
+<li>kubelet: 负责Pod对应的容器的创建、启停等任务，同时与Master节点密切协作，实现集群管理的基本功能。</li>
+<li>kube-proxy:实现Kubernetes Service的通信与负载均衡机制的重要组件。</li>
+<li>Docker Engine（docker）： Docker引擎负责本机的容器创建和管理工作</li>
+</ul>
+<p>Node节点可以在运行期间动态添加到K8s急群众，前提是这个节点上已经正确钱庄、配置和启动了上述关键进程。一旦Node被纳入集群管理范围，kubelet会定时想Master节点汇报自身情况，这样Master可以获知每个Node的资源使用情况，并实现高效的负载均衡的资源调度策略。 而某个Node超过指定时间不上报信息时，会被Master判定为<code>失联</code>，Node的状态会被标记为不可用（Not Ready）,随后Master会出发<code>工作负载大转移</code> 的自动化迁移流程。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的内容就能够对k8s大致形态和规则有了相应的了解，也知道了k8s是由哪些关键进程组成的，他们的写作模式是什么？ k8s是如何达到高可用的目的，后续我会更多整理相关知识，继续深入研究k8s相关内容。</p>
+</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-04-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/运维/" title="运维">运维 </a><i class="fa fa-tag"></i><a class="tag" href="/tags/K8S/" title="K8S">K8S </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Kubernetes/" title="Kubernetes">Kubernetes </a><i class="fa fa-tag"></i><a class="tag" href="/tags/容器化/" title="容器化">容器化 </a><span>About1781words, 5min56secread</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/2/">Próximo</a></li></ul></div></div></div></div></main-outlet><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
