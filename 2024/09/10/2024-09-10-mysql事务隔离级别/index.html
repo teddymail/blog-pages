@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>mysql事务隔离级别 · 少年当自强</title><meta name="description" content="使用数据库怎么不会遇到事务呢？ 今天我们就一起总结一下吧只要涉及到金钱转账，强一致性的数据问题  都需要采用事务来去解决
+
+说到事务不得不关注以下几个问题：
+
+事务的特征有哪些？
+
+
+原子性（Atomicity）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节，而且事务在"><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a href="https://www.caicai.me"> CaiCai </a><span>&</span><a href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Archivo</a></li><li><a href="/links">Enlaces</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>mysql事务隔离级别</a></h3></div><div class="post-content"><blockquote>
+<p>使用数据库怎么不会遇到事务呢？ 今天我们就一起总结一下吧<br>只要涉及到金钱转账，强一致性的数据问题  都需要采用事务来去解决</p>
+</blockquote>
+<p>说到事务不得不关注以下几个问题：</p>
+<blockquote>
+<p>事务的特征有哪些？</p>
+</blockquote>
+<ol>
+<li>原子性（Atomicity）：一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节，而且事务在执行过程中发生错误，会被回滚到事务开始前的状态，就像这个事务从来没有执行过一样，就好比买一件商品，购买成功时，则给商家付了钱，商品到手；购买失败时，则商品在商家手中，消费者的钱也没花出去。</li>
+<li>一致性（Consistency）：是指事务操作前和操作后，数据满足完整性约束，数据库保持一致性状态。比如，用户 A 和用户 B 在银行分别有 800 元和 600 元，总共 1400 元，用户 A 给用户 B 转账 200 元，分为两个步骤，从 A 的账户扣除 200 元和对 B 的账户增加 200 元。一致性就是要求上述步骤操作后，最后的结果是用户 A 还有 600 元，用户 B 有 800 元，总共 1400 元，而不会出现用户 A 扣除了 200 元，但用户 B 未增加的情况（该情况，用户 A 和 B 均为 600 元，总共 1200 元）。</li>
+<li>隔离性（Isolation）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致，因为多个事务同时使用相同的数据时，不会相互干扰，每个事务都有一个完整的数据空间，对其他并发事务是隔离的。也就是说，消费者购买商品这个事务，是不影响其他消费者购买的。</li>
+<li>持久性（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</li>
+</ol>
+<blockquote>
+<p>mysql如何保证?</p>
+</blockquote>
+<ol>
+<li>持久性是通过 redo log （重做日志）来保证的；</li>
+<li>原子性是通过 undo log（回滚日志） 来保证的；</li>
+<li>隔离性是通过 MVCC（多版本并发控制） 或锁机制来保证的；</li>
+<li>一致性则是通过持久性+原子性+隔离性来保证；</li>
+</ol>
+<blockquote>
+<p>为什么事务要有隔离性？</p>
+</blockquote>
+<p>为什么事务要有隔离性，我们就要知道并发事务时会引发什么问题！</p>
+<p>MySQL 服务端是允许多个客户端连接的，这意味着 MySQL 会出现同时处理多个事务的情况。</p>
+<p>那么在同时处理多个事务的时候，就可能出现<br><strong>脏读（dirty read）</strong>、<br><strong>不可重复读（non-repeatable read</strong>、<br><strong>幻读（phantom read)</strong> 的问题。</p>
+<h1 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h1><p>如果一个事务「读到」了另一个「未提交事务修改过的数据」，就意味着发生了「脏读」现象。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910145752.webp" alt="脏读图例"></p>
+<p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取我的余额数据，然后再执行更新操作，<br>如果此时事务 A 还没有提交事务，而此时正好事务 B 也从数据库中读取我的余额数据，<br>那么事务 B 读取到的余额数据是刚才事务 A 更新后的数据，即使没有提交事务。</p>
+<h1 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h1><p>在一个事务内多次读取同一个数据，如果出现前后两次读到的数据不一样的情况，就意味着发生了「不可重复读」现象。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910145805.webp" alt="不可重复读图例"></p>
+<p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库中读取我的余额数据，<br>然后继续执行代码逻辑处理，在这过程中如果事务 B 更新了这条数据，并提交了事务，<br>那么当事务 A 再次读取该数据时，就会发现前后两次读到的数据是不一致的，<br>这种现象就被称为不可重复读。</p>
+<h1 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h1><p>在一个事务内多次查询某个符合查询条件的「记录数量」，如果出现前后两次查询到的记录数量不一样的情况，就意味着发生了「幻读」现象。</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910145809.webp" alt="幻读图例"></p>
+<p>假设有 A 和 B 这两个事务同时在处理，事务 A 先开始从数据库查询账户余额大于 100 万的记录，<br>发现共有 5 条，然后事务 B 也按相同的搜索条件也是查询出了 5 条记录。<br>接下来，事务 A 插入了一条余额超过 100 万的账号，并提交了事务，此时数据库超过 100 万余额的账号个数就变为 6。<br>然后事务 B 再次查询账户余额大于 100 万的记录，此时查询到的记录数量有 6 条，发现和前一次读到的记录数量不一样了，<br>就感觉发生了幻觉一样，这种现象就被称为幻读。</p>
+<blockquote>
+<p>SQL 标准提出了四种隔离级别来规避这些现象，隔离级别越高，性能效率就越低，这四个隔离级别如下：</p>
+</blockquote>
+<ol>
+<li>读未提交（read uncommitted），指一个事务还没提交时，它做的变更就能被其他事务看到；</li>
+<li>读提交（read committed），指一个事务提交之后，它做的变更才能被其他事务看到；</li>
+<li>可重复读（repeatable read），指一个事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，MySQL InnoDB 引擎的默认隔离级别；</li>
+<li>串行化（serializable ）；会对记录加上读写锁，在多个事务对这条记录进行读写操作时，如果发生了读写冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行；</li>
+</ol>
+<p>按隔离水平高低排序如下：</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910152306.webp" alt="隔离水平高低排序"></p>
+<p>针对不同的隔离级别，并发事务时可能发生的现象也会不同</p>
+<p><img src="https://img.yuekang.org.cn/blog/images/20240910152312.webp" alt="隔离级别对应问题"></p>
+<ol>
+<li>在「读未提交」隔离级别下，可能发生脏读、不可重复读和幻读现象；</li>
+<li>在「读提交」隔离级别下，可能发生不可重复读和幻读现象，但是不可能发生脏读现象；</li>
+<li>在「可重复读」隔离级别下，可能发生幻读现象，但是不可能脏读和不可重复读现象；</li>
+<li>在「串行化」隔离级别下，脏读、不可重复读和幻读现象都不可能会发生。</li>
+</ol>
+<hr>
+<p>至此我们了解了相关隔离级别和不同级别带来的问题等相关知识概念，后面我会继续学习更加深入的概念并总结。</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-10</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><a class="tag" href="/tags/事务/" title="事务">事务 </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" href="http://twitter.com/home?status=,https://yuekang.org.cn/2024/09/10/2024-09-10-mysql事务隔离级别/,少年当自强,mysql事务隔离级别,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2024/09/11/2024-09-11-mysql%E9%94%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F/" title="mysql锁系列-行级锁有哪些？">Post anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/09/09/2024-09-09-%E6%80%BB%E7%BB%93%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88/" title="总结索引失效">Post siguiente</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

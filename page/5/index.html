@@ -1,536 +1,91 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>少年当自强</title><meta name="description" content="A Blog Powered By Hexo"><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta id="site_data_static" data-url="/"><meta id="default-theme" data="light"><meta name="renderer" content="webkit"><link rel="shortcut icon" type="image/x-icon" href="/"><link rel="stylesheet" href="/css/theme/light.css"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/insight.css"><link rel="stylesheet" href="/css/search.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"><script src="/js_complied/bundle.js"></script><script>Anatolo.comment.setConfig({})</script><meta name="generator" content="Hexo 7.3.0"></head><body> <main-outlet><div class="page-top animated"><div class="nav"></div><div class="information"><div class="nav_right_btn"></div><div class="avatar"></div></div></div><div class="sidebar animated"><div class="sidebar-top"><div class="logo-title"><div class="title"><img src="/" alt="favicon"><h3 title=""><a href="/">少年当自强</a></h3></div><ul class="social-links"></ul></div></div><div class="footer"><div class="p"><i class="fa fa-star"></i></div><div class="by_farbox"></div></div></div><div class="main animated fadeInDown"><div class="autopagerize_page_element"><div class="content"><div class="post animated"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%8E%A7%E5%88%B6/">php信号量控制</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>上一篇文章学习到了php的共享内存，但是仅仅这个是不够的，我们还需要更精确的控制，避免多个进程同时写入共享内存的情况发生，我们还需奥信号量的控制等内容</p>
-</blockquote>
-<ul>
-<li>准备<br>PHP 也提供了类似的内置扩展 sysvsem（这个扩展在 Windows 环境下没有，文档中将 ftok 函数也归到这个扩展中，但实际上 ftok 是在标准函数库中提供的，所以在 Windows 下也是可用的）。</li>
-</ul>
-<p>检查扩展是否支持通过phpinfo() 检测加载情况</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sysvmsg</span><br><span class="line"></span><br><span class="line">sysvmsg support =&gt; enabled</span><br><span class="line">Revision =&gt; $Id: 8fc76436c42ce984b2ad34ae6b27082d5e66c104 $</span><br></pre></td></tr></table></figure>
-
-<p>有以上这样的就属于已经正常加载可以使用这些功能啦</p>
-<ul>
-<li>知识点介绍</li>
-</ul>
-<ul>
-<li>sem_get()   获取信号标识</li>
-<li>sem_acquire()  获取信号量</li>
-<li>sem_release() 信号量发布</li>
-<li>sem_remove() 删除信号量</li>
-<li>shm_attach()  创建或打开共享内存段</li>
-<li>shm_detach() 断开与共享内存段的连接</li>
-</ul>
-<p><a href="http://php.net/manual/zh/ref.sem.php">相关函数列表</a></p>
-<ul>
-<li>样例</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$id_key = ftok(__FILE__, &#x27;t&#x27;);</span><br><span class="line">$sem_id = sem_get($id_key);</span><br><span class="line"># 请求信号控制权</span><br><span class="line">if (sem_acquire($sem_id)) &#123;</span><br><span class="line">    $shm_id = shmop_open($id_key, &#x27;c&#x27;, 0644, 8);</span><br><span class="line">    # 读取并写入数据</span><br><span class="line">    $count = (int) shmop_read($shm_id, 0, 8) + 1;</span><br><span class="line">    shmop_write($shm_id, str_pad($count, 8, &#x27;0&#x27;, STR_PAD_LEFT), 0);</span><br><span class="line">    // echo shmop_read($shm_id, 0, 8);</span><br><span class="line">    # 关闭内存块</span><br><span class="line">    shmop_close($shm_id);</span><br><span class="line">    # 释放信号</span><br><span class="line">    sem_release($sem_id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>测试</li>
-</ul>
-<p><img src="http://img.yuekang.org.cn/blog/images/WX20180205-161115@2x.png" alt="运行效果图"></p>
-<p><img src="http://img.yuekang.org.cn/blog/images/WX20180205-161243@2x.png" alt="循环中运行100次效果图"></p>
-<blockquote>
-<p>最后一定要注意关闭信号量，以免造成上一个信号量一直被占用造成下一个无法使用的问题！！</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Semaphore/" title="Semaphore">Semaphore </a><span>About395words, 1min19secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A0/">php共享内存学习</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>php中进程间通信介绍的很少，今天我来学习学习怎么实现共享内存的实现</p>
-</blockquote>
-<ul>
-<li>安装</li>
-</ul>
-<p><a href="http://php.net/manual/zh/shmop.installation.php">安装地址</a></p>
-<p>需要在安装的时候添加 <strong>–enable-shmop</strong> 来启用该函数的功能</p>
-<p>可以通过 ** phpinfo(); ** 来确认是否安装成功，我这里查看 ** shmop support &#x3D;&gt; enabled ** 代表启用成功了</p>
-<ul>
-<li>主要函数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">shmop_close — 关闭共享内存块</span><br><span class="line">shmop_delete — 删除共享内存块</span><br><span class="line">shmop_open — 创建或打开共享内存块</span><br><span class="line">shmop_read — 从共享内存块中读取数据</span><br><span class="line">shmop_size — 获取共享内存块的大小</span><br><span class="line">shmop_write — 向共享内存块中写入数据</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>与此相关的还有一个很重要的函数：<a href="http://php.net/manual/zh/function.ftok.php">ftok</a>，通过文件的 inode 信息（<strong>nix</strong> 上通过 <strong>stat</strong> 或 <strong>ls -i</strong> 命令查看）创建 IPC 的唯一 key（文件&#x2F;文件夹的 inode 是唯一的）。这个函数在 Linux 上也是直接调用同名的系统函数实现，Windows 上还是使用一些封装。</p>
-</blockquote>
-<p>有个需要稍微注意的点：shmop_open 的第二个参数是个 flag，类似 fopen 的第二个参数，其取值有以前几个：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">“a” 只读访问</span><br><span class="line">“c” 如果内存片段不存在，则创建，如果存在，则可读写；</span><br><span class="line"></span><br><span class="line">“w” 读写；</span><br><span class="line"></span><br><span class="line">“n” 创建新的内存片段，如果同样 key 的已存在，则会创建失败，这是为了安全使用共享内存考虑。</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>程序</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//新建一块共享内存（并取得唯一nodeID）</span></span><br><span class="line"><span class="variable">$shm_key</span> = <span class="title function_ invoke__">ftok</span>(<span class="keyword">__FILE__</span>,<span class="string">&#x27;t&#x27;</span>);</span><br><span class="line"><span class="comment">//打开改共享内存文件，采用片段不存在则创建策略</span></span><br><span class="line"><span class="variable">$shm_id</span> = <span class="title function_ invoke__">shmop_open</span>(<span class="variable">$shm_key</span>,<span class="string">&#x27;c&#x27;</span>,<span class="number">0644</span>,<span class="number">8</span>);</span><br><span class="line"><span class="comment"># 读取读取共享内存（8字节读取）</span></span><br><span class="line"><span class="variable">$count</span> = (<span class="keyword">int</span>) <span class="title function_ invoke__">shmop_read</span>(<span class="variable">$shm_id</span>, <span class="number">0</span>, <span class="number">8</span>) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">shmop_write</span>(<span class="variable">$shm_id</span>, <span class="title function_ invoke__">str_pad</span>(<span class="variable">$count</span>, <span class="number">8</span>, <span class="string">&#x27;0&#x27;</span>, STR_PAD_LEFT), <span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$count</span>;</span><br><span class="line"><span class="title function_ invoke__">shmop_close</span>(<span class="variable">$shm_id</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>运行效果图</li>
-</ul>
-<blockquote>
-<p>即使进程关闭重新开启依然能够正常读取数据！</p>
-</blockquote>
-<p><img src="http://img.yuekang.org.cn/blog/images/20180205150620.png" alt="效果图"></p>
-<blockquote>
-<p>一定要把握长度，否则可能出现读取异常的问题</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Shared-memory/" title="Shared-memory">Shared-memory </a><span>About535words, 1min47secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/20/2017-12-20-spring-boot%E9%85%8D%E7%BD%AE%E5%A4%9A%E7%8E%AF%E5%A2%83/">spring boot配置多环境</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>我是经常会遇到不同环境配置不同参数的情况，例如我们在本地开发环境的端口1111 但是测试环境就要换成2222，线上环境端口就要换成8080端口，为了应对这种情况， <code>spring boot</code>给我们提供了更成熟的方案。</p>
-</blockquote>
-<ol>
-<li>配置公共文件<br>  <code>spring boot</code>默认配置文件是<code>application.properties</code>这里我们采用另外一种简便格式 <code>application.yml</code> 我们配置公共内容如下:</li>
-</ol>
-  <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">orivon:</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.2</span><span class="number">.0</span></span><br><span class="line">  <span class="attr">apiversion:</span> <span class="number">1.2</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>第一个是配置我们产品的相关版本信息，这样升级的时候可以很容易看到版本等信息更好的维护产品的运行，第二行就是指明我们默认加载开发环境下的配置内容</li>
-</ul>
-<ol start="2">
-<li>创建环境的配置文件</li>
-</ol>
-<p>  我们假设如下几个环境场景:测试环境，开发环境，线上环境，我们分配配置如下几个文件（<code>spring boot</code>环境配置文件遵循以下格式appilication-{$varsion}.yml）否组不予加载</p>
-<p>  测试环境: application-test.yml<br>  开发环境: application-dev.yml<br>  线上环境: application-prod.yml</p>
-<p>  分别制定在里面写个server.port&#x3D;{$port}</p>
-<p>  我这里设置测试1111，开发8888，线上8080<br>  大家可以随便设置，来测试端口是否已经发生了改变<br>3. 加载不同的配置文件</p>
-<p> 讲完了环境配置文件，我们要切换配置文件怎么办呢？当我们编写完了程序，需要进行打包，这里我就打包成jar文件了，通过<code>mvn install</code>来打包jar文件，生成完毕后会存放在<code>target/XXXX.1.0.0-XXX.jar</code>的文件,我们只需要拷贝到线上环境通过<code>java -jar XXXX.jar --spring.profiles.active=prod</code>后面这个就是配置使用哪个配置文件啦，使用test就可以啦，不用带其他的内容，即可完成配置，并成功运行啦，给个成功运行的效果图</p>
-<p> <img src="http://img.yuekang.org.cn/blog/images/20171220-143315@2x.png" alt="运行成功效果图"></p>
-<blockquote>
-<p>每日名言：生命力的意义在于拼搏，因为世界本身就是一个竞技场。</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-20</span><i class="fa fa-tag"></i><a class="tag" href="/tags/java/" title="java">java </a><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Spring-boot/" title="Spring-boot">Spring-boot </a><span>About548words, 1min49secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/19/2017-12-19-Spring-boot-%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8banner%E5%86%85%E5%AE%B9/">Spring boot 修改启动banner内容</a></h3></div><div class="post-content"><div class="card"><p><p>我们在启动Spring boot时候会出现以下情况</p>
-<p><img src="http://img.yuekang.org.cn/blog/images/20171219-102535@2x.png" alt="banner启动图"></p>
-<p>我们可以将它改成自己产品的内容修改方式如下</p>
-<p>在 src&#x2F;main&#x2F;resources&#x2F;banner.txt 创建并加入内容:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">           _                  </span><br><span class="line">          (_)                 </span><br><span class="line"> ___  _ __ ___   _____  _ __  </span><br><span class="line">/ _ \| &#x27;__| \ \ / / _ \| &#x27;_ \</span><br><span class="line">| (_) | |  | |\ V / (_) | | | |</span><br><span class="line">\___/|_|  |_| \_/ \___/|_| |_|</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$&#123;spring-boot.version&#125;$&#123;spring-boot.formatted-version&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在banner.txt 文件末尾可以加入<code>$&#123;spring-boot.version&#125;$&#123;spring-boot.formatted-version&#125;</code>用来显示最新的版本等信息</p>
-<p>再次启动项目会看到如下结果</p>
-<p><img src="http://img.yuekang.org.cn/blog/images/20171219-103130@2x.png" alt="修改后的banner效果图"></p>
-<blockquote>
-<p>每日名言：不要向这个世界认输，因为你还有牛逼的梦想！</p>
-</blockquote>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><i class="fa fa-tag"></i><a class="tag" href="/tags/spring-boot/" title="spring-boot">spring-boot </a><span>About135words, 27secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/12/09/2017-12-09-Snowflake%EF%BC%88twitter-64%E4%BD%8D%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95%EF%BC%89/">Snowflake（twitter 64位唯一ID生成算法）</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>在很多业务场景中会遇到id唯一的问题，我就遇到很多，<br>数据库中的自增的生成，接下来我们一起学习唯一ID生成算法</p>
-</blockquote>
-<h2 id="Snowflake-组成结构"><a href="#Snowflake-组成结构" class="headerlink" title="Snowflake 组成结构"></a>Snowflake 组成结构</h2><ol>
-<li>雪花算法总共64位组成(不要问我为什么，这是具体规定啊)</li>
-</ol>
-<p>  1.1 正负码1位 （通常为0）</p>
-<p>  1.2 毫秒级时间41位  </p>
-<p>  1.3 节点码10位</p>
-<pre><code>    由于设计之初是分布式ID，所以这里基本上是5位节点码+机器码5位
-</code></pre>
-<p>  1.4 序列码12位<br>      累加计数器 最大1毫秒产生4095个不重复的id</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2></p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-09</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><i class="fa fa-tag"></i><a class="tag" href="/tags/算法/" title="算法">算法 </a><span>About153words, 30secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/09/23/2017-09-23-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-PHP%E5%AE%9E%E7%8E%B0/">单例模式(PHP实现)</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>介绍一下单例的应用场景:最简单的场景就是数据库了， 还有框架中基础的应用配置加载了，使用单例模式有如下好处，避免过多的new对象造成大量资源廊坊和超出最大连接数而产生应用down机问题，可以全局设立一个单访问点避免多出访问点造成难以维护的现象，便于调试直接可以设立日志记录全局设立统一节点，避免导出var_dump，print_r的现象</p>
-</blockquote>
-<h4 id="一、类图"><a href="#一、类图" class="headerlink" title="一、类图"></a>一、类图</h4><p><img src="http://img.jewei.cn/5261067-d237feca85784587.png" alt="单例设计图"><br>单例相对结构上比较简单，总体实现想法就是全局设立一个访问点，全局共同使用一个对象，不会创建多余的对象。</p>
-<h4 id="二、实现思路"><a href="#二、实现思路" class="headerlink" title="二、实现思路"></a>二、实现思路</h4><p>完成单例需要满足以下需求：<br>1、全局隐藏私有构造方法，预防通过new来创建对象。<br>2、隐藏私有克隆方法，预防通过克隆创建对象<br>3、对外暴露一个静态的Instance方法提供统一对外的获取对象的方式</p>
-<h4 id="三、实现单例模式"><a href="#三、实现单例模式" class="headerlink" title="三、实现单例模式"></a>三、实现单例模式</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">//存放实例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$_instance</span> = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化构造方法、</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;禁止构造&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化克隆方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//公有化获取实例方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!(<span class="built_in">self</span>::<span class="variable">$_instance</span> <span class="keyword">instanceof</span> Singleton)) &#123;</span><br><span class="line">            <span class="built_in">self</span>::<span class="variable">$_instance</span> = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">self</span>::<span class="variable">$_instance</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过Singleon::getInstance();来使用单例</p>
-<hr>
-<h4 id="2、使用trait方式实现"><a href="#2、使用trait方式实现" class="headerlink" title="2、使用trait方式实现"></a>2、使用trait方式实现</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//PHP trait 使用                                     </span></span><br><span class="line">Trait Singleton&#123;                                   </span><br><span class="line">    <span class="comment">//存储实例                                         </span></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$_instance</span> = <span class="literal">null</span>;              </span><br><span class="line"></span><br><span class="line">    <span class="comment">//私有化克隆方法                                      </span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span>&#123;&#125;                   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//提供统一对外的实例方法                                  </span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span>(<span class="params"></span>)</span>&#123;          </span><br><span class="line">        <span class="variable">$class</span> = <span class="keyword">__CLASS__</span>;                        </span><br><span class="line">        <span class="keyword">if</span> (!(<span class="built_in">self</span>::<span class="variable">$_instance</span> <span class="keyword">instanceof</span> <span class="variable">$class</span>))&#123;</span><br><span class="line">            <span class="built_in">self</span>::<span class="variable">$_instance</span> = <span class="keyword">new</span> <span class="variable">$class</span>();       </span><br><span class="line">        &#125;                                          </span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">self</span>::<span class="variable">$_instance</span>;                   </span><br><span class="line">    &#125;                                              </span><br><span class="line">&#125;                                                  </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DB</span></span>&#123;                                          </span><br><span class="line">    <span class="keyword">use</span> <span class="title">Singleton</span>;                                 </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)                 </span></span><br><span class="line"><span class="function">    </span>&#123;                                              </span><br><span class="line">       <span class="keyword">echo</span> <span class="string">&#x27;实例被创建了&#x27;</span>;                              </span><br><span class="line">    &#125;                                              </span><br><span class="line">&#125;                                                  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">DB::<span class="title function_ invoke__">getInstance</span>();                                 </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>少年当自强</title><meta name="description" content="Write the code. Change the World."><meta name="keywords"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">少年当自强</a></h3></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a href="https://www.caicai.me"> CaiCai </a><span>&</span><a href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a class="current" href="/">Home</a></li><li><a href="/about">Sobre</a></li><li><a href="/archives">Archivo</a></li><li><a href="/links">Enlaces</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)" style="display:none;"> </a></li></div><div class="avatar"><img></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%8E%A7%E5%88%B6/">php信号量控制</a></h3></div><div class="post-content"><p>
+上一篇文章学习到了php的共享内存，但是仅仅这个是不够的，我们还需要更精确的控制，避免多个进程同时写入共享内存的情况发生，我们还需奥信号量的控制等内容
 
 
-<hr>
-<p>好了今天的单例就到这里，以后会陆续上其它的设计模式，并且会通过PHP和JAVA两种语言或者多种来去实现来加深印象，好的设计模式能让系统更加的简介代码复用更高，大家努力学习吧</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/设计模式/" title="设计模式">设计模式 </a><span>About536words, 1min47secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/09/11/2017-09-11-23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%8B%B1%E6%96%87%E4%B8%AD%E6%96%87%E5%AF%B9%E7%85%A7/">23种设计模式英文中文对照</a></h3></div><div class="post-content"><div class="card"><p><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="left">模式名</th>
-<th align="left">英文名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="left">简单工厂模式</td>
-<td align="left">Simple Factory Pattern</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="left">工厂方法模式</td>
-<td align="left">Factory Method Pattern</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="left">抽象工厂模式</td>
-<td align="left">Abstract Factory Pattern</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="left">建造者模式</td>
-<td align="left">Builder Pattern</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="left">原型模式</td>
-<td align="left">Prototype Pattern</td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="left">单例模式</td>
-<td align="left">Singleton Pattern</td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="left">适配器模式</td>
-<td align="left">Adapter Pattern</td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="left">桥梁模式(桥接模式)</td>
-<td align="left">Bridge Pattern</td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="left">组合模式</td>
-<td align="left">Composite Pattern</td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="left">装饰模式</td>
-<td align="left">Decorator Pattern</td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="left">门面模式(外观模式)</td>
-<td align="left">Facade Pattern</td>
-</tr>
-<tr>
-<td align="center">12</td>
-<td align="left">享元模式</td>
-<td align="left">Flyweight Pattern</td>
-</tr>
-<tr>
-<td align="center">13</td>
-<td align="left">代理模式</td>
-<td align="left">Proxy pattern</td>
-</tr>
-<tr>
-<td align="center">14</td>
-<td align="left">责任链模式</td>
-<td align="left">Chain of Responsibility Pattern</td>
-</tr>
-<tr>
-<td align="center">15</td>
-<td align="left">命令模式</td>
-<td align="left">Command Pattern</td>
-</tr>
-<tr>
-<td align="center">16</td>
-<td align="left">解释器模式</td>
-<td align="left">Interpreter Pattern</td>
-</tr>
-<tr>
-<td align="center">17</td>
-<td align="left">迭代器模式</td>
-<td align="left">Iterator Pattern</td>
-</tr>
-<tr>
-<td align="center">18</td>
-<td align="left">中介者模式</td>
-<td align="left">Mediator Pattern</td>
-</tr>
-<tr>
-<td align="center">19</td>
-<td align="left">备忘录模式</td>
-<td align="left">Memento Pattern</td>
-</tr>
-<tr>
-<td align="center">20</td>
-<td align="left">观察者模式</td>
-<td align="left">Observer Pattern</td>
-</tr>
-<tr>
-<td align="center">21</td>
-<td align="left">状态模式</td>
-<td align="left">State Pattern</td>
-</tr>
-<tr>
-<td align="center">22</td>
-<td align="left">策略模式</td>
-<td align="left">Strategy Pattern</td>
-</tr>
-<tr>
-<td align="center">23</td>
-<td align="left">模板方法模式</td>
-<td align="left">Template Method Pattern</td>
-</tr>
-<tr>
-<td align="center">24</td>
-<td align="left">访问者模式</td>
-<td align="left">Visitor Pattern</td>
-</tr>
-</tbody></table>
-<hr>
-<p>接下来的一段日子里我将陆续更新每个设计模式的做法，多学习设计模式防止被祭天~  哈哈哈</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-11</span><i class="fa fa-tag"></i><a class="tag" href="/tags/设计模式/" title="设计模式">设计模式 </a><span>About223words, 44secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/07/28/2017-07-28-%E4%BD%BF%E7%94%A8mysql-router%E5%B7%A5%E5%85%B7%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">使用mysql-router工具实现数据库读写分离，数据库负载均衡</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>研究公司oFrame框架发现，我们框架内大量的sql扫表语句严重的影响了数据查询速度和产品使用的各种问题，为此我准备先从第一步入手去增数据的性能，让我们一起学一下吧.</p>
-</blockquote>
-<h3 id="一、-环境准备"><a href="#一、-环境准备" class="headerlink" title="一、 环境准备"></a>一、 环境准备</h3><ul>
-<li>mysql-router 简单的负载均衡组件</li>
-<li>mysql5.6        mysql</li>
-<li>centos7</li>
-<li>Vmware</li>
-</ul>
-<p>** mysql-router 简介 **</p>
-<p>MySQL的路由器是轻量级的中间件，提供您的应用程序和任何后端MySQL服务器之间的透明路由。它可用于各种各样的使用情况，如通过有效的路由数据库流量到合适的后端MySQL服务器提供高可用性和可扩展性。可插拔的体系结构还使开发者来扩展MySQL的路由器自定义的用例。</p>
-<ol>
-<li>故障转移</li>
-</ol>
-<p>典型地，高度可用的MySQL设置由一个单一的主站和多个从机，并且它是由应用程序来处理故障切换，在情况下，MySQL主变得不可用。使用MySQL路由器，应用程序连接将被透明基于负载平衡策略路由，不实现自定义应用程序代码。</p>
-<ol start="2">
-<li>负载均衡</li>
-</ol>
-<p>MySQL的路由器通过在服务器池分配数据库的连接提供了额外的可扩展性和性能。举例来说，如果你有一个复制的一套MySQL服务器的，MySQL的路由器可以在一个循环的方式分发应用程序连接到他们。</p>
-<ol start="3">
-<li>可插入式架构</li>
-</ol>
-<p>MySQL的路由器的可插入式架构使MySQL的开发人员能够轻松地与附加功能延伸产品，以及提供MySQL用户能够创建提供了无限的可能性自己的自定义插件的能力。MySQL的路由器目前包括一些核心插件，其中包括：</p>
-<p>连接路由插件，它确实基于连接的路由，这意味着它转发MySQL的数据包发送到后端服务器，而不检查或修改它们，从而提供最大的吞吐量。<br>的元数据高速缓存插件，它提供了透明的客户端负载平衡，路由和故障转移到组复制和InnoDB群集。</p>
-<p><img src="http://img.yuekang.org.cn/blog/images/mysql_router.png" alt="mysql-router结构示意图"></p>
-<h3 id="二、环境搭建"><a href="#二、环境搭建" class="headerlink" title="二、环境搭建"></a>二、环境搭建</h3><blockquote>
-<p>这里centos搭建和Vmware不再阐述，mysql的安装也不在讲解，重点讲解配置步骤和实现mysql-router功能</p>
-</blockquote>
-<ol>
-<li>安装mysql-router</li>
-</ol>
-<p>进入官网下载页面：<a href="https://dev.mysql.com/downloads/router/">点我去往下载页面</a></p>
-<p><img src="http://img.yuekang.org.cn/blog/images/MySQL%20%20%20%20Download%20MySQL%20Router.png" alt="mysql-router下载页面"></p>
-<p>这里我选择Red Hat Enterprise Linux 7 &#x2F; Oracle Linux 7也就是上图中的第一个rpm包进行下载</p>
-<p>为了在虚拟机中能够方便的复制，我这里下载过程中复制下载地址到虚拟机中使用**[ wget ]**命令进行下载</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# wget https://cdn.mysql.com//Downloads/MySQL-Router/mysql-router-2.1.4-1.el7.x86_64.rpm</span><br><span class="line"></span><br><span class="line">--2017-07-28 14:57:02--  https://cdn.mysql.com//Downloads/MySQL-Router/mysql-router-2.1.4-1.el7.x86_64</span><br><span class="line">.rpm</span><br><span class="line">Resolving cdn.mysql.com (cdn.mysql.com)... 2.17.63.195</span><br><span class="line">Connecting to cdn.mysql.com (cdn.mysql.com)|2.17.63.195|:443... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 1947576 (1.9M) [application/x-redhat-package-manager]</span><br><span class="line">Saving to: ‘mysql-router-2.1.4-1.el7.x86_64.rpm’</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">100%</span><span class="language-bash">[============================================================&gt;] 1,947,576    773KB/s   <span class="keyword">in</span> 2.5s</span>   </span><br><span class="line"></span><br><span class="line">2017-07-28 14:57:10 (773 KB/s) - ‘mysql-router-2.1.4-1.el7.x86_64.rpm’ saved [1947576/1947576]</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# rpm -i mysql-router-2.1.4-1.el7.x86_64.rpm</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>经过上面的步骤mysql-router已经安装完毕，这里mysql安装不在叙述</p>
-<h3 id="三、负载均衡架构规划"><a href="#三、负载均衡架构规划" class="headerlink" title="三、负载均衡架构规划"></a>三、负载均衡架构规划</h3><blockquote>
-<p>我由于使用的是虚拟机我这里设定以下几个服务器</p>
-</blockquote>
-<p>1.Mysql Middleware 安装着mysql-router专门用于mysql入口负责机器的主从分配等问题</p>
-<p>2.Mysql Master 数据库主库，用于数据的读写</p>
-<p>3.Mysql Salve 数据库从库</p>
-<p>我对结构做了如下划分和IP分配，详情见图:</p>
-<p><img src="http://img.yuekang.org.cn/blog/images/%E7%BB%93%E6%9E%84%E5%9B%BE%E7%81%B0%E5%BA%95.png" alt="结构规划图"></p>
-<h3 id="四、配置服务"><a href="#四、配置服务" class="headerlink" title="四、配置服务"></a>四、配置服务</h3><p>1.Mysql Middleware (router主机)</p>
-<blockquote>
-<p>默认rpm安装位置在&#x2F;usr&#x2F;bin&#x2F;mysqlrouter 为了个人意愿我把日志logs和配置文件mysqlrouter.ini都存放在&#x2F;usr&#x2F;local&#x2F;mysql-router下</p>
-</blockquote>
-<p>下面开始新建配置文件，设置port:8000为读写端口 port:8001为只读端口</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql-router]# mkdir logs</span><br><span class="line">[root@localhost mysql-router]# vi mysqlrouter.ini</span><br><span class="line"></span><br><span class="line">[DEFAULT]              </span><br><span class="line">logging_folder=usr/local/mysql-router/logs                                                         </span><br><span class="line"></span><br><span class="line">[logger]                                                                  </span><br><span class="line">level=INFO                                                                                    </span><br><span class="line">[routing:basic_failover]                                                                              </span><br><span class="line">bind_address=192.168.1.186                                                                          </span><br><span class="line">bind_port=000                                                                                      </span><br><span class="line">destinations=192.168.1.189:3306                                                                     </span><br><span class="line">mode=read-write                                                                                     </span><br><span class="line">max_connections=1024                                                                                </span><br><span class="line">max_connect_errors=100                                                                              </span><br><span class="line">client_connect_timeout=9                                                                        </span><br><span class="line">[routing:balancing]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">绑定router的IP即可</span>                                               </span><br><span class="line">bind_address=192.168.1.186                                                #绑定端口                </span><br><span class="line">bind_port=8001                                                            #数据库地址，会轮训访问                      </span><br><span class="line">destinations = 192.168.1.193:3306</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">指定模式为只读</span></span><br><span class="line">mode=read-only                                                            #设置最大连接数        </span><br><span class="line">max_connections=65535</span><br><span class="line">max_connect_errors=100</span><br><span class="line">client_connect_timeout = 9            </span><br><span class="line">[keepalive]                                                               </span><br><span class="line">interval = 60</span><br></pre></td></tr></table></figure>
-
-<p>以上是配置文件内容，注释了一部分</p>
-<ul>
-<li>启动mysqlrouter(设置自己的配置文件即可，我已经在配置文件目录了就按照下方启动即可)</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql-router]# mysqlrouter -c ./mysqlrouter.ini &amp;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>验证mysqlrouter是否启动（下图情况为启动成功）</li>
-</ul>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql-router]# netstat -tunlp|grep mysqlrouter                               </span><br><span class="line">tcp        0      0 0.0.0.0:8000            0.0.0.0:*               LISTEN      71271/mysqlrouter     </span><br><span class="line">tcp        0      0 0.0.0.0:8001            0.0.0.0:*               LISTEN      71271/mysqlrouter</span><br></pre></td></tr></table></figure>
-
-<p> 经过以上步骤已经完成router配置了，如果主库从库都可以的话即可使用客户端通过8000端口访问测试，如果不能访问通过下面这组命令查看错误日志</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql-router]# tail logs/mysqlrouter.log</span><br></pre></td></tr></table></figure>
-
-<p>2.Mysql Master 数据库主库</p>
-<ul>
-<li>配置从库复制账号</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; grant replication scale on *.* to &#x27;账号名&#x27;@&#x27;主机域&#x27; identifed by &#x27;账号密码&#x27;；</span><br><span class="line">MySQL [(none)]&gt; flush privileges;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>配置主库的主从复制文件my.ini主要增加或修改一下选项</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#服务器ID唯一标识，错了，无法复制</span><br><span class="line">server-id = 1</span><br><span class="line">#指定复制库</span><br><span class="line">binlog-do-db=text</span><br><span class="line">#以下数据库不复制</span><br><span class="line">binlog-ignore-db=mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p> 经过修改以后从其mysql主库的任务就完成了，接下来配置从库</p>
-<ol start="3">
-<li>Mysql Salve 数据库从库(设定主库信息进行读写配置)</li>
-</ol>
-<p>登入数据库后查看服务器ID不可以和主库相同，切记！</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show variables like &#x27;server_id&#x27;;</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| server_id     | 2     |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.02 sec)</span><br></pre></td></tr></table></figure>
-
-<p>查询主库配置信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show master status \G</span><br><span class="line"></span><br><span class="line">             File: mysql-bin.000006</span><br><span class="line">         Position: 2647</span><br><span class="line">     Binlog_Do_DB: text</span><br><span class="line"> Binlog_Ignore_DB: mysql</span><br><span class="line">Executed_Gtid_Set:</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-
-<p>获取File和Position即可</p>
-<p>写入主库信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; change master to</span><br><span class="line">    -&gt;master_host=&#x27;192.168.1.189&#x27;,//主库地址</span><br><span class="line">    -&gt;master_port=3306,          //主库端口      </span><br><span class="line">    -&gt;master_user=&#x27;master&#x27;,      //主库同步账户名             </span><br><span class="line">    -&gt;master_password=&#x27;master&#x27;,  //同步账号密码</span><br><span class="line">    -&gt;master_log_file=&#x27;mysql-bin.000005&#x27;,//对应主库File</span><br><span class="line">    -&gt;master_log_pos=3195;//对应主库Position                                                 </span><br><span class="line">Query OK, 0 rows affected, 2 warnings (0.02 sec)</span><br><span class="line"></span><br><span class="line">MySQL [(none)]&gt; start slave;   //启动同步</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
-
-<p>为了保证数据同步，请一定要空表操作，避免报错</p>
-<p>如果同步请使用MySQL [(none)]&gt; show slave status \G 查看具体错误</p>
-<p>其它从库全部遵循这个配置原则即可完成，多少个从库都可以</p>
-<h3 id="五、-总结"><a href="#五、-总结" class="headerlink" title="五、 总结"></a>五、 总结</h3><p>通过本次学习我对数据库负载均衡有了很大的了解，我以后也会继续学习更深入的集群化知识，为以后架构师的梦想做知识筹备，也希望我出的这个经验分享能给大家一个很好的参考，也是目前能提高公司产品服务器这块速度慢，在并发情况下发生数据库罢工的解决方案，目前这个演示仅仅是一个主库和从库，大家回去练习可以多建立从库进行大并发访问测试，今天的分享就到这里，祝大家工作顺利。</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-07-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql-router/" title="mysql-router">mysql-router </a><span>About1877words, 6min15secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/07/26/2017-07-26-%E5%A5%BD%E4%B9%85%E6%B2%A1%E5%86%99%E5%8D%9A%E5%AE%A2%E4%BA%86/">好久没写博客了</a></h3></div><div class="post-content"><div class="card"><p><blockquote>
-<p>转眼间我已经毕业了踏上了人生新的征程，大学这四年我每逢假期都会去做兼职，我做过的很多呢，卖冰激凌，烤鱿鱼，烤鱼片，爆米花冰激凌，快餐店的鲜榨果汁和汉堡等我都有触及，之前在大学觉得一点意思也没有，总是想出去工作，先自我毕业了也签工作，感受颇多，我想对我在公司的感受做一个总结吧。</p>
-</blockquote>
-<h3 id="初入职场"><a href="#初入职场" class="headerlink" title="初入职场"></a>初入职场</h3><p>  当我来到新公司一切幻想都是那么的美好，曾一度幻想着自己子公司发挥多大作用，出任CEO、赢取白富美、走上人生巅峰~</p>
-<h3 id="入场三个月"><a href="#入场三个月" class="headerlink" title="入场三个月"></a>入场三个月</h3><p>  目前公司产品是考试培训系统，按照当今来说竞争真的非常激励了，公司使用的是之前来员工写的框架oFrame ，怎么说呢框架在八年前非常的厉害，给我的感觉和TP3时代的产物，公司老大安排我解决新题型的问题，目前把  考试系统面临新题型问题，我经过三天研究真的放弃了，真的代码太难维护了，毕竟那个年的产物没有命名空间什么的，而且更没有composer这样的先进版本管理的产物。</p>
-<p>  目前我维护接口这块内容，因为接口和旧框架有很大的问题，比如数据都是SQL直接查询，大量的代码充斥着面临各种安全危机，xss，CSRF，SQL注入等常见漏洞比比皆是，系统内部饱含各种bug和问题。</p>
-<p>  目前我的想法是先从我这里开刀动用现今的Laravel(PHP先进框架)  因为公司业务目前业务都是针对于客户主机获取内容，这次应对的目标是在未来ios的APP能够尽快完成出来让用户先用起来，没有办法我只能继续沿用致前任写的接口，尽快的赶工出来。</p>
-<p>  在未来我做如下规划：<br>  Laravel负责基础框架快速完成平台化的工作<br>  docker 负责环境这块的配置达到运维一条命令即可完成部署<br>  radis  作为内存机数据库完成token这里快速查询修改<br>  mysql  作为主要数据来源，负责数据的持久化，这里我准备使用主从分离技术来完成<br>  centos 服务器这里统一采用centos免费的服务器系统</p>
-<p>  以上是我的想法和规划，目前需要尽快出来的的版本这里为了能够尽快完成必须完成session集群化共享的内容，达到快速完成现有版本的实现。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我会在接下来的日子继续学习，学习各种最新的架构，争取这一年能够自己独立完成php框架的学习和编写，在未来成为架构师的道路上继续努力。</p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-07-26</span><i class="fa fa-tag"></i><a class="tag" href="/tags/博客感言/" title="博客感言">博客感言 </a><span>About811words, 2min42secread</span></div></div></div></div><div class="post animated"><div class="post-title"><h3><a href="/2017/05/19/2017-05-19-php%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%A7%84%E8%8C%83%E6%80%BB%E7%BB%93%E5%92%8C%E5%AD%A6%E4%B9%A0/">php文档注释规范总结和学习</a></h3></div><div class="post-content"><div class="card"><p><h3 id="PHP标准注释列表"><a href="#PHP标准注释列表" class="headerlink" title="PHP标准注释列表"></a>PHP标准注释列表</h3><ul>
-<li><a href="#api" title="@api">@api</a></li>
-<li><a href="#author" title="@author">@author</a></li>
-<li><a href="#category" title="@category">@category</a></li>
-<li><a href="#copyright" title="@copyright">@copyright</a></li>
-<li><a href="#deprecated" title="@deprecated">@deprecated</a></li>
-<li><a href="#example" title="@example">@example</a></li>
-<li><a href="#filesource" title="@filesource">@filesource</a></li>
-<li><a href="#global" title="@global">@global</a></li>
-<li><a href="#ignore" title="@ignore">@ignore</a></li>
-<li><a href="#internal" title="@internal">@internal</a></li>
-<li><a href="#license" title="@license">@license</a></li>
-<li><a href="#link" title="@link">@link</a></li>
-<li><a href="#method" title="@method">@method</a></li>
-<li><a href="#package" title="@package">@package</a></li>
-<li><a href="#param" title="@param">@param</a></li>
-<li><a href="#property-read" title="@property-read">@property-read</a></li>
-<li><a href="#property-write" title="@property-write">@property-write</a></li>
-<li><a href="#return" title="@return">@return</a></li>
-<li><a href="#see" title="@see">@see</a></li>
-<li><a href="#since" title="@since">@since</a></li>
-<li><a href="#source" title="@source">@source</a></li>
-<li><a href="#subpackage" title="@subpackage">@subpackage</a></li>
-<li><a href="#throws" title="@throws">@throws</a></li>
-<li><a href="#todo" title="@todo">@todo</a></li>
-<li><a href="#uses" title="@uses">@uses</a></li>
-<li><a href="#var" title="@vars">@var</a></li>
-<li><a href="#version" title="@version">@version</a></li>
-</ul>
-<p><a id="api"><h3>@api </h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例如下：<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * This method will not change until a major release.</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@api</span></span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">showVersion</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">     &lt;...&gt;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><a id="api"><h3>@author</h3></a></p>
-<ul>
-<li><p>语法要求</p>
-<ul>
-<li>@author [name] [<email address>]</li>
-</ul>
-</li>
-<li><p>官方示例如下：</p>
-</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@author</span> My Name</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@author</span> My Name &lt;my.name<span class="doctag">@example</span>.com&gt;</span></span><br><span class="line"><span class="comment">  */</span></span><br></pre></td></tr></table></figure>
+准备PHP 也提供了类似的内置扩展 sysvsem（这个扩展在 Windows 环境下没有，文档中将 ftok 函数也归到这个扩展中，但实际上 ftok 是...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><a class="tag" href="/tags/Semaphore/" title="Semaphore">Semaphore </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2018/02/05/2018-02-05-php%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A0/">php共享内存学习</a></h3></div><div class="post-content"><p>
+php中进程间通信介绍的很少，今天我来学习学习怎么实现共享内存的实现
 
 
-<p><a id="category"><h3>@category</h3></a></p>
-<ul>
-<li><p>语法要求</p>
-<ul>
-<li>@category [description]</li>
-</ul>
-</li>
-<li><p>官方示例</p>
-</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Page-Level DocBlock</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@category</span> MyCategory</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@package</span>  MyPackage</span></span><br><span class="line"><span class="comment">  */</span></span><br></pre></td></tr></table></figure>
+安装
+
+安装地址
+需要在安装的时候添加 –enable-shmop 来启用该函数的功能
+可以通过 ** phpinfo(); ** 来确认是否安装成功，我这里查看 ** shmop support &#x3D;&gt; enabled *...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-02-05</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><a class="tag" href="/tags/Shared-memory/" title="Shared-memory">Shared-memory </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/12/20/2017-12-20-spring-boot%E9%85%8D%E7%BD%AE%E5%A4%9A%E7%8E%AF%E5%A2%83/">spring boot配置多环境</a></h3></div><div class="post-content"><p>
+我是经常会遇到不同环境配置不同参数的情况，例如我们在本地开发环境的端口1111 但是测试环境就要换成2222，线上环境端口就要换成8080端口，为了应对这种情况， spring boot给我们提供了更成熟的方案。
+
+
+配置公共文件  spring boot默认配置文件是application.propertie...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-20</span><i class="fa fa-tag"></i><a class="tag" href="/tags/java/" title="java">java </a><a class="tag" href="/tags/framework/" title="framework">framework </a><a class="tag" href="/tags/Spring-boot/" title="Spring-boot">Spring-boot </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/12/19/2017-12-19-Spring-boot-%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8banner%E5%86%85%E5%AE%B9/">Spring boot 修改启动banner内容</a></h3></div><div class="post-content"><p>我们在启动Spring boot时候会出现以下情况
+
+我们可以将它改成自己产品的内容修改方式如下
+在 src&#x2F;main&#x2F;resources&#x2F;banner.txt 创建并加入内容:
+12345678910           _                            (...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/framework/" title="framework">framework </a><a class="tag" href="/tags/spring-boot/" title="spring-boot">spring-boot </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/12/09/2017-12-09-Snowflake%EF%BC%88twitter-64%E4%BD%8D%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95%EF%BC%89/">Snowflake（twitter 64位唯一ID生成算法）</a></h3></div><div class="post-content"><p>
+在很多业务场景中会遇到id唯一的问题，我就遇到很多，数据库中的自增的生成，接下来我们一起学习唯一ID生成算法
+
+Snowflake 组成结构
+雪花算法总共64位组成(不要问我为什么，这是具体规定啊)
+
+  1.1 正负码1位 （通常为0）
+  1.2 毫秒级时间41位  
+  1.3 节点码10位
+    由于...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-12-09</span><i class="fa fa-tag"></i><a class="tag" href="/tags/PHP/" title="PHP">PHP </a><a class="tag" href="/tags/算法/" title="算法">算法 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/09/23/2017-09-23-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-PHP%E5%AE%9E%E7%8E%B0/">单例模式(PHP实现)</a></h3></div><div class="post-content"><p>
+介绍一下单例的应用场景:最简单的场景就是数据库了， 还有框架中基础的应用配置加载了，使用单例模式有如下好处，避免过多的new对象造成大量资源廊坊和超出最大连接数而产生应用down机问题，可以全局设立一个单访问点避免多出访问点造成难以维护的现象，便于调试直接可以设立日志记录全局设立统一节点，避免导出var_dum...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-23</span><i class="fa fa-tag"></i><a class="tag" href="/tags/设计模式/" title="设计模式">设计模式 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/09/11/2017-09-11-23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%8B%B1%E6%96%87%E4%B8%AD%E6%96%87%E5%AF%B9%E7%85%A7/">23种设计模式英文中文对照</a></h3></div><div class="post-content"><p>
+
+
+序号
+模式名
+英文名
 
 
 
-<p><a id="copyright"><h3>@copyright</h3></a></p>
-<ul>
-<li>语法要求<ul>
-<li>@copyright [description]</li>
-</ul>
-</li>
-<li>描述<ul>
-<li>此注释专用于对软件版权进行注释</li>
-</ul>
-</li>
-<li>官方示例<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@copyright</span> 1997-2005 The PHP Group</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><a id="deprecated"><h3>@deprecated</h3></a></p>
-<ul>
-<li><p>语法要求</p>
-<ul>
-<li>@deprecated [version] [description]</li>
-</ul>
-</li>
-<li><p>官方示例</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span></span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span> 1.0.0</span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span> No longer used by internal code and not recommended.</span></span><br><span class="line"><span class="comment">* <span class="doctag">@deprecated</span> 1.0.0 No longer used by internal code and not recommended.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  &lt;...&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><a id="example"><h3>@example</h3></a></p>
-<ul>
-<li><p>语法要求</p>
-<ul>
-<li>@example [location] [start-line] [number-of-lines] ] [description]</li>
-</ul>
-</li>
-<li><p>官方示例</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@example</span> example1.php Counting in action.</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@example</span> http://example.com/example2.phps Counting in action by a 3rd party.</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@example</span> &quot;My Own Example.php&quot; My counting.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">     &lt;...&gt;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><a id="filesource"><h3>@filesource</h3></a></p>
-<blockquote>
-<p>@filesource标签用于告诉phpDocumentor将当前文件的源包含在解析结果中。</p>
-</blockquote>
-<ul>
-<li><p>语法要求</p>
-<ul>
-<li>@filesource</li>
-</ul>
-</li>
-<li><p>说明<br>@filesource标签告诉phpDocumentor将当前文件包含在解析输出中。由于这仅适用于整个文件的源代码，所以必须在文件级PHPDoc中使用此标记。任何其他位置都将被忽略。</p>
-<p>当包含此标签时，phpDocumentor将压缩文件内容并使用Base64进行编码，以便可以由变压器处理。任何能够显示源代码的模板都可以在抽象语法树中读取相关文件元素中的源子元素。</p>
-</li>
-<li><p>官方示例</p>
-</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/ **</span><br><span class="line">  * @filesource</span><br><span class="line">  * /</span><br></pre></td></tr></table></figure>
+1
+简单工厂模式
+Simple Factory Pattern
 
 
-<p><a id="global"><h3>@global</h3></a></p>
-<blockquote>
-<p>@global标签用于通知phpDocumentor全局变量_or_其用法。(非必须)</p>
-</blockquote>
-<ul>
-<li>语法要求</li>
-</ul>
-<ul>
-<li>@global [ Type ] [name] @global [ Type ] [description]</li>
-</ul>
-<hr>
-<p><a id="ignore"><h3>@ignore</h3></a></p>
-<blockquote>
-<p>@ignore标签用于告诉phpDocumentor结构元素不被phpDocumentor处理。</p>
-</blockquote>
-<ul>
-<li>语法要求<ul>
-<li>@ignore [<description>]</li>
-</ul>
-</li>
-<li>官方示例</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>（$ ostest）&#123;</span><br><span class="line">     / **</span><br><span class="line">      *这个定义将是“Unix”或“Windows”</span><br><span class="line">      * /</span><br><span class="line">     define（“OS”，“Unix”）;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     / **</span><br><span class="line">      * @ignore</span><br><span class="line">      * /</span><br><span class="line">     define（“OS”，“Windows”）;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p><a id="api"><h3>@api</h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例</li>
-</ul>
-<hr>
-<p><a id="api"><h3>@api</h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例</li>
-</ul>
-<p><a id="api"><h3>@api</h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例</li>
-</ul>
-<p><a id="api"><h3>@api</h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例</li>
-</ul>
-<p><a id="api"><h3>@api</h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例</li>
-</ul>
-<p><a id="api"><h3>@api</h3></a></p>
-<ul>
-<li>语法要求</li>
-<li>官方示例</li>
-</ul>
-<p><a id="api"><h3>@api</h3></a><br><a id="api"><h3>@api</h3></a><br><a id="api"><h3>@api</h3></a></p>
-</p></div></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-05-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><i class="fa fa-tag"></i><a class="tag" href="/tags/Apidoc/" title="Apidoc">Apidoc </a><span>About556words, 1min51secread</span></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/4/">Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/6/">Próximo</a></li></ul></div></div></div></div></main-outlet><button class="float-button hide" id="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" type="button" title="Scroll to top"><i class="fa fa-angle-up"></i></button><div class="modal-cover" id="success-indicator"><div class="modal-container indicator"><i class="fa fa-check"></i></div></div></body></html>
+2
+工厂方法模式
+Factory Method Pattern
+
+
+3
+抽象工厂模式
+Abstract Factory Pattern
+
+
+4
+建造者模式
+Builder Pattern
+
+
+5
+原型模式
+Pro...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-11</span><i class="fa fa-tag"></i><a class="tag" href="/tags/设计模式/" title="设计模式">设计模式 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/07/28/2017-07-28-%E4%BD%BF%E7%94%A8mysql-router%E5%B7%A5%E5%85%B7%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">使用mysql-router工具实现数据库读写分离，数据库负载均衡</a></h3></div><div class="post-content"><p>
+研究公司oFrame框架发现，我们框架内大量的sql扫表语句严重的影响了数据查询速度和产品使用的各种问题，为此我准备先从第一步入手去增数据的性能，让我们一起学一下吧.
+
+一、 环境准备
+mysql-router 简单的负载均衡组件
+mysql5.6        mysql
+centos7
+Vmware
+
+**...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-07-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/mysql/" title="mysql">mysql </a><a class="tag" href="/tags/mysql-router/" title="mysql-router">mysql-router </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/07/26/2017-07-26-%E5%A5%BD%E4%B9%85%E6%B2%A1%E5%86%99%E5%8D%9A%E5%AE%A2%E4%BA%86/">好久没写博客了</a></h3></div><div class="post-content"><p>
+转眼间我已经毕业了踏上了人生新的征程，大学这四年我每逢假期都会去做兼职，我做过的很多呢，卖冰激凌，烤鱿鱼，烤鱼片，爆米花冰激凌，快餐店的鲜榨果汁和汉堡等我都有触及，之前在大学觉得一点意思也没有，总是想出去工作，先自我毕业了也签工作，感受颇多，我想对我在公司的感受做一个总结吧。
+
+初入职场  当我来到新公司一切幻...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-07-26</span><i class="fa fa-tag"></i><a class="tag" href="/tags/博客感言/" title="博客感言">博客感言 </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2017/05/19/2017-05-19-php%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E8%A7%84%E8%8C%83%E6%80%BB%E7%BB%93%E5%92%8C%E5%AD%A6%E4%B9%A0/">php文档注释规范总结和学习</a></h3></div><div class="post-content"><p>PHP标准注释列表
+@api
+@author
+@category
+@copyright
+@deprecated
+@example
+@filesource
+@global
+@ignore
+@internal
+@license
+@link
+@method
+@package
+@param
+@property-read
+...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-05-19</span><i class="fa fa-tag"></i><a class="tag" href="/tags/php/" title="php">php </a><a class="tag" href="/tags/Apidoc/" title="Apidoc">Apidoc </a></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/4/">Anterior</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/page/6/">Siguiente</a></li></ul></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
